@@ -1,0 +1,3 @@
+interface:
+  display_name: "Dev Team"
+  short_description: "Role-based sub-agent delivery with durable handoffs"

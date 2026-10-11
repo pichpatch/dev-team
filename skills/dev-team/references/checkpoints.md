@@ -1,0 +1,40 @@
+# Pause, interruption, and resume
+
+`/.AI/` means `.AI/` at the target repository root. It is temporary unfinished
+state, not a task tracker or permanent documentation.
+
+| State | Checkpoint behavior |
+| --- | --- |
+| Not started | No checkpoint |
+| Currently working | Normally no checkpoint |
+| Paused or interrupted | Save resumable state |
+| Blocked or cannot finish | Save resumable state |
+| Context/model handoff | Save resumable unfinished state |
+| Finished | Remove that agent's checkpoint |
+| Cancelled | Transfer durable knowledge, then remove that agent's checkpoint |
+
+Everything under `.AI/` is Markdown. Use `.AI/{feature-slug}/{role}.md`, for example
+`.AI/meetup-create-event/senior-developer.md`. If multiple agents have the same
+role, use stable instance suffixes so they cannot overwrite one another.
+Create no empty folders or checkpoints for future tasks.
+
+When the human tells Organizer to pause, stop scheduling new work and have each
+active unfinished agent save a checkpoint. Where possible request checkpointing
+before interrupting a running agent. An abrupt crash may prevent a final write;
+Organizer records only recoverable observed facts and explicitly marks unknowns,
+without claiming the missing agent saved or completed work.
+
+Use [the checkpoint template](../assets/checkpoint.md). Include role, Issue,
+current state, completed/current work, important findings, decisions already made,
+relevant files, remaining work, blockers, and the recommended next action. Include
+workspace/revision and agent identity when needed to resume accurately. Link to
+durable decisions instead of making the checkpoint their permanent home. Never
+include credentials, hidden reasoning, or transcript dumps.
+
+On resume, re-read the owning Issue, applicable repo instructions, relevant docs,
+actual workspace state, and that agent's checkpoint. Reconcile changes since the
+checkpoint before proceeding; a checkpoint is not approval or proof of completed work.
+Retain the useful checkpoint until a completed handoff or task makes it obsolete;
+refresh it if work stops again. Once work finishes, transfer all durable outcomes
+to repo docs/Issue and remove only that agent's checkpoint. Remove empty checkpoint
+directories if appropriate, without deleting another agent's unfinished work.

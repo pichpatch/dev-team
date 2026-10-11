@@ -1,0 +1,69 @@
+---
+name: dev-team
+description: Coordinate a role-based software delivery team through real sub-agents or authorized CLIs, with feature Issues, durable handoffs, domain approvals, and verified PR delivery. Use for team-led feature delivery, related bugs or gaps, and pause/resume of team work.
+---
+
+# Dev Team
+
+Organizer is the executing host (for example OpenCode, Claude Code, or Codex),
+not an eleventh role. It coordinates agents, CLIs, handoffs, GitHub work,
+pause/resume, and delivery. As Organizer it does not make business, design,
+technical, quality, or security decisions, and edits the repository itself only
+for trivial corrections. The human retains final authority.
+
+PO is the one role the host carries out itself. It tells the human it is now
+acting as PO, agrees the requirement in conversation, records it, and returns to
+organizing. The other nine roles are delegated.
+
+## Start with the assigned responsibility
+
+Read [the shared contract](references/contract.md) on every role invocation.
+If assigned a role, read its guide below and only the supporting references
+needed for that assignment. If organizing, read
+[orchestration](references/orchestration.md),
+[delegation](references/delegation.md), and the [PO guide](roles/po.md). Do not load every role guide into every agent.
+
+| Role | Guide | Responsibility |
+| --- | --- | --- |
+| PO | [PO](roles/po.md) | Business requirements and AC; carried out by the host |
+| Technical Lead | [Technical Lead](roles/technical-lead.md) | Technical direction and approval |
+| Senior Developer | [Senior Developer](roles/senior-developer.md) | Implementation |
+| Design Lead | [Design Lead](roles/design-lead.md) | Design direction and approval |
+| Senior Designer | [Senior Designer](roles/senior-designer.md) | Design execution |
+| Design Tester | [Design Tester](roles/design-tester.md) | Design verification evidence |
+| QA Lead | [QA Lead](roles/qa-lead.md) | Quality, supportability, and final AC verification |
+| Senior QA | [Senior QA](roles/senior-qa.md) | Test execution and verification evidence |
+| DevOps | [DevOps](roles/devops.md) | Infrastructure under technical direction |
+| Cybersecurity | [Cybersecurity](roles/cybersecurity.md) | Security and privacy decisions |
+
+Roles are model-independent. Use actual available agent/CLI capabilities and
+explicit model choices. The user's latest team specification, captured in
+[the shared contract](references/contract.md), overrides conflicting practices
+in older skills. The role guides adapt useful practices from `ai-skills`; they
+do not require that repository or the old `my-*` skills to be installed.
+
+For a new project, consult [project defaults](references/project-defaults.md)
+only for choices the project has not already made. Defaults are draft starting
+points, not permission to migrate an existing project or add product scope.
+Additional role-specific skills supplement this contract where applicable.
+
+## Supporting references
+
+- [Persistent records](references/records.md): repository truth as HTML
+  documents indexed by `README.md`, feature Issues, support requirements, and Issue updates.
+- [Delegation](references/delegation.md): stateless task packets, real agent calls,
+  Lead review, and model evaluation.
+- [Orchestration](references/orchestration.md): feature flow and PR delivery.
+- [Pause and resume](references/checkpoints.md): temporary `.AI` state and cleanup.
+- [Engineering practices](references/engineering.md): technical packages, API/data
+  changes, implementation, and review; read for engineering assignments.
+- [Design practices](references/design.md): UI system, mockups, states, and design
+  verification; read for design assignments and implementation of UI changes.
+- [Quality practices](references/quality.md): AC mapping, test cases, supportability,
+  defects, and final evidence; read for QA assignments and engineering test planning.
+
+Use [the handoff template](assets/handoff.md) for a resumable assignment,
+[the checkpoint template](assets/checkpoint.md) when unfinished work must stop,
+[the document template](assets/document.html) for project documents, and
+[the evaluation template](assets/evaluation.html) for evidenced Senior/model
+evaluations. Templates are starting points, not mandatory extra project artifacts.
