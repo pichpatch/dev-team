@@ -56,9 +56,10 @@ class InstallerTests(unittest.TestCase):
             ".gemini/config/skills/dev-team", ".config/opencode/skills/dev-team",
         ):
             self.assert_skill_link(self.home / relative)
-        command = self.home / ".claude/commands/dev-team.md"
-        self.assertTrue(command.is_symlink())
-        self.assertEqual(command.resolve(), ROOT / "commands/dev-team.md")
+        for name in ("dev-team.md", "tech-lead.md"):
+            command = self.home / ".claude/commands" / name
+            self.assertTrue(command.is_symlink())
+            self.assertEqual(command.resolve(), ROOT / "commands" / name)
         self.run_install("--target", "all")
 
     def test_auto_detect_only_existing_hosts(self):

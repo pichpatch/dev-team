@@ -4,7 +4,7 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 SKILL_SOURCE="$REPO_DIR/skills/dev-team"
-COMMAND_SOURCE="$REPO_DIR/commands/dev-team.md"
+COMMANDS_SOURCE="$REPO_DIR/commands"
 dry_run=0
 custom_dir=""
 targets=()
@@ -23,7 +23,7 @@ With no target, install for hosts whose configuration directories already exist.
 --dry-run prints planned links and checks conflicts without changing files.
 
 Codex:    ${CODEX_HOME:-~/.codex}/skills/dev-team
-Claude:   ~/.claude/skills/dev-team and ~/.claude/commands/dev-team.md
+Claude:   ~/.claude/skills/dev-team and ~/.claude/commands/{dev-team,tech-lead}.md
 Gemini:   ~/.gemini/config/skills/dev-team (the reference repo's convention)
 OpenCode: ${XDG_CONFIG_HOME:-~/.config}/opencode/skills/dev-team
 
@@ -94,8 +94,10 @@ else
     destinations+=("$destination")
     sources+=("$SKILL_SOURCE")
     if [[ "$target" == claude ]]; then
-      destinations+=("$HOME/.claude/commands/dev-team.md")
-      sources+=("$COMMAND_SOURCE")
+      for command in dev-team tech-lead; do
+        destinations+=("$HOME/.claude/commands/$command.md")
+        sources+=("$COMMANDS_SOURCE/$command.md")
+      done
     fi
   done
 fi

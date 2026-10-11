@@ -98,8 +98,9 @@ def validate():
     for relative in ("agents/openai.yaml",):
         if not (SKILL / relative).is_file():
             errors.append(f"Missing skill metadata: {relative}")
-    if not (ROOT / "commands/dev-team.md").is_file():
-        errors.append("Missing Claude command wrapper")
+    for command in ("dev-team", "tech-lead"):
+        if not (ROOT / "commands" / f"{command}.md").is_file():
+            errors.append(f"Missing Claude command wrapper: commands/{command}.md")
     for relative in ("install.sh", "check.sh"):
         script = ROOT / relative
         if not script.is_file():

@@ -22,7 +22,8 @@ Inspect the host's real delegation/CLI capabilities and use
 [the invocation loop](delegation.md) to dispatch owners. When a tool call returns
 only a running handle, collect its outcome before treating the assignment as done.
 Do not use role headings in a single answer as a substitute for delegated execution.
-PO is the only role the host carries out itself.
+The host itself carries out PO, and Technical Lead when the human talks to it
+directly; nothing else.
 
 ## Acting as PO
 
@@ -43,32 +44,54 @@ Other roles do not see this conversation, so everything agreed must be on the
 Issue before they start. If the discussion stops before agreement, save the
 draft as PO's [checkpoint](checkpoints.md).
 
+## Switching to Technical Lead
+
+Technical Lead is a delegated sub-agent, but the human can talk to it directly.
+The host then acts as Technical Lead in the conversation, following
+[its guide](../roles/technical-lead.md), and says when it switches and when it
+returns to organizing.
+
+- **After PO.** When a new feature's requirement is agreed, offer to switch to
+  Technical Lead so the technical questions that need the human are cleared
+  before the team starts. The human can accept, call `/tech-lead` themselves, or
+  skip it. Do not offer it for a bug, a small change, or a trivial edit.
+- **When Technical Lead is blocked.** A delegated Technical Lead that needs the
+  human keeps working on what it can and saves its blocked items in its
+  [checkpoint](checkpoints.md). Tell the human there are items to settle, list
+  them, and ask them to switch. Do not answer the items yourself. Resume the
+  delegated work once the decisions are recorded.
+
+Other roles' questions for the human are still relayed by Organizer.
+
 ## Feature sequence
 
 Preserve this high-level order, involving only relevant owners:
 
 1. **Human + PO (the host):** agree the purpose, business requirement, and AC.
 2. **PO:** create the feature Issue and update project-wide business truth.
-3. **Design Lead:** direct and approve relevant design work, using Senior
+3. **Human + Technical Lead (the host, optional):** clear the technical questions
+   that need the human before the team starts.
+4. **Design Lead:** direct and approve relevant design work, using Senior
    Designer(s) and Design Tester evidence as needed.
-4. **Technical Lead:** establish initial technical direction.
-5. **QA Lead:** design quality, testability, and supportability requirements;
+5. **Technical Lead:** establish initial technical direction.
+6. **QA Lead:** design quality, testability, and supportability requirements;
    ensure test plans/cases cover every AC before implementation.
-6. **Cybersecurity:** review relevant security/privacy requirements and risks.
-7. **Technical Lead:** integrate the prior owners' decisions into the final
+7. **Cybersecurity:** review relevant security/privacy requirements and risks.
+8. **Technical Lead:** integrate the prior owners' decisions into the final
    technical package, including DevOps input where infrastructure is involved.
-8. **Senior Developer(s):** implement scoped tasks delegated by Technical Lead.
-9. **Responsible Lead:** review outputs and evidence; rejection returns work for
-   correction, approval completes that scope. A Lead integrates parallel outputs.
-10. **QA execution + verification:** Senior QA executes verification and supplies
+9. **Senior Developer(s):** implement scoped tasks delegated by Technical Lead.
+10. **Responsible Lead:** review its own team's outputs and evidence; rejection
+    returns work for correction, approval completes that scope. A Lead integrates
+    parallel outputs.
+11. **QA execution + verification:** Senior QA executes verification and supplies
     actual results and regression evidence.
-11. **QA Lead:** review quality requirements, test coverage, every AC, regression,
+12. **QA Lead:** review quality requirements, test coverage, every AC, regression,
     and relevant supportability requirements. Check AC only when evidence supports it.
-12. **Cybersecurity:** check the delivered revision's ignore rules and tracked
+13. **Cybersecurity:** check the delivered revision's ignore rules and tracked
     secret files, even when the earlier security review was not applicable; for
     a public site, also check and report the AI crawler rules.
-13. **Organizer:** prepare/open the finished implementation PR linked to the Issue.
-14. **Human:** receive the PR for the final decision.
+14. **Organizer:** prepare/open the finished implementation PR linked to the Issue.
+15. **Human:** receive the PR for the final decision.
 
 Parallelize independent tasks within these stages where useful. Do not start a
 dependent stage before its necessary owner decisions are available. Do not add a

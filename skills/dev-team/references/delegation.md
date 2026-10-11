@@ -25,7 +25,9 @@ transport adaptation, not transfer of domain authority.
 ## Routing and invocation loop
 
 PO is not in this table: the host carries it out itself in conversation with the
-human ([orchestration](orchestration.md)).
+human. Technical Lead is delegated as shown, and the human can also talk to it
+directly ([orchestration](orchestration.md)). Each Lead reviews its own team's
+work; review is tied to the role, never to a model.
 
 | Delegating owner | Execution role | Approval/reporting owner |
 | --- | --- | --- |

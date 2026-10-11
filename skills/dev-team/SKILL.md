@@ -11,9 +11,10 @@ pause/resume, and delivery. As Organizer it does not make business, design,
 technical, quality, or security decisions, and edits the repository itself only
 for trivial corrections. The human retains final authority.
 
-PO is the one role the host carries out itself. It tells the human it is now
-acting as PO, agrees the requirement in conversation, records it, and returns to
-organizing. The other nine roles are delegated.
+The host carries out PO itself: it tells the human it is now acting as PO, agrees
+the requirement in conversation, records it, and returns to organizing. Technical
+Lead is delegated, but the human can also talk to it directly; the host then acts
+as Technical Lead in the conversation. The other roles are always delegated.
 
 ## Start with the assigned responsibility
 
@@ -26,7 +27,7 @@ needed for that assignment. If organizing, read
 | Role | Guide | Responsibility |
 | --- | --- | --- |
 | PO | [PO](roles/po.md) | Business requirements and AC; carried out by the host |
-| Technical Lead | [Technical Lead](roles/technical-lead.md) | Technical direction and approval |
+| Technical Lead | [Technical Lead](roles/technical-lead.md) | Technical direction and approval; delegated, and reachable in conversation |
 | Senior Developer | [Senior Developer](roles/senior-developer.md) | Implementation |
 | Design Lead | [Design Lead](roles/design-lead.md) | Design direction and approval |
 | Senior Designer | [Senior Designer](roles/senior-designer.md) | Design execution |

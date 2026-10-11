@@ -10,7 +10,7 @@ The skill is self-contained and does not invoke or require the old `my-*` skills
 | Draft role | Main source and adaptation |
 | --- | --- |
 | PO | `PO/SKILL.md` and AC/research references: purpose, scope, phases, business rules, market research with a business viability verdict, challenging the direction before agreeing, discoverability, testable AC with mandatory identifiers; a short purpose on the Issue; feature Issue creation follows human agreement. Carried out by the host in conversation, not delegated. |
-| Technical Lead | `FullstackDev/SKILL.md` engineering-lead practices: architecture, impact, contracts, delegation, integration, code review; now owns the single model-independent technical authority. |
+| Technical Lead | `FullstackDev/SKILL.md` engineering-lead practices: architecture, impact, contracts, delegation, integration, code review; now owns the single model-independent technical authority. Delegated, and reachable in conversation through `/tech-lead` to clear technical questions with the human. |
 | Senior Developer | Fullstack implementation/testing/API/dependency practices: bounded implementation, unit/integration verification, docs, and evidence returned to Technical Lead. |
 | Design Lead | `UX_UI/SKILL.md`: flows, direction, shared UI system, design decisions, feasibility, and approval; delegates production and verification. |
 | Senior Designer | UX/UI production methods: reusable components, editable artifacts, states, accessibility, realistic content, self-inspection, and handoff. |
@@ -30,7 +30,7 @@ discussion with the human.
 | Older convention | Current rule |
 | --- | --- |
 | PM role and repeated human workflow gates | Organizer coordinates; human + PO agree scope, owners execute, human receives the finished PR unless a genuine decision is needed. |
-| Model/provider-bound seats and approval gates | Ten model-independent roles; real delegation and truthful execution identity. |
+| Model/provider-bound seats and approval gates | Ten model-independent roles; real delegation and truthful execution identity. Each Lead reviews its own team's work; there is no Claude or other provider gate. |
 | Local progress dashboard as exclusive tracker | Feature Issue holds durable lifetime work/history; repository docs hold current truth. |
 | Per-bug/CR work packages and new tracking entries | Continue the legitimate original feature Issue; update existing truth and retain history. A change to agreed AC is a numbered change record comment on that Issue, not a separate CR file. |
 | HTML project documentation with `README.md` indexes | Kept: HTML documents, with `README.md` files as the index chain from the root README down to each application's documents. Per-work-item packages and `CHANGELOG.html` are not carried over. |

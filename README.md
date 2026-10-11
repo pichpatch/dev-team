@@ -5,7 +5,9 @@ already-authorized CLIs. Organizer is the executing host (OpenCode, Claude Code,
 Codex, etc.), **not a role**. It coordinates work while the ten roles retain their
 domain authority and the human retains final authority. The host carries out one
 role itself: it tells you it is now acting as PO, agrees the requirement with you
-in conversation, and returns to organizing. The other nine roles are delegated.
+in conversation, and returns to organizing. Technical Lead is delegated, and you
+can also talk to it directly with `/tech-lead`. The other roles are always
+delegated, and each Lead reviews its own team's work.
 
 This draft combines the agreed team structure with role methods adapted from
 `ai-skills` and general delivery practices. The latest user specification takes
@@ -56,7 +58,7 @@ explicitly, or use a custom skill directory:
 | Host | Destination |
 | --- | --- |
 | Codex | `${CODEX_HOME:-~/.codex}/skills/dev-team` |
-| Claude Code | `~/.claude/skills/dev-team` plus `~/.claude/commands/dev-team.md` |
+| Claude Code | `~/.claude/skills/dev-team` plus `~/.claude/commands/dev-team.md` and `tech-lead.md` |
 | Gemini / Antigravity | `~/.gemini/config/skills/dev-team`, matching the reference repo |
 | OpenCode | `${XDG_CONFIG_HOME:-~/.config}/opencode/skills/dev-team` |
 
@@ -70,7 +72,9 @@ Use `--skills-dir` when the host's configured discovery directory differs.
 ## Use
 
 Invoke `dev-team` in the host's supported skill syntax (the supplied Claude command
-is `/dev-team`) with the feature goal or owning Issue. Organizer loads only relevant
+is `/dev-team`) with the feature goal or owning Issue. Call `/tech-lead` to talk to
+the Technical Lead directly; on other hosts, ask the skill to act as Technical
+Lead. Organizer loads only relevant
 role guides and sends a complete task packet to each actual agent/CLI. If no real
 delegation tool is available, it reports the limitation instead of claiming that a
 review occurred.

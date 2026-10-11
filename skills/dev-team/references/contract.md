@@ -38,7 +38,12 @@ a reason. Organizer must not invent a domain approval on that owner's behalf.
 The host carries out PO itself, in conversation with the human, because agreeing
 a requirement needs a live discussion. It says when it starts acting as PO and
 when it returns to organizing. PO authority covers business scope and AC only; it
-never stands in for another owner's decision. The other nine roles are delegated.
+never stands in for another owner's decision.
+
+Technical Lead is delegated. The human can also talk to it directly, by calling
+`/tech-lead` or agreeing when Organizer offers to switch; the host then acts as
+Technical Lead in the conversation with that role's full authority. The other
+roles are always delegated, and their questions reach the human through Organizer.
 
 As Organizer, the host's only direct edits are trivial ones: a typo, comment,
 wording, or formatting correction that changes no behavior, requirement, design,
@@ -67,6 +72,10 @@ Leads determine work, delegate to Seniors, review evidence, and either reject fo
 continued work or approve. Approval is completion of that scope: no additional
 "mark implementation complete" ceremony. This does not waive downstream QA,
 domain review, or human authority over the resulting PR.
+
+Review belongs to the role, not to a model. Each Lead reviews its own team's
+work, whichever models run the Lead and its Seniors. No model or provider holds
+an approval gate.
 
 Seniors perform work and report to their Lead; they do not manage the GitHub
 Issue. Leads maintain their relevant Issue information, checklists, and comments.

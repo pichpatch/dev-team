@@ -28,7 +28,9 @@ Use [the checkpoint template](../assets/checkpoint.md). Include role, Issue,
 current state, completed/current work, important findings, decisions already made,
 relevant files, remaining work, blockers, and the recommended next action. Include
 workspace/revision and agent identity when needed to resume accurately. Link to
-durable decisions instead of making the checkpoint their permanent home. Never
+durable decisions instead of making the checkpoint their permanent home. List
+items blocked on the human as questions with the options, a recommendation, and
+what each blocks, so they can all be settled in one conversation. Never
 include credentials, hidden reasoning, or transcript dumps.
 
 On resume, re-read the owning Issue, applicable repo instructions, relevant docs,

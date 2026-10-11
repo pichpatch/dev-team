@@ -11,6 +11,7 @@
 - Relevant files / artifacts:
 - Remaining work:
 - Blockers:
+- Questions for the human (options, recommendation, what each blocks):
 - Recommended next action:
 
 Keep only resumable information. Transfer permanent knowledge to repo docs / the
