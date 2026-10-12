@@ -18,7 +18,7 @@ every small UI edit.
 Define the main user journey, information hierarchy, navigation, states,
 responsive/platform behavior, accessibility, and content needs. Public-page
 design includes semantic structure, headings, internal links, and metadata/content
-intent in coordination with PO. Apply [draft defaults](../references/project-defaults.md)
+intent in coordination with PO. Apply [project defaults](../references/project-defaults.md)
 only when the project has not made those choices.
 
 ## Delegate and verify

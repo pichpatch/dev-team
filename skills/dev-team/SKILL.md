@@ -43,9 +43,9 @@ explicit model choices. The user's latest team specification, captured in
 in older skills. The role guides adapt useful practices from `ai-skills`; they
 do not require that repository or the old `my-*` skills to be installed.
 
-For a new project, consult [project defaults](references/project-defaults.md)
-only for choices the project has not already made. Defaults are draft starting
-points, not permission to migrate an existing project or add product scope.
+For a new project, follow the [project defaults](references/project-defaults.md)
+and the [standard stack](references/stack.md). They are the human's standard
+choices, not permission to migrate an existing project or add product scope.
 Additional role-specific skills supplement this contract where applicable.
 
 ## Supporting references
@@ -56,8 +56,12 @@ Additional role-specific skills supplement this contract where applicable.
   Lead review, and model evaluation.
 - [Orchestration](references/orchestration.md): feature flow and PR delivery.
 - [Pause and resume](references/checkpoints.md): temporary `.AI` state and cleanup.
-- [Engineering practices](references/engineering.md): technical packages, API/data
-  changes, implementation, and review; read for engineering assignments.
+- [Engineering practices](references/engineering.md): technical decisions in the
+  docs, rule identifiers, API/data changes, implementation, and review; read for
+  engineering assignments.
+- [Standard stack](references/stack.md): NestJS, Next.js or React, React Native,
+  `frontend-core`, the repository layout, the typed API contract, `id` and
+  `ref_id`, and the Next.js SEO checklist; read for a new project or application.
 - [Design practices](references/design.md): UI system, mockups, states, and design
   verification; read for design assignments and implementation of UI changes.
 - [Quality practices](references/quality.md): AC mapping, test cases, supportability,

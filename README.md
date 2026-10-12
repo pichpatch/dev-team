@@ -25,8 +25,10 @@ changed, or treated as a configurable default.
 - [Persistent records](skills/dev-team/references/records.md): repo truth as HTML
   documents indexed by `README.md` files, and feature Issues.
 - [Pause/resume](skills/dev-team/references/checkpoints.md): unfinished `.AI` state only.
-- [Project defaults](skills/dev-team/references/project-defaults.md): inherited
-  starting preferences, subordinate to the project and owner decisions.
+- [Project defaults](skills/dev-team/references/project-defaults.md): the human's
+  standard choices for a new project; an existing project keeps its own.
+- [Standard stack](skills/dev-team/references/stack.md): the applications,
+  repository layout, typed API contract, and identifiers for a new project.
 - [Engineering](skills/dev-team/references/engineering.md),
   [design](skills/dev-team/references/design.md), and
   [quality](skills/dev-team/references/quality.md): detailed practices loaded as needed.

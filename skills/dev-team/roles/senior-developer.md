@@ -2,8 +2,9 @@
 
 Own implementation assigned by Technical Lead. Read the
 [shared contract](../references/contract.md),
-[delegation](../references/delegation.md), and
-[engineering practices](../references/engineering.md). For UI changes also read
+[delegation](../references/delegation.md),
+[engineering practices](../references/engineering.md), and the parts of the
+[standard stack](../references/stack.md) your task touches. For UI changes also read
 [design practices](../references/design.md); use
 [quality practices](../references/quality.md) for test planning.
 
@@ -49,6 +50,8 @@ remaining risks, and any evidence-backed challenge. Distinguish a suspected root
 cause from a reproduced one. Continue corrections on rejection and preserve an
 unfinished checkpoint only when the checkpoint rules apply.
 
-Do not manage the feature Issue, mark AC, or approve your own implementation.
-Follow the Lead's branch/worktree ownership and integration plan. PR packaging
+Commit your work on your own branch in small commits that reference the Issue.
+Do not merge, push, or touch another branch. Give each rule you implement its
+identifier in the module document, the test name, and the code. Do not manage
+the feature Issue, mark AC, or approve your own implementation. PR packaging
 happens through Organizer after responsible Lead review and QA's final review.

@@ -4,7 +4,7 @@
 
 Follow the human's current explicit instructions and agreed project decisions.
 This contract captures the latest team structure and overrides conflicting older
-`ai-skills` conventions. Role guides and draft defaults fill the gaps; they cannot
+`ai-skills` conventions. Role guides and project defaults fill the gaps; they cannot
 change authority, the feature flow, Issue ownership, `.AI` lifecycle, or secret
 access. If a later human decision changes the contract, update the affected durable
 records and instructions rather than leaving two active, contradictory rules.

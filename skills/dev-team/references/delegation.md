@@ -143,6 +143,20 @@ projects/
 - Remove a worktree once its work is integrated, never while it holds unfinished
   work or a checkpoint.
 
+Branches, commits, and pushing:
+
+- The feature branch is `feat/{issue-number}-{slug}`, and each Senior's branch is
+  that name plus `-{instance}`, unless the project already has a convention.
+- A Senior commits its own work on its own branch, in small commits that
+  reference the Issue. It does not merge, push, or touch another branch.
+- The responsible Lead reviews. Technical Lead then merges the approved branches
+  into the feature branch and verifies the combined result.
+- Organizer pushes only the feature branch and opens the PR.
+- Nobody commits or pushes to the default branch, force-pushes, or rewrites
+  history that has been pushed.
+- After the human merges the PR, Technical Lead, or Organizer on its behalf,
+  removes the feature's worktrees and local branches.
+
 A Lead can reach the main checkout and its real files. The human accepted that
 exposure; the contract's ask-before-reading rule still applies to Leads. A
 worktree keeps secrets out of a Senior's working directory but does not stop a

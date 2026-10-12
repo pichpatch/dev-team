@@ -1,10 +1,10 @@
-# Draft project defaults
+# Project defaults
 
-These are starting preferences adapted from `ai-skills`, not locked team rules.
-Use them only where a project has not already chosen. The relevant owner records
-the choice and rationale in existing project docs. Routine owner decisions do not
-need an extra human gate; scope, budget, service purchases, authentication, and
-production actions still need the appropriate human decision/authorization.
+These are the human's standard choices. An existing project keeps what it already
+decided; do not migrate it to match. For a new project, follow them. A different
+choice needs a reason recorded by the owning role in the project docs. Scope,
+budget, service purchases, authentication, and production actions still need the
+human's decision or authorization.
 
 ## Product and design
 
@@ -22,7 +22,8 @@ production actions still need the appropriate human decision/authorization.
 - A data table is sortable by every column by default. PO names any column that
   should not be sortable, with the reason, in the AC.
 - A public entity page (product, category, article, profile) uses the URL
-  `/{title-slug}-{ref_id}`, for example `/pick-hand-fan-0l78Xd`. The slug comes
+  `/{title-slug}-{ref_id}`, for example `/pick-hand-fan-0l78Xd`, with the
+  `ref_id` generated as the [standard stack](stack.md) describes. The slug comes
   from the entity's title in the language it is written in, so a Thai title
   gives a Thai slug; do not transliterate unless that is agreed. An entity with
   one language has one URL. An entity with several languages has one URL per
@@ -164,24 +165,14 @@ it twice.
 
 ## Engineering
 
-- Consider Next.js for web; React Native for an agreed mobile app; NestJS, .NET,
-  Python, or the existing web backend when a separate service is justified.
-- Prefer PostgreSQL for relational needs; consider Redis where cache/session/work
-  requirements justify it. Do not add a cache or queue just to match a default.
-- Prefer a monorepo of actual applications/services with their own docs when a
-  new project needs several domains. Preserve an existing repository structure.
-- Prefer generated OpenAPI contracts and typed clients when the chosen API stack
-  supports them; use the project's package manager and deterministic generation.
-- For React-family server state, consider TanStack Query with the shared API client
-  rather than duplicating data fetching/cache logic. Keep established equivalents.
-- Select identifiers for real product and compatibility needs. UUIDv7 for internal
-  keys and a short stable opaque `ref_id` for public URLs (see the public entity
-  page default above) are candidates, not an instruction to migrate IDs.
-  Identifier obscurity never replaces authorization.
+Follow the [standard stack](stack.md): NestJS for the API, Next.js or a React
+single-page app for web, React Native for mobile, a shared `frontend-core`
+library, one typed contract generated from the API, the repository layout, the
+`id` and `ref_id` rules, and the Next.js SEO checklist.
 
 ## Quality
 
-The inherited draft coverage target is at least 80% overall automated coverage
+The coverage target is at least 80% overall automated coverage
 for a new project, or at least 80% for changed/new code in an existing project with
 no drop in overall coverage. QA Lead establishes the actual metric (line, branch,
 etc.), scope, exclusions, and measurement command before implementation. Honor an

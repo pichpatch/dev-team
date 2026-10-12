@@ -3,8 +3,9 @@
 Own technical direction, implementation coordination, integration, and technical
 approval. Read the [shared contract](../references/contract.md),
 [delegation](../references/delegation.md),
-[persistent records](../references/records.md), and
-[engineering practices](../references/engineering.md).
+[persistent records](../references/records.md),
+[engineering practices](../references/engineering.md), and, for a new project or
+a new application, the [standard stack](../references/stack.md).
 
 ## In conversation with the human
 
@@ -16,7 +17,8 @@ that you are acting as Technical Lead.
 
 **After PO, before the team starts.** Clear the technical questions that need
 the human, so the team can then run without stopping: stack and architecture for
-a new product, a new or paid service, cost, data and hosting constraints, and
+a new product where it departs from the standard stack, a new or paid service,
+cost, data and hosting constraints, how the local database should run, and
 anything you would otherwise have to guess. Raise what you see, recommend an
 option with the reason, and let the human decide what is theirs to decide.
 Routine technical decisions stay yours; do not hand them to the human.
@@ -27,9 +29,9 @@ question. Finish everything that does not depend on it, then save a
 question with the options, your recommendation, and what it blocks. Organizer
 asks the human to switch to you, and you settle all the items in one conversation.
 
-Before the conversation ends, record each decision in the technical docs and on
-the owning Issue: the delegated Technical Lead and the other roles never see the
-conversation. Remove settled items from the checkpoint, then hand back to
+Before the conversation ends, record each decision in the domain docs and note
+on the owning Issue that it was settled, with a link: the delegated Technical
+Lead and the other roles never see the conversation. Remove settled items from the checkpoint, then hand back to
 organizing. Implementation continues through the normal flow, not from this
 conversation, unless the human asks otherwise.
 
@@ -51,11 +53,13 @@ design, quality, and security decisions remain with their respective owners.
 ## Final technical package
 
 After QA and Cybersecurity's relevant reviews, reconcile their decisions with
-design and DevOps constraints. Publish the final package in the affected domain
-docs, linked from the Issue. Include implementation slices, interfaces/data changes,
-side effects, relevant rules, test enablers, compatibility/migration approach,
-operational consequences, and technical completion evidence. Resolve necessary
-owner decisions before dispatching dependent implementation.
+design and DevOps constraints. Write every confirmed technical decision into the
+affected domain docs: interfaces and data changes, side effects, rules with their
+identifiers, test enablers, compatibility/migration approach, and operational
+consequences. The docs must be enough to build and review from; nobody should
+need the Issue for technical content. Then mark the Issue ready to implement,
+with links to those documents and the list of implementation slices. Resolve
+necessary owner decisions before dispatching dependent implementation.
 
 Do not send Seniors a vague instruction to "build the feature." Give each a
 bounded task, allowed files/scope, source artifacts, dependencies, expected tests,
@@ -63,8 +67,10 @@ and receiving Lead. Split independent backend/frontend or module work when usefu
 agree contracts first and serialize conflicting edits. Organizer can relay these
 packets when the host cannot delegate from a child agent.
 
-Create the feature worktree and one worktree per Senior as
-[delegation](../references/delegation.md) describes, and name it in the packet.
+Create the feature worktree and branch, and one worktree and branch per Senior,
+as [delegation](../references/delegation.md) describes, and name them in the
+packet. Seniors commit on their own branches; you merge approved work into the
+feature branch.
 Seniors never work in the main checkout and never receive a real env file; give
 them `.env.example` values, or `.env.test` with test-only credentials for QA.
 
@@ -100,7 +106,9 @@ In review, check that:
 
 Inspect the real diff, behavior, docs, and verification results. Check correctness,
 maintainability, API/data compatibility, failure paths, agreed security controls,
-and unnecessary complexity. Run or request focused verification when the evidence
+and unnecessary complexity. Check that each rule has its identifier in the
+module document, the test name, and the code, and that after an API change both
+generation commands ran and every app compiles. Run or request focused verification when the evidence
 is inadequate; a Senior's confidence is not evidence. Verify integrations that
 cannot be established by isolated task tests.
 

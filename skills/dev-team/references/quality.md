@@ -16,7 +16,7 @@ Record strategy/cases in the existing QA docs. For a new location,
 test details may live with the application/service. Link the records from the
 feature Issue instead of introducing a second task tracker.
 
-Use the [draft coverage policy](project-defaults.md) only when no project policy
+Use the [coverage default](project-defaults.md) only when no project policy
 exists. State command, metric, scope, baseline, and exclusions. Report planned
 coverage and actually executed coverage separately. Every relevant AC needs
 evidence regardless of the aggregate percentage.

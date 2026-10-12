@@ -32,6 +32,7 @@ discussion with the human.
 | PM role and repeated human workflow gates | Organizer coordinates; human + PO agree scope, owners execute, human receives the finished PR unless a genuine decision is needed. |
 | Model/provider-bound seats and approval gates | Ten model-independent roles; real delegation and truthful execution identity. Each Lead reviews its own team's work; there is no Claude or other provider gate. |
 | Local progress dashboard as exclusive tracker | Feature Issue holds durable lifetime work/history; repository docs hold current truth. |
+| Per-item `tech.html` technical package | Confirmed technical decisions go into the domain docs as current truth; the Issue is the ticket that marks readiness and links to them. |
 | Per-bug/CR work packages and new tracking entries | Continue the legitimate original feature Issue; update existing truth and retain history. A change to agreed AC is a numbered change record comment on that Issue, not a separate CR file. |
 | HTML project documentation with `README.md` indexes | Kept: HTML documents, with `README.md` files as the index chain from the root README down to each application's documents. Per-work-item packages and `CHANGELOG.html` are not carried over. |
 | Always-active role notes under `.AI` | Only resumable unfinished state on pause/interruption/blockage/context handoff, kept as Markdown; remove after completion. |
@@ -46,18 +47,25 @@ discussion with the human.
 
 ## Draft judgments to review
 
-Useful old preferences are retained in
-[project defaults](../skills/dev-team/references/project-defaults.md), including
-stack candidates, HTML mockups, TH/EN and theme proposals, social login preference,
-the 80% coverage starting target, service naming, release-tag examples, and backup
-planning. They do not change existing project decisions or add agreed feature scope.
+The human's standard choices are kept in
+[project defaults](../skills/dev-team/references/project-defaults.md) and the
+[standard stack](../skills/dev-team/references/stack.md). They apply to a new
+project and never migrate an existing one or add agreed feature scope.
 
-The synthesis also replaces rigid implementation prescriptions with owner judgment:
-research effort scales to the design decision; E2E placement follows QA/DevOps needs;
-recovery need not mean an unsafe database downgrade; environments are chosen from
-real risk rather than assuming production access; custom cryptography is not copied.
-Arbitrary ten-product research quotas, mandatory critique counts, automatic tours,
-fixed task durations, and universal UI/ID/cache rules are not enforced.
+The first draft had softened the old engineering rules into suggestions. The
+human restored them as the standard: NestJS for every backend, Next.js or a React
+single-page app for web, React Native for mobile, a shared `frontend-core`, one
+typed contract generated from the API, UUIDv7 `id` with the supplied `ref_id`
+module in every project, the health endpoint, integration mock modes,
+refresh-ahead caching, TanStack Query, the i18n library, Firebase Remote Config,
+the list thresholds, the Next.js SEO checklist, rule identifiers in three places,
+and the local-database and no-reset rules.
+
+Still left to owner judgment: research effort scales to the design decision; E2E
+placement follows QA/DevOps needs; recovery need not mean an unsafe database
+downgrade; environments are chosen from real risk. Arbitrary ten-product research
+quotas, mandatory critique counts, automatic tours, and fixed task durations are
+not enforced.
 
 These are drafting choices, distinct from the user's locked authority and workflow
 rules. They can be adjusted without redesigning the team contract.

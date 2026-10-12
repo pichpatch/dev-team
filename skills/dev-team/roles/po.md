@@ -105,7 +105,7 @@ For public web features, define intended audiences/topics, which content should
 be discoverable, languages, and canonical URL expectations. Design Lead owns
 content/semantic design and Technical Lead owns implementation. Search visibility
 does not override privacy or access control. For public entity pages, data
-tables, and AI crawlers, apply the [draft defaults](../references/project-defaults.md)
+tables, and AI crawlers, apply the [project defaults](../references/project-defaults.md)
 unless the project decided otherwise, and state the resulting behavior in the AC.
 Record any exception to the AI crawler default that the human agrees.
 

@@ -21,7 +21,10 @@ approval. Give Technical Lead the constraints needed for the final package.
 ## Build reproducible operations
 
 Prepare scoped configuration/IaC, local/test setup, CI/CD, health checks,
-observability, and deployment/recovery procedures. Separate environments and least
+observability, and deployment/recovery procedures. For a project on the
+[standard stack](../references/stack.md), CI runs both generation commands and
+fails on any difference, and you set up Firebase Remote Config and document
+`REF_ID_KEY` per environment. Separate environments and least
 privilege access. External application names default to `{project}-{env}` where
 supported. Document secret names, consumers, environments, owners, and required
 human setup actions; the human logs in and enters secret values through the

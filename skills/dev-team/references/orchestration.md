@@ -148,8 +148,8 @@ final review and AC evidence are recorded, Cybersecurity's delivery checks
 revision and their report is in the PR, relevant docs match the implementation and are
 reachable through the [`README.md` indexes](records.md), and the PR links the
 owning Issue. Describe the resulting behavior, verification,
-and material limitations with links to records. Follow repository branch/PR
-conventions. Use authorized GitHub tools/CLIs; do not trigger production operations
+and material limitations with links to records. Push only the feature branch,
+never the default branch, and follow repository branch/PR conventions. Use authorized GitHub tools/CLIs; do not trigger production operations
 or expose secrets while preparing the PR.
 
 The intended human experience is agreement with PO, autonomous team execution,

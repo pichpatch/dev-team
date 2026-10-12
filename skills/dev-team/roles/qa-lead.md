@@ -26,7 +26,7 @@ enablers through Technical Lead and environments through DevOps. Never require
 production secrets or real external side effects by default.
 
 Define the applicable coverage and completion policy before work starts. Use the
-[draft coverage default](../references/project-defaults.md) when the project has
+[coverage default](../references/project-defaults.md) when the project has
 none, recording the metric/scope and any justified adjustment. Coverage percentages
 do not prove AC correctness; critical behavior still needs explicit verification.
 

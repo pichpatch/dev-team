@@ -50,7 +50,9 @@ In a project that already keeps non-HTML docs, write new documents as HTML and
 list the existing ones in the `README.md` index as they are. Converting them is a migration
 the human agrees first. Never keep two formats of the same truth.
 
-The following are example locations, not a scaffold to create in every project:
+The following are example document locations in the
+[standard repository layout](stack.md), not a scaffold to create in every project.
+`frontend_domain_N` stands for a frontend domain named after the business:
 
 ```text
 README.md
@@ -61,6 +63,25 @@ docs/
   security/
   decisions/
   evaluation/{feature-slug}-{role}-{model}.html
+frontend_domain_N/
+  README.md
+  docs/                 mobile flows, mockups, decisions
+web/frontend_domain_N/
+  README.md
+  docs/                 web flows, mockups, decisions
+frontend-core/
+  README.md
+  docs/                 tokens, shared components, SDK usage; apps link here
+api/
+  README.md
+  docs/
+    architecture/
+    flows/
+    modules/            one document per module, with its rules
+    data-dictionary/
+    api-spec/openapi.json
+    roles-permissions/
+    decisions/
 infra/
   README.md
   docs/
@@ -69,23 +90,11 @@ infra/
     production.html
     diagrams/
     decisions/
-  terraform/
-frontend/
-  README.md
-  docs/
-    technical/
-    mockups/
-    decisions/
-api/
-  README.md
-  docs/
-    architecture/
-    flows/
-    data-dictionary/
-    api-spec/
-    roles-permissions/
-    decisions/
 ```
+
+An application's docs describe only what is specific to it. For anything it
+takes from `frontend-core`, link to the `frontend-core` document, so it is clear
+that one change there applies to every application that links to it.
 
 Create a directory only when a real deliverable needs it. Keep requirements,
 decisions, and implementation docs current as part of the work that changes them.
@@ -99,8 +108,11 @@ requirements under `docs/qa/support/`.
 
 ## One feature, one Issue
 
-A GitHub Issue is the durable lifetime history for one feature. PO creates it
-only after the human and PO agree on the business requirement and AC. The team
+A GitHub Issue is the ticket and the durable lifetime history for one feature:
+what was agreed, whether it is ready to implement, and what happened. Decisions
+themselves live in the docs, which the Issue links to, so an agent learns how
+something works from the docs and never needs the Issue for that. PO creates the
+Issue only after the human and PO agree on the business requirement and AC. The team
 works on GitHub only: when the repository's remote is another host, stop and ask
 the human instead of recording the feature elsewhere or inventing a substitute.
 Include:
