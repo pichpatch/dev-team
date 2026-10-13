@@ -3,8 +3,12 @@
 set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
-SKILL_SOURCE="$REPO_DIR/skills/dev-team"
+SKILLS_SOURCE="$REPO_DIR/skills"
 COMMANDS_SOURCE="$REPO_DIR/commands"
+# The team skill, the role skills that act as commands where a host has no
+# separate command files, and the command wrappers for hosts that do.
+ROLE_SKILLS=(my-po my-design-lead my-tech-lead my-qa-lead)
+COMMANDS=(my-dev-team my-po my-design-lead my-tech-lead my-qa-lead)
 dry_run=0
 custom_dir=""
 targets=()
@@ -16,16 +20,23 @@ usage() {
 Usage: ./install.sh [--target HOST]... [--dry-run]
        ./install.sh --skills-dir DIRECTORY [--dry-run]
 
-Hosts: codex, claude, gemini, opencode, all
+Hosts: codex, claude, agy (also: antigravity, gemini), opencode, all
 With no target, install for hosts whose configuration directories already exist.
 --target all explicitly selects all four hosts.
---skills-dir installs only the skill into a custom directory.
+--skills-dir installs the team skill and the role skills into a custom directory.
 --dry-run prints planned links and checks conflicts without changing files.
 
-Codex:    ${CODEX_HOME:-~/.codex}/skills/dev-team
-Claude:   ~/.claude/skills/dev-team and ~/.claude/commands/{dev-team,po,design-lead,tech-lead,qa-lead}.md
-Gemini:   ~/.gemini/config/skills/dev-team (the reference repo's convention)
-OpenCode: ${XDG_CONFIG_HOME:-~/.config}/opencode/skills/dev-team
+Every host gets the my-dev-team skill and a way to call each role directly:
+my-dev-team, my-po, my-design-lead, my-tech-lead, my-qa-lead.
+
+Claude:      ~/.claude/skills/my-dev-team, and ~/.claude/commands/<name>.md
+             (call as /my-po)
+OpenCode:    ${XDG_CONFIG_HOME:-~/.config}/opencode/skills/my-dev-team, and
+             .../opencode/commands/<name>.md (call as /my-po)
+Antigravity: ~/.gemini/config/skills/<name>; a skill is the slash command
+             (call as /my-po)
+Codex:       ${CODEX_HOME:-~/.codex}/skills/<name>; a skill is the command
+             (call as $my-po)
 
 Requires bash and python3. Existing unrelated files, directories, or links are
 never replaced. Keep this checkout in place: installation uses symbolic links.
@@ -36,6 +47,9 @@ die() { echo "Error: $*" >&2; exit 1; }
 
 add_target() {
   local target="$1" existing
+  case "$target" in
+    agy|antigravity) target=gemini ;;
+  esac
   case "$target" in
     codex|claude|gemini|opencode) ;;
     *) die "Unknown host: $target" ;;
@@ -74,8 +88,10 @@ python3 -B "$REPO_DIR/scripts/validate.py"
 
 if [[ -n "$custom_dir" ]]; then
   [[ ${#targets[@]} -eq 0 ]] || die "Do not combine --skills-dir and --target"
-  destinations+=("$custom_dir/dev-team")
-  sources+=("$SKILL_SOURCE")
+  for skill in my-dev-team "${ROLE_SKILLS[@]}"; do
+    destinations+=("$custom_dir/$skill")
+    sources+=("$SKILLS_SOURCE/$skill")
+  done
 else
   if [[ ${#targets[@]} -eq 0 ]]; then
     [[ ! -d "${CODEX_HOME:-$HOME/.codex}" ]] || add_target codex
@@ -85,18 +101,29 @@ else
   fi
   [[ ${#targets[@]} -gt 0 ]] || die "No host configuration found; select --target or --skills-dir"
   for target in "${targets[@]}"; do
+    # commands_dir is set for hosts with command files; the others call a
+    # skill by name, so they get the role skills instead.
+    commands_dir=""
     case "$target" in
-      codex) destination="${CODEX_HOME:-$HOME/.codex}/skills/dev-team" ;;
-      claude) destination="$HOME/.claude/skills/dev-team" ;;
-      gemini) destination="$HOME/.gemini/config/skills/dev-team" ;;
-      opencode) destination="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/skills/dev-team" ;;
+      codex) skills_dir="${CODEX_HOME:-$HOME/.codex}/skills" ;;
+      claude) skills_dir="$HOME/.claude/skills"; commands_dir="$HOME/.claude/commands" ;;
+      gemini) skills_dir="$HOME/.gemini/config/skills" ;;
+      opencode)
+        skills_dir="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/skills"
+        commands_dir="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/commands"
+        ;;
     esac
-    destinations+=("$destination")
-    sources+=("$SKILL_SOURCE")
-    if [[ "$target" == claude ]]; then
-      for command in dev-team po design-lead tech-lead qa-lead; do
-        destinations+=("$HOME/.claude/commands/$command.md")
+    destinations+=("$skills_dir/my-dev-team")
+    sources+=("$SKILLS_SOURCE/my-dev-team")
+    if [[ -n "$commands_dir" ]]; then
+      for command in "${COMMANDS[@]}"; do
+        destinations+=("$commands_dir/$command.md")
         sources+=("$COMMANDS_SOURCE/$command.md")
+      done
+    else
+      for skill in "${ROLE_SKILLS[@]}"; do
+        destinations+=("$skills_dir/$skill")
+        sources+=("$SKILLS_SOURCE/$skill")
       done
     fi
   done
@@ -153,5 +180,5 @@ done
 if [[ "$dry_run" -eq 1 ]]; then
   echo "Dry run complete; nothing installed."
 else
-  echo "Installed. Start a new host session to discover dev-team. No authentication or model settings changed."
+  echo "Installed. Start a new host session to discover my-dev-team. No authentication or model settings changed."
 fi

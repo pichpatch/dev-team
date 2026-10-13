@@ -1,5 +1,5 @@
 ---
-name: dev-team
+name: my-dev-team
 description: Coordinate a role-based software delivery team through real sub-agents or authorized CLIs, with feature Issues, durable handoffs, domain approvals, and verified PR delivery. Use for team-led feature delivery, related bugs or gaps, and pause/resume of team work.
 ---
 

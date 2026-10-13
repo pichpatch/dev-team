@@ -36,10 +36,10 @@ delegating, because agreeing a feature needs a live discussion.
 
 | Role | Settles with the human | Command |
 | --- | --- | --- |
-| PO | The problem, scope, business rules, and AC | `/po` |
-| Design Lead | Direction, flows, brand and visual changes | `/design-lead` |
-| Technical Lead | Whether and how it can work, cost, technical constraints | `/tech-lead` |
-| QA Lead | The Definition of Done and how each AC will be proven | `/qa-lead` |
+| PO | The problem, scope, business rules, and AC | `/my-po` |
+| Design Lead | Direction, flows, brand and visual changes | `/my-design-lead` |
+| Technical Lead | Whether and how it can work, cost, technical constraints | `/my-tech-lead` |
+| QA Lead | The Definition of Done and how each AC will be proven | `/my-qa-lead` |
 
 A new feature usually runs business, then design, then technical, then quality.
 Not every feature needs every Lead: a logo change may need PO and Design Lead

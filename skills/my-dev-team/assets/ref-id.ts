@@ -1,7 +1,7 @@
 // Format-Preserving Encryption (FPE) for ref_id: turns the next number of a table's sequence into the
 // encrypted sequence number stored in its `ref_id` column — a fixed 6-character base62 id used only in
 // public (SEO) URLs, and impossible to reverse without REF_ID_KEY.
-// Rules: the dev-team skill's standard stack reference, "Identifiers and public URLs".
+// Rules: the my-dev-team skill's standard stack reference, "Identifiers and public URLs".
 
 import { createHmac } from "node:crypto";
 

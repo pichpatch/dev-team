@@ -8,7 +8,7 @@ from urllib.parse import unquote, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILL = ROOT / "skills" / "dev-team"
+SKILL = ROOT / "skills" / "my-dev-team"
 ROLES = {
     "po", "technical-lead", "senior-developer", "design-lead",
     "senior-designer", "design-tester", "qa-lead", "senior-qa",
@@ -20,7 +20,7 @@ def validate():
     errors = []
     entry = SKILL / "SKILL.md"
     if not entry.is_file():
-        return ["Missing skills/dev-team/SKILL.md"]
+        return ["Missing skills/my-dev-team/SKILL.md"]
     text = entry.read_text(encoding="utf-8")
     parts = text.split("---", 2)
     if len(parts) != 3 or parts[0].strip():
@@ -32,8 +32,8 @@ def validate():
             if not sep or key in fields:
                 errors.append(f"Invalid or duplicate frontmatter field: {line}")
             fields[key] = value.strip()
-        if fields.get("name") != "dev-team":
-            errors.append("Skill name must match its install directory: dev-team")
+        if fields.get("name") != "my-dev-team":
+            errors.append("Skill name must match its install directory: my-dev-team")
         if not fields.get("description"):
             errors.append("Skill description is missing")
         if fields.get("description") and len(fields["description"]) > 1024:
@@ -98,9 +98,20 @@ def validate():
     for relative in ("agents/openai.yaml",):
         if not (SKILL / relative).is_file():
             errors.append(f"Missing skill metadata: {relative}")
-    for command in ("dev-team", "po", "design-lead", "tech-lead", "qa-lead"):
+    for command in ("my-dev-team", "my-po", "my-design-lead", "my-tech-lead", "my-qa-lead"):
         if not (ROOT / "commands" / f"{command}.md").is_file():
-            errors.append(f"Missing Claude command wrapper: commands/{command}.md")
+            errors.append(f"Missing command wrapper: commands/{command}.md")
+    # Role skills are the commands on hosts where a skill is called by name.
+    for skill in ("my-po", "my-design-lead", "my-tech-lead", "my-qa-lead"):
+        role_entry = ROOT / "skills" / skill / "SKILL.md"
+        if not role_entry.is_file():
+            errors.append(f"Missing role skill: skills/{skill}/SKILL.md")
+            continue
+        role_text = role_entry.read_text(encoding="utf-8")
+        if f"\nname: {skill}\n" not in role_text or "\ndescription: " not in role_text:
+            errors.append(f"Role skill needs matching name and a description: skills/{skill}/SKILL.md")
+        if "](../my-dev-team/SKILL.md)" not in role_text:
+            errors.append(f"Role skill must link the team skill: skills/{skill}/SKILL.md")
     for relative in ("install.sh", "check.sh"):
         script = ROOT / relative
         if not script.is_file():

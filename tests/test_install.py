@@ -8,12 +8,14 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "skills/dev-team"
+SOURCE = ROOT / "skills/my-dev-team"
+ROLE_SKILLS = ("my-po", "my-design-lead", "my-tech-lead", "my-qa-lead")
+COMMANDS = ("my-dev-team",) + ROLE_SKILLS
 
 
 class InstallerTests(unittest.TestCase):
     def setUp(self):
-        self.temp = tempfile.TemporaryDirectory(prefix="dev-team-test-")
+        self.temp = tempfile.TemporaryDirectory(prefix="my-dev-team-test-")
         self.addCleanup(self.temp.cleanup)
         self.home = Path(self.temp.name) / "home with spaces"
         self.home.mkdir()
@@ -36,11 +38,26 @@ class InstallerTests(unittest.TestCase):
         self.assertTrue(path.is_symlink(), str(path))
         self.assertEqual(path.resolve(), SOURCE)
 
+    def assert_role_skills(self, skills_dir):
+        for name in ROLE_SKILLS:
+            link = skills_dir / name
+            self.assertTrue(link.is_symlink(), str(link))
+            self.assertEqual(link.resolve(), ROOT / "skills" / name)
+            # The role skill finds the team skill through the sibling link.
+            self.assertTrue((link / "../my-dev-team/SKILL.md").is_file())
+
+    def assert_commands(self, commands_dir):
+        for name in COMMANDS:
+            command = commands_dir / f"{name}.md"
+            self.assertTrue(command.is_symlink(), str(command))
+            self.assertEqual(command.resolve(), ROOT / "commands" / f"{name}.md")
+
     def test_custom_directory_and_idempotence(self):
         dest = self.home / "custom skills"
         self.run_install("--skills-dir", dest)
-        link = dest / "dev-team"
+        link = dest / "my-dev-team"
         self.assert_skill_link(link)
+        self.assert_role_skills(dest)
         before = link.lstat().st_ino
         self.run_install("--skills-dir", dest)
         self.assertEqual(link.lstat().st_ino, before)
@@ -52,20 +69,33 @@ class InstallerTests(unittest.TestCase):
     def test_all_targets_and_claude_command(self):
         self.run_install("--target", "all", "--target", "codex")
         for relative in (
-            ".codex/skills/dev-team", ".claude/skills/dev-team",
-            ".gemini/config/skills/dev-team", ".config/opencode/skills/dev-team",
+            ".codex/skills/my-dev-team", ".claude/skills/my-dev-team",
+            ".gemini/config/skills/my-dev-team", ".config/opencode/skills/my-dev-team",
         ):
             self.assert_skill_link(self.home / relative)
-        for name in ("dev-team.md", "po.md", "design-lead.md", "tech-lead.md", "qa-lead.md"):
-            command = self.home / ".claude/commands" / name
-            self.assertTrue(command.is_symlink())
-            self.assertEqual(command.resolve(), ROOT / "commands" / name)
+        # Claude and OpenCode have command files; Codex and Antigravity call a
+        # skill by name, so they get the role skills and no command files.
+        self.assert_commands(self.home / ".claude/commands")
+        self.assert_commands(self.home / ".config/opencode/commands")
+        self.assert_role_skills(self.home / ".codex/skills")
+        self.assert_role_skills(self.home / ".gemini/config/skills")
+        for name in ROLE_SKILLS:
+            self.assertFalse((self.home / ".claude/skills" / name).exists())
+            self.assertFalse((self.home / ".config/opencode/skills" / name).exists())
         self.run_install("--target", "all")
+
+    def test_antigravity_aliases(self):
+        for alias in ("agy", "antigravity", "gemini"):
+            with self.subTest(alias=alias):
+                self.run_install("--target", alias)
+                self.assert_skill_link(self.home / ".gemini/config/skills/my-dev-team")
+                self.assert_role_skills(self.home / ".gemini/config/skills")
+        self.assertFalse((self.home / ".codex").exists())
 
     def test_auto_detect_only_existing_hosts(self):
         (self.home / ".codex").mkdir()
         self.run_install()
-        self.assert_skill_link(self.home / ".codex/skills/dev-team")
+        self.assert_skill_link(self.home / ".codex/skills/my-dev-team")
         self.assertFalse((self.home / ".claude").exists())
         self.assertFalse((self.home / ".gemini").exists())
         self.assertFalse((self.home / ".config").exists())
@@ -81,12 +111,12 @@ class InstallerTests(unittest.TestCase):
         (config / "opencode").mkdir(parents=True)
         self.env.update(CODEX_HOME=str(codex), XDG_CONFIG_HOME=str(config))
         self.run_install()
-        self.assert_skill_link(codex / "skills/dev-team")
-        self.assert_skill_link(config / "opencode/skills/dev-team")
+        self.assert_skill_link(codex / "skills/my-dev-team")
+        self.assert_skill_link(config / "opencode/skills/my-dev-team")
         self.assertFalse((self.home / ".codex").exists())
 
     def test_conflict_prevents_all_links(self):
-        conflict = self.home / ".claude/skills/dev-team"
+        conflict = self.home / ".claude/skills/my-dev-team"
         conflict.mkdir(parents=True)
         marker = conflict / "user-file"
         marker.write_text("keep", encoding="utf-8")
@@ -100,7 +130,7 @@ class InstallerTests(unittest.TestCase):
             with self.subTest(kind=kind):
                 directory = self.home / kind
                 directory.mkdir()
-                conflict = directory / "dev-team"
+                conflict = directory / "my-dev-team"
                 if kind == "file":
                     conflict.write_text("keep", encoding="utf-8")
                 else:
@@ -123,7 +153,7 @@ class InstallerTests(unittest.TestCase):
     def test_shell_characters_are_literal(self):
         directory = self.home / "literal $(touch INJECTED) `touch ALSO_INJECTED`"
         self.run_install("--skills-dir", directory)
-        self.assert_skill_link(directory / "dev-team")
+        self.assert_skill_link(directory / "my-dev-team")
         self.assertFalse((self.home / "INJECTED").exists())
         self.assertFalse((self.home / "ALSO_INJECTED").exists())
 

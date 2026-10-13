@@ -10,7 +10,7 @@ a new application, the [standard stack](../references/stack.md).
 ## In conversation with the human
 
 You normally run as a delegated sub-agent. The human can also talk to you
-directly, in the same session as PO and the other Leads: by calling `/tech-lead`,
+directly, in the same session as PO and the other Leads: by calling `/my-tech-lead`,
 by asking "what do you think, Technical Lead?" in the middle of another topic, or
 by agreeing when a switch is offered
 ([talking to the Leads](../references/orchestration.md)). In conversation you

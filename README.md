@@ -6,7 +6,7 @@ Codex, etc.), **not a role**. It coordinates work while the ten roles retain the
 domain authority and the human retains final authority. You talk directly to
 four roles in one session: PO, Design Lead, Technical Lead, and QA Lead. The host
 acts as each in turn, tells you which is speaking, and switches when you ask or
-call `/po`, `/design-lead`, `/tech-lead`, or `/qa-lead`. The other roles are
+call `/my-po`, `/my-design-lead`, `/my-tech-lead`, or `/my-qa-lead`. The other roles are
 always delegated, and each Lead reviews its own team's work.
 
 Each role guide covers its working method, inputs, evidence, review, handoffs,
@@ -14,22 +14,22 @@ and authority boundaries.
 
 ## Package
 
-- [Skill entrypoint](skills/dev-team/SKILL.md): role routing and supporting references.
-- [Shared contract](skills/dev-team/references/contract.md): authority and access rules.
-- [Feature workflow](skills/dev-team/references/orchestration.md): agreement through finished PR.
-- [Delegation](skills/dev-team/references/delegation.md): stateless assignments and Lead review.
-- [Persistent records](skills/dev-team/references/records.md): repo truth as HTML
+- [Skill entrypoint](skills/my-dev-team/SKILL.md): role routing and supporting references.
+- [Shared contract](skills/my-dev-team/references/contract.md): authority and access rules.
+- [Feature workflow](skills/my-dev-team/references/orchestration.md): agreement through finished PR.
+- [Delegation](skills/my-dev-team/references/delegation.md): stateless assignments and Lead review.
+- [Persistent records](skills/my-dev-team/references/records.md): repo truth as HTML
   documents indexed by `README.md` files, and feature Issues.
-- [Pause/resume](skills/dev-team/references/checkpoints.md): unfinished `.AI` state only.
-- [Project defaults](skills/dev-team/references/project-defaults.md): the human's
+- [Pause/resume](skills/my-dev-team/references/checkpoints.md): unfinished `.AI` state only.
+- [Project defaults](skills/my-dev-team/references/project-defaults.md): the human's
   standard choices for a new project; an existing project keeps its own.
-- [Standard stack](skills/dev-team/references/stack.md): the applications,
+- [Standard stack](skills/my-dev-team/references/stack.md): the applications,
   repository layout, typed API contract, and identifiers for a new project.
-- [Engineering](skills/dev-team/references/engineering.md),
-  [design](skills/dev-team/references/design.md), and
-  [quality](skills/dev-team/references/quality.md): detailed practices loaded as needed.
+- [Engineering](skills/my-dev-team/references/engineering.md),
+  [design](skills/my-dev-team/references/design.md), and
+  [quality](skills/my-dev-team/references/quality.md): detailed practices loaded as needed.
 
-One installable `dev-team` skill contains ten role guides: PO, Technical Lead,
+One installable `my-dev-team` skill contains ten role guides: PO, Technical Lead,
 Senior Developer, Design Lead, Senior Designer, Design Tester, QA Lead, Senior QA,
 DevOps, and Cybersecurity. Keeping the guides and shared references in one bundle
 makes every handoff self-contained without copying rules into ten installations.
@@ -53,12 +53,17 @@ explicitly, or use a custom skill directory:
 ./install.sh --skills-dir /path/to/skills
 ```
 
-| Host | Destination |
-| --- | --- |
-| Codex | `${CODEX_HOME:-~/.codex}/skills/dev-team` |
-| Claude Code | `~/.claude/skills/dev-team` plus `~/.claude/commands/` `dev-team.md`, `po.md`, `design-lead.md`, `tech-lead.md`, and `qa-lead.md` |
-| Gemini / Antigravity | `~/.gemini/config/skills/dev-team`, matching the reference repo |
-| OpenCode | `${XDG_CONFIG_HOME:-~/.config}/opencode/skills/dev-team` |
+Every host gets the `my-dev-team` skill and a way to call each role directly:
+`my-dev-team`, `my-po`, `my-design-lead`, `my-tech-lead`, and `my-qa-lead`.
+
+| Host | Skill | Role commands | Call a role as |
+| --- | --- | --- | --- |
+| Claude Code | `~/.claude/skills/my-dev-team` | Command files in `~/.claude/commands/` | `/my-po` |
+| OpenCode | `${XDG_CONFIG_HOME:-~/.config}/opencode/skills/my-dev-team` | Command files in `.../opencode/commands/` | `/my-po` |
+| Antigravity (`agy`) | `~/.gemini/config/skills/my-dev-team` | Role skills beside it; a skill is the slash command | `/my-po` |
+| Codex | `${CODEX_HOME:-~/.codex}/skills/my-dev-team` | Role skills beside it; a skill is the command | `$my-po` |
+
+`--target agy`, `antigravity`, and `gemini` all select Antigravity.
 
 Installation creates symlinks, so keep this checkout in place. Re-running is safe;
 existing unrelated files/directories/links cause a clear failure before links are
@@ -69,11 +74,10 @@ Use `--skills-dir` when the host's configured discovery directory differs.
 
 ## Use
 
-Invoke `dev-team` in the host's supported skill syntax (the supplied Claude command
-is `/dev-team`) with the feature goal or owning Issue. Call `/po`, `/design-lead`,
-`/tech-lead`, or `/qa-lead` to talk to that role directly, or just ask for it in
-the conversation; on other hosts, ask the skill to act as that role. Organizer
-loads only relevant
+Invoke `my-dev-team` in the host's skill or command syntax with the feature goal
+or owning Issue. Call `my-po`, `my-design-lead`, `my-tech-lead`, or `my-qa-lead`
+the same way to talk to that role directly, or just ask for it in the
+conversation. Organizer loads only relevant
 role guides and sends a complete task packet to each actual agent/CLI. If no real
 delegation tool is available, it reports the limitation instead of claiming that a
 review occurred.
