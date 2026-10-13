@@ -19,7 +19,17 @@ separately. If a necessary contract or decision is missing, send a concrete
 question and proposed options to Technical Lead. Do not improvise business scope.
 
 Implement the smallest complete slice that meets the package and fits repository
-patterns. Reuse existing components/modules. Make side effects, transactions,
+patterns. Reuse existing components/modules.
+
+When implementing object/file storage, use the project's S3-compatible storage
+boundary rather than provider-specific application code. The default is MinIO
+locally and Cloudflare R2 in deployed environments, but code should switch by
+configuration (endpoint, bucket, credentials, and related settings), not by
+forking domain behavior. For public assets, implement the agreed immutable or
+versioned object keys, stable delivery URLs, and cache metadata such as
+`Cache-Control` so Cloudflare CDN/cache can operate at the edge. Do not build a
+custom NestJS/application cache for static assets unless the technical package
+explicitly requires one. Make side effects, transactions,
 validation, failure handling, permissions, and external integration behavior
 explicit. Do not silently redesign approved UI or expand services/dependencies.
 

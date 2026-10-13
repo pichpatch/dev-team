@@ -45,7 +45,23 @@ Use [project defaults](../references/project-defaults.md) only for undecided
 new-project choices. Avoid speculative services and unnecessary abstractions.
 
 Give QA Lead enough technical detail to design tests and supportability, and
-Cybersecurity enough to assess boundaries, access, data flow, and risk. Request
+Cybersecurity enough to assess boundaries, access, data flow, and risk.
+
+### Default object-storage architecture
+
+When the product needs object/file storage, design application code against the
+S3-compatible API by default. Keep provider-specific behavior behind the storage
+boundary so application/domain logic does not depend directly on MinIO,
+Cloudflare R2, or another provider. The default stack is MinIO for local
+development and Cloudflare R2 for deployed environments, unless the project
+explicitly overrides it.
+
+For public assets, make Cloudflare CDN/cache delivery part of the technical
+design. Prefer stable public delivery URLs and immutable/versioned object keys so
+assets can be cached aggressively without stale replacements. Define required
+object metadata such as `Cache-Control`; do not add an application-level caching
+service when the edge cache is sufficient. Ask DevOps to own buckets, endpoints,
+credentials, custom domains, cache rules, and purge/operational configuration. Request
 DevOps input for environments, CI/CD, infrastructure, observability, migrations,
 or deployment implications. Routine implementation decisions are yours; business,
 design, quality, and security decisions remain with their respective owners.
