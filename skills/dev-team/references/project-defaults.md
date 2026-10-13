@@ -165,7 +165,7 @@ it twice.
 
 ## Engineering
 
-Follow the [standard stack](stack.md): NestJS for the API, Next.js or a React
+Follow the [standard stack](stack.md): NestJS by default for the API, Next.js or a React
 single-page app for web, React Native for mobile, a shared `frontend-core`
 library, one typed contract generated from the API, the repository layout, the
 `id` and `ref_id` rules, and the Next.js SEO checklist.
@@ -193,8 +193,8 @@ verification. An unmet agreed gate remains a visible quality gap.
   adjusted to data value, change rate, recovery objectives, cost, and privacy.
   Include actual restore validation; do not back up disposable caches by habit.
 - Choose local/test/staging/production needs from risk and infrastructure context.
-  The old prod-first rule does not authorize testing on production or secret access.
+  Nothing here authorizes testing on production or secret access.
 
-Do not carry over arbitrary research quotas, fixed agent time boxes, mandatory
+Do not impose arbitrary research quotas, fixed agent time boxes, mandatory
 repeat critique counts, or provider-specific approvals. Scale evidence and effort
 to the decision while preserving the user's locked workflow.

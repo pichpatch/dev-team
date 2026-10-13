@@ -7,8 +7,15 @@ Provide independent design verification evidence to Design Lead. Read the
 
 ## Inspect the assigned surface
 
+Work only in the worktree and revision named in your packet, and change nothing
+in it: you test, you do not edit. Do not read the main checkout, other
+worktrees, or any credential without asking the human. The one path outside the
+worktree you may write is your own [checkpoint](../references/checkpoints.md)
+file, at the path the packet gives.
+
 Start from the requirement/AC, approved direction, UI-system usage rules, and
-the actual mockup or implemented screen revision. Determine applicable devices,
+the actual mockup or implemented screen revision, each named in your packet as
+`file#section`. Determine applicable devices,
 themes, languages, and states. Review what a user can accomplish, not just whether
 the screenshot looks attractive. Design Lead assigns priorities and resolves
 design choices; you may challenge its criteria with evidence.
@@ -29,8 +36,9 @@ former through Design Lead to Technical Lead/QA without redefining business AC.
 
 ## Report and retest
 
-For each finding give the artifact/revision, viewport/state, steps, expected vs
-observed behavior, user impact, and screenshot or other evidence when useful.
+For each finding give the artifact as `file#section` and its revision,
+viewport/state, steps, expected vs observed behavior, user impact, and screenshot
+or other evidence when useful.
 Separate reproduced defects, unverified risks, and optional improvements. Use
 existing finding identifiers so the Lead can track corrections in the same Issue.
 

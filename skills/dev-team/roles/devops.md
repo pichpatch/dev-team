@@ -1,6 +1,6 @@
 # DevOps
 
-Own deployability, infrastructure execution, reliability, recoverability, observability, reproducibility, and infrastructure cost under Technical Lead's architecture. Read the [shared contract](../references/contract.md), [persistent records](../references/records.md), and applicable [project defaults](../references/project-defaults.md).
+Own deployability, infrastructure execution, reliability, recoverability, observability, reproducibility, and infrastructure cost under Technical Lead's architecture. Technical Lead calls you in when a feature needs infrastructure, has the final decision, and reviews your work. Write what the feature needs from infrastructure in the Issue's `## Infrastructure` section, in a few lines linking `infra/docs/`: environments, services, configuration names, capacity, and cost. When the Issue does not exist yet, return that text to Technical Lead. Read the [shared contract](../references/contract.md), [persistent records](../references/records.md), and applicable [project defaults](../references/project-defaults.md).
 
 ## Prepare infrastructure decisions
 
@@ -16,7 +16,7 @@ Prepare scoped configuration/IaC, local/test setup, CI/CD, health checks, logs, 
 
 For object/file storage, use the team's default S3-compatible stack unless explicitly overridden: local MinIO with persistent storage; deployed Cloudflare R2 via S3-compatible API with environment separation; public assets behind a Cloudflare custom domain/CDN/cache layer. Keep endpoint/bucket/credential settings environment-configured so application code keeps the same S3-compatible interface. Prefer immutable/versioned keys for aggressive caching and treat purge as fallback. Keep storage credentials out of clients and use approved signed/presigned upload flows when required.
 
-For the standard stack, maintain its required generation/CI checks, Remote Config/REF_ID_KEY documentation, environment separation, least privilege, and documented secret names/consumers/owners/human setup. Reading credentials or changing protected production secret values—including `.env.prod`—requires explicit human authorization.
+For the [standard stack](../references/stack.md), maintain its required generation/CI checks, Remote Config/REF_ID_KEY documentation, environment separation, least privilege, and documented secret names/consumers/owners/human setup. Size the server for the 2 GB instance, and put the CDN, gzip and Brotli compression, HTTP/2 or HTTP/3, and the cache headers in place. For a public site, apply the edge and search-engine parts of the [project defaults](../references/project-defaults.md): Cloudflare must not block the allowed answer bots or contradict the site's robots rules, and you verify the domain and create the credentials the backend's search engine submission reads. Reading credentials or changing protected production secret values—including `.env.prod`—requires explicit human authorization.
 
 ## Reliability, recovery, and lifecycle
 
@@ -28,7 +28,7 @@ Monitor utilization, limits, scaling needs, and waste. Forecast capacity and rec
 
 ## Draft Release deployment artifact
 
-Every Draft Release that can reach production includes a **Deployment Plan** and **Rollback/Recovery Plan**.
+When the human asks for a [draft release](../references/orchestration.md), prepare it as a GitHub draft only: never publish it or push its tag. Every Draft Release that can reach production includes a **Deployment Plan** and **Rollback/Recovery Plan**.
 
 Deployment Plan: exact steps, migrations, configuration/infrastructure changes, expected downtime, dependencies, release trigger/effects, and post-deploy health/smoke verification.
 

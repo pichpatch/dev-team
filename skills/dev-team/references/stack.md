@@ -8,14 +8,19 @@ part: create only what the product uses.
 
 ## Applications
 
-- **Backend: NestJS.** One API for every client, REST plus WebSocket where the
-  product needs it. PostgreSQL for data, Redis or Valkey for server cache, and a
-  queue or scheduler only when the work needs one.
+- **Backend: NestJS by default.** Technical Lead may choose Python or C# when
+  the product needs it, and records why. One API for every client, REST plus
+  WebSocket where the product needs it. PostgreSQL for data, Redis or Valkey for
+  server cache, and a queue or scheduler only when the work needs one.
 - **Web: Next.js**, SEO-ready from its first page. A web app that sits entirely
   behind sign-in and needs no SEO is a React single-page app instead.
 - **Mobile: React Native**, iOS and Android.
-- **Web and mobile both call the NestJS API.** Put no business logic or data
-  access in Next.js API routes.
+- **Web and mobile both call the API.** Put no business logic or data access in
+  Next.js API routes.
+- **Standalone Next.js is the one exception.** A web-only product with no mobile
+  app and no separate API may be a single Next.js application that holds its own
+  business logic and data access, using Prisma. Technical Lead decides this at
+  the start; it follows the backend rules below wherever they apply.
 - **`frontend-core`** is a shared library with no running server. Web and mobile
   take from it the design tokens, shared components, presentation logic, hooks,
   i18n, platform adapters, and the generated API SDK.
@@ -43,7 +48,7 @@ alpha-food/
 │   ├── docs/
 │   └── src/
 │       ├── tokens/             colors, spacing, typography
-│       ├── components/         shared component interfaces and renderers
+│       ├── components/         atoms/, molecules/, organisms/, templates/
 │       ├── frontend_domain_1/  reusable presentation logic for that domain
 │       ├── frontend_domain_2/
 │       ├── hooks/
@@ -52,6 +57,9 @@ alpha-food/
 │       └── sdk/                generated API client and types
 ├── api/
 │   ├── docs/
+│   │   ├── architecture.html   module map and rules that cross modules
+│   │   ├── modules/            one docs folder per module, named like its code folder
+│   │   ├── decisions/
 │   │   └── api-spec/openapi.json
 │   └── app/
 │       ├── modules/            business modules, REST + WebSocket
@@ -72,8 +80,10 @@ document instead of describing it again. The link tells a person or an agent tha
 the thing is shared, so changing it there changes every app that links to it.
 What an app's own docs describe is only what is specific to that app.
 
-Each folder with documents has a `README.md` that indexes them
-([records](records.md)).
+Each application has a `README.md` that gives its commands and maps its modules
+to their documents and code, and the root `README.md` maps the applications. An
+agent reaches any file through those maps instead of searching the code
+([navigate by documents](records.md)).
 
 ## One typed contract, end to end
 
@@ -81,7 +91,8 @@ The API is the single source of types. A backend change reaches every client
 through two commands:
 
 1. In `api/app`, `yarn generate-openapi` writes `api/docs/api-spec/openapi.json`
-   from the NestJS controllers and DTOs.
+   from the controllers and DTOs. A Python or C# API provides the same output
+   through its own generator behind one documented command.
 2. In `frontend-core`, `yarn generate-spec` reads that file and regenerates the
    typed SDK in `src/sdk/`.
 
@@ -107,20 +118,153 @@ through two commands:
   Public web pages must still produce semantic HTML.
 - An app holds screens, routing, and platform wiring. It does not copy a
   component or repeat logic that belongs in `frontend-core`.
+- **Components follow Atomic Design:** atoms, molecules, organisms, and
+  templates in `frontend-core`; pages in the app. Build a screen from existing
+  parts first, and add a new part at the lowest level that fits.
+- **Styling is Tailwind**, with its theme generated from the design tokens. On
+  React Native use NativeWind, so the same token classes work on mobile. No
+  hand-written CSS files or inline style values that bypass the tokens.
 - **Server state goes through TanStack Query** (`useQuery`, `useMutation`) calling
-  the SDK. Never fetch server data inside `useEffect`. Clear the whole client
-  cache on login, logout, and user switch.
+  the SDK. Never fetch server data inside `useEffect`, and never copy it into a
+  client store. Clear the whole client cache on login, logout, and user switch.
+- **Client state lives at the smallest scope that works.** Go up a step only
+  when the one below cannot do the job:
+
+  | Scope | Use | For |
+  | --- | --- | --- |
+  | Component | `useState` / `useReducer` | State one component owns; it lives and dies with the component |
+  | Lifted | The same hooks, in the nearest common parent | State a few sibling components share |
+  | Context | React Context | What most screens need: theme, current user, locale, feature flags |
+  | Global client store | Zustand | Client state shared across distant screens that Context does not fit |
+
+- **Side effects have one place each,** mirroring the backend's repository and
+  service:
+
+  | Where | Holds | Never holds |
+  | --- | --- | --- |
+  | Zustand store | State, and setters that keep that state consistent with itself: setting one field may reset the fields that depend on it | API calls, navigation, storage, analytics, anything asynchronous |
+  | Action hook (`useCheckout.ts`) or service | API calls through TanStack Query and the SDK, multi-step mutations, updates to several stores, navigation and messages that follow a result | Markup |
+  | Component | Rendering, and a call to the action hook from an event handler | API calls, multi-step logic, effects that react to store changes |
+  | Store `subscribe` | Effects that must run whenever a state changes, wherever the change came from: persisting to local storage, logging, analytics | Business steps that belong to one user action |
+
+  Register each `subscribe` once, in the root component or a dedicated
+  initialization file, never inside a screen. A component then reads as
+  `const { submit, isPending } = useCheckout()` and `onClick={submit}`. Record
+  every global store, what changes when it changes, and every `subscribe` in the
+  module's `flows.html#global-state` ([module documents](engineering.md)).
+- **Dates display in the user's time zone, through dayjs.** The API sends and
+  receives UTC only; convert at the moment of display or input.
 - **Every user-facing string goes through the i18n library.** No hard-coded text.
 - **Feature flags use Firebase Remote Config.** DevOps sets it up, local
   environment included.
 - **Lists:** paginate on the server beyond about 30 items; make a dropdown
-  searchable beyond about 10 options; virtualize long lists; debounce a search
+  searchable beyond about 10 options; virtualize any list over 100 items
+  (`react-virtuoso` or `@tanstack/react-virtual` on web, the virtualized list
+  component on React Native); debounce a search
   that calls the API by 600 ms and ignore stale responses, but filter an
   already-loaded list instantly; make every table column sortable, on the server
   for a paginated table.
 
+## Frontend performance
+
+- **Colocate state.** State lifted too high re-renders the whole subtree on
+  every change.
+- **Split each route into its own bundle** with `React.lazy` and `Suspense`, or
+  the framework's route splitting.
+- **Server-render when you can.** In Next.js, a component is a Server Component
+  unless it needs interaction.
+- **Use `useTransition` or `useDeferredValue`** for expensive but tolerable
+  updates, such as search-as-you-type over a large loaded set.
+- **Memoize only with proof.** Add `React.memo`, `useMemo`, or `useCallback` when
+  the React Profiler shows a real problem, and say so in a comment.
+- **Do not create objects, arrays, or functions in render to pass as props** to
+  a memoized child, as in `<Child config={{ a: 1 }} />`. Hoist constants out.
+- **Split a Context that holds unrelated values**, so a consumer re-renders only
+  for what it reads.
+- **Never call a state setter during render.** Compute the value in render, or
+  use an effect.
+
+## Images, compression, and caching
+
+- **Every image is WebP.** The API converts each uploaded image to WebP and
+  stores responsive sizes; static images in the repository are WebP too.
+- **Serve responsive sizes** (`srcset` and `sizes`, or `next/image`), lazy-load
+  images below the fold, and set `width` and `height` on every image so the
+  layout does not shift.
+- **Serve gzip and Brotli** for text assets and API responses.
+- **A CDN sits in front of everything,** Cloudflare by default, with HTTP/2 or
+  HTTP/3 at the edge. DevOps sets up compression, the CDN, and these headers:
+
+  | Response | `Cache-Control` |
+  | --- | --- |
+  | Bundled assets, with a content hash in the filename (`app.a3f7b9.js`) | `public, max-age=31536000, immutable` |
+  | `index.html` and other HTML entry documents | `no-cache` |
+  | Cacheable API responses | `public, s-maxage=60, stale-while-revalidate=600` |
+
+- **Only public responses are cacheable.** A response that depends on who is
+  asking, or carries personal data, is `private, no-store` and never reaches the
+  CDN cache. Technical Lead lists the cacheable operations in each module's
+  `api-spec.html`.
+
 ## Backend
 
+- **Layers: controller, service, repository.** A controller handles the
+  transport only: input validation, permissions, and the response. A service
+  holds the business rules. A repository is the only place that talks to the
+  database. A controller never calls a repository, and a service never builds a
+  query.
+- **A repository owns one table.** It saves and reads that table and keeps each
+  record consistent with itself: when one column changes, it clears or resets
+  the columns of the same record that depend on it. It never updates another
+  table, calls another repository, sends a webhook, or triggers anything
+  external.
+- **A service orchestrates.** Anything that spans tables or leaves the database
+  belongs to the service: it calls each repository in turn, wraps the calls in
+  one transaction when they must succeed or fail together, and triggers external
+  effects only after the transaction commits.
+
+  For example, when a user disconnects Google:
+
+  ```text
+  AccountService.unbindGoogle(userId)          one transaction
+    1. userRepository.clearGoogleId(userId)    also clears google_refresh_token,
+                                               a column of the same record
+    2. storageRepository.disallowGoogleDrive(userId)
+                                               another table, so the service
+                                               calls it, not userRepository
+  ```
+
+  Clearing `google_refresh_token` stays in `userRepository`, because no caller
+  should be able to leave a token behind without a `google_id`. Removing the
+  Google Drive permission is in the service, because it is another table.
+  Record the same-record rule in the module's `data-dict.html` and every side
+  effect in its `flows.html#side-effects`
+  ([module documents](engineering.md)).
+- **ORM:** TypeORM with NestJS, behind the repositories. Prisma in a standalone
+  Next.js application.
+- **Runs in 2 GB of memory.** Design for an instance of that size: paginate or
+  stream instead of loading a whole table or file, bound every queue, batch, and
+  concurrent job, keep long work in the worker, and set the runtime's heap limit
+  below the instance size. A design that needs more is raised to the human with
+  its cost.
+- **Time is UTC, always.** Store `timestamptz`, compute in UTC with dayjs and its
+  UTC plugin, and return ISO 8601 with `Z`. Never save or return a local time. A
+  time zone the business needs, such as a shop's opening hours, is stored as its
+  own named field beside the UTC value.
+- **Immutable data in TypeScript projects, through `readonly` types.** Declare
+  fields `readonly` and collections `ReadonlyArray`, `ReadonlyMap`, or
+  `ReadonlySet`, use `as const` for fixed values, and return a new value instead
+  of changing an argument. Add no immutability library.
+- **Three logs, in every project:**
+
+  | Log | Records | Kept in |
+  | --- | --- | --- |
+  | Application log | Requests, errors, and job runs as structured JSON with a request id | Log output, collected by the platform |
+  | Audit log | Every create, update, and delete of business data: who, when, what, the record `id`, before and after | An append-only database table |
+  | User activity log | What a user did: sign-in and sign-out, key screens and actions, failures they met | A database table, for support and product analysis |
+
+  Never log secrets, tokens, passwords, or full personal data. Cybersecurity
+  decides what each log may hold and for how long.
 - **Health:** `GET /api/health` returns
   `{status, name, version, release, commit, builtAt}`.
 - **Integrations:** every third-party integration has a mock behind the same
@@ -158,7 +302,9 @@ Every project uses two ids, one purpose each:
   `id`.
 - **Generate `ref_id` with the supplied module, [ref-id.ts](../assets/ref-id.ts),
   in every project.** Copy it into the API's shared library. Do not re-implement
-  it per feature and do not replace it with another method.
+  it per feature and do not replace it with another method. A Python or C# API
+  ports it line for line and proves the port gives the same output as the
+  supplied module for the same inputs.
 
   ```sql
   CREATE SEQUENCE products_ref_seq MAXVALUE 4294967295; -- stays inside the module's 32-bit range

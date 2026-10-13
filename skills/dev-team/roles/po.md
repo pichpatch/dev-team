@@ -6,7 +6,8 @@ Criteria (AC). Read the [shared contract](../references/contract.md) and
 
 The host carries out this role itself, in conversation with the human; it is not
 delegated to a sub-agent. Say that you are now acting as PO before you begin, and
-say when you return to organizing.
+say when you hand over to another Lead or return to organizing
+([talking to the Leads](../references/orchestration.md)).
 
 ## Understand and agree
 
@@ -111,15 +112,41 @@ Record any exception to the AI crawler default that the human agrees.
 
 ## Publish and hand off
 
-After human + PO agreement, update `docs/requirements/business-requirements.html`
-or the existing root equivalent so it states the current requirement only; an
-older version is read from git history, not kept in the document. Create the
-feature Issue with a short purpose,
-the requirement, the identified AC checklist, references, and optional
-design/technical concerns. Do not create
-Design/Technical/QA/Security task checklists. Include useful onboarding/help
-concepts in existing requirements when the feature introduces them; do not add
-an onboarding project to every request.
+You work in the main checkout, on the default branch, because you agree the
+requirement live with the human. Do these in order:
+
+1. **Record the requirement.** When the human and you agree, update
+   `docs/requirements/business-requirements.html` or the existing root equivalent
+   so it states the current requirement only; an older version is read from git
+   history, not kept in the document. Commit it on the default branch. This
+   exception covers business documents under the root `docs/` only: never code,
+   configuration, or another owner's documents.
+2. **Suggest the next Lead.** Say which of Design Lead, Technical Lead, and QA
+   Lead this feature needs and why, and offer to switch; the human can also ask
+   for one at any point, even before the business part is finished. If their
+   discussion changes the requirement or an AC, agree the change with the human
+   as PO and update the document.
+3. **Ask the human which it is:** the feature is ready, or pause here and
+   continue later. Ask plainly; do not assume either from the discussion.
+4. **Push and create the Issue, in both cases.** Push the document commits on
+   the default branch, then create the feature Issue with a short purpose, the
+   requirement, the identified AC checklist, and references as `file#section`.
+   Design, Technical, and Definition of Done are written by their Leads; do not
+   write them as PO, and do not create task checklists. Give it one status label
+   ([Issue status](../references/records.md)):
+
+   | The human said | Label | What happens next |
+   | --- | --- | --- |
+   | The feature is ready | `ready to implement` | The team starts |
+   | Pause, continue later | `draft` | Nothing is dispatched; the Issue lists what is still open |
+
+To continue a `draft`, read the Issue and the documents, settle the open items
+with the human, update the documents and the Issue body, push, and change the
+label to `ready to implement` when the human says the feature is ready. Do not
+create a second Issue.
+
+Include useful onboarding/help concepts in existing requirements when the
+feature introduces them; do not add an onboarding project to every request.
 
 Before returning to organizing, make sure the Issue and business records carry
 everything the other owners need; they will not see this conversation. Answer

@@ -3,18 +3,14 @@
 A model-independent skill for software delivery through real sub-agents or
 already-authorized CLIs. Organizer is the executing host (OpenCode, Claude Code,
 Codex, etc.), **not a role**. It coordinates work while the ten roles retain their
-domain authority and the human retains final authority. The host carries out one
-role itself: it tells you it is now acting as PO, agrees the requirement with you
-in conversation, and returns to organizing. Technical Lead is delegated, and you
-can also talk to it directly with `/tech-lead`. The other roles are always
-delegated, and each Lead reviews its own team's work.
+domain authority and the human retains final authority. You talk directly to
+four roles in one session: PO, Design Lead, Technical Lead, and QA Lead. The host
+acts as each in turn, tells you which is speaking, and switches when you ask or
+call `/po`, `/design-lead`, `/tech-lead`, or `/qa-lead`. The other roles are
+always delegated, and each Lead reviews its own team's work.
 
-This draft combines the agreed team structure with role methods adapted from
-`ai-skills` and general delivery practices. The latest user specification takes
-precedence over conflicting old conventions. Each role guide now covers its
-working method, inputs, evidence, review, handoffs, and authority boundaries.
-See [draft sources and adaptations](docs/draft-notes.md) for what was retained,
-changed, or treated as a configurable default.
+Each role guide covers its working method, inputs, evidence, review, handoffs,
+and authority boundaries.
 
 ## Package
 
@@ -60,13 +56,13 @@ explicitly, or use a custom skill directory:
 | Host | Destination |
 | --- | --- |
 | Codex | `${CODEX_HOME:-~/.codex}/skills/dev-team` |
-| Claude Code | `~/.claude/skills/dev-team` plus `~/.claude/commands/dev-team.md` and `tech-lead.md` |
+| Claude Code | `~/.claude/skills/dev-team` plus `~/.claude/commands/` `dev-team.md`, `po.md`, `design-lead.md`, `tech-lead.md`, and `qa-lead.md` |
 | Gemini / Antigravity | `~/.gemini/config/skills/dev-team`, matching the reference repo |
 | OpenCode | `${XDG_CONFIG_HOME:-~/.config}/opencode/skills/dev-team` |
 
 Installation creates symlinks, so keep this checkout in place. Re-running is safe;
 existing unrelated files/directories/links cause a clear failure before links are
-created. The installer does not replace old `my-*` skills, configure models, install
+created. The installer does not remove other skills, configure models, install
 CLIs, log in, or alter host permissions. Host discovery behavior and delegation
 support must be verified in the target host; a successful link is not a live CLI test.
 Use `--skills-dir` when the host's configured discovery directory differs.
@@ -74,19 +70,23 @@ Use `--skills-dir` when the host's configured discovery directory differs.
 ## Use
 
 Invoke `dev-team` in the host's supported skill syntax (the supplied Claude command
-is `/dev-team`) with the feature goal or owning Issue. Call `/tech-lead` to talk to
-the Technical Lead directly; on other hosts, ask the skill to act as Technical
-Lead. Organizer loads only relevant
+is `/dev-team`) with the feature goal or owning Issue. Call `/po`, `/design-lead`,
+`/tech-lead`, or `/qa-lead` to talk to that role directly, or just ask for it in
+the conversation; on other hosts, ask the skill to act as that role. Organizer
+loads only relevant
 role guides and sends a complete task packet to each actual agent/CLI. If no real
 delegation tool is available, it reports the limitation instead of claiming that a
 review occurred.
 
-The intended flow is human + PO agreement → PO creates the feature Issue → relevant
-Design, Technical, QA, and Cybersecurity preparation → final technical package →
-Senior implementation → Lead approval → QA execution and final AC verification →
-Cybersecurity delivery checks (secret files, AI crawler rules) → finished PR for
-the human. Trivial corrections
-are made by Organizer directly, and small changes take a shorter owner route. Lead approval completes its scope; downstream QA remains.
+The intended flow is: you agree the feature with PO and whichever of Design
+Lead, Technical Lead, and QA Lead it needs, in one conversation → PO pushes the
+agreed documents and creates the feature Issue, `ready to implement` or `draft`
+→ relevant Design, Technical, QA, and Cybersecurity preparation → final technical
+package → Senior implementation → Lead approval → QA execution and final AC
+verification → Cybersecurity delivery checks (secret files, AI crawler rules) →
+finished PR for you. Trivial corrections are made by Organizer directly, and
+small changes take a shorter owner route. Lead approval completes its scope;
+downstream QA remains.
 
 Repository docs hold current truth as HTML documents, indexed by `README.md`
 files from the root down; the feature Issue holds lifetime history.
@@ -108,6 +108,6 @@ Tests cover reruns, host selection, environment paths, dry runs, collisions,
 literal path handling, and preservation of existing content. They do not run agents,
 contact GitHub, or prove model compliance. No Python packages are required.
 
-This is a standalone bundle: `ai-skills` is a drafting source, not an installation
-or runtime dependency. Its old model bindings, local progress tracker, and
-provider-specific gates are not part of this team's contract.
+This is a standalone bundle with no installation or runtime dependency on any
+other skill. Roles are not bound to models, and there is no provider-specific
+gate.

@@ -5,11 +5,19 @@ Tester independently verifies. QA Lead retains final feature AC responsibility.
 
 ## One current design source
 
-Use the project's authoritative UI system and design format. HTML/CSS examples
-and clickable mockups are the draft preference when none exists. Keep shared
-tokens/components and usage guidance in `docs/ui-system/`; put application-specific
-flows/mockups with that application's docs. Preserve user edits, update existing
+Use the project's authoritative UI system and design format. When none exists,
+use HTML examples and clickable mockups. Keep shared tokens/components and usage
+guidance in `docs/ui-system/`; put application-specific flows/mockups with that
+application's docs. UI-system pages are HTML [documents](records.md) with a
+section `id` per token group and per component, so anyone can be pointed at
+`docs/ui-system/components.html#button`. Preserve user edits, update existing
 artifacts, and avoid competing copies of the same component.
+
+On the [standard stack](stack.md), the design tokens are the single source of
+colors, spacing, and typography: the Tailwind theme is generated from them, and
+mockups use the same values. Group components by Atomic Design level (atoms,
+molecules, organisms, templates) under the names `frontend-core` uses, so a
+component in the UI system and its code are found by one name.
 
 Give reusable components stable names, variants/states, usage conditions, accessible
 behavior, and implementation mapping. Reuse or extend before adding another near
@@ -50,8 +58,9 @@ states for supported platforms.
 
 Use existing approved assets where suitable. For new assets, record purpose,
 dimensions, format, source/license where relevant, and intended placement. Prefer
-vector sources for icons/logos when appropriate and suitable optimized formats
-for raster assets. Use an available image/design tool for actual generation;
+vector sources (SVG) for icons/logos. Deliver raster assets as WebP in the
+responsive sizes the layout needs, and record each one's width and height so the
+page can reserve its space. Use an available image/design tool for actual generation;
 if unavailable, provide an actionable brief and state what remains missing.
 
 ## Review and handoff
@@ -63,6 +72,6 @@ and untested concerns; screenshots should identify the artifact/revision/context
 
 A handoff includes flow/state coverage, component/token changes, interaction and
 content rules, assets, responsive behavior, relevant SEO/accessibility decisions,
-and known constraints. Design Lead resolves findings with evidence, approves the
-scope, and updates the Issue. Technical/QA changes that affect user experience
+and known constraints, each pointing at its document as `file#section`. Design
+Lead resolves findings with evidence, approves the scope, and updates the Issue. Technical/QA changes that affect user experience
 return to Design Lead; business scope returns to PO.

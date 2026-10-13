@@ -6,14 +6,14 @@
 - Additional applicable skills:
 - Owning feature Issue:
 - Repository/worktree, branch, revision, and relevant local changes:
-- Current authoritative docs and recorded decisions:
+- Documents and sections to start from (`file#section`), and recorded decisions:
 - Task and expected deliverables:
 - Scope / files owned and boundaries:
 - Dependencies and existing applicable approvals:
 - Verification expected:
 - Reporting route and durable outcome location:
 - Completion criteria and evidence required by the receiving owner:
-- Checkpoint to resume, if one exists:
+- Checkpoint path (absolute, under the main checkout's `.AI/`), and the checkpoint to resume if one exists:
 
 At completion, return artifacts, actual evidence, limitations, remaining work, and
 any evidenced challenge. Persist decisions in repo docs / the owning Issue through

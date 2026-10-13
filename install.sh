@@ -23,7 +23,7 @@ With no target, install for hosts whose configuration directories already exist.
 --dry-run prints planned links and checks conflicts without changing files.
 
 Codex:    ${CODEX_HOME:-~/.codex}/skills/dev-team
-Claude:   ~/.claude/skills/dev-team and ~/.claude/commands/{dev-team,tech-lead}.md
+Claude:   ~/.claude/skills/dev-team and ~/.claude/commands/{dev-team,po,design-lead,tech-lead,qa-lead}.md
 Gemini:   ~/.gemini/config/skills/dev-team (the reference repo's convention)
 OpenCode: ${XDG_CONFIG_HOME:-~/.config}/opencode/skills/dev-team
 
@@ -94,7 +94,7 @@ else
     destinations+=("$destination")
     sources+=("$SKILL_SOURCE")
     if [[ "$target" == claude ]]; then
-      for command in dev-team tech-lead; do
+      for command in dev-team po design-lead tech-lead qa-lead; do
         destinations+=("$HOME/.claude/commands/$command.md")
         sources+=("$COMMANDS_SOURCE/$command.md")
       done

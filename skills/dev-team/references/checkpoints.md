@@ -1,7 +1,12 @@
 # Pause, interruption, and resume
 
-`/.AI/` means `.AI/` at the target repository root. It is temporary unfinished
-state, not a task tracker or permanent documentation.
+`.AI/` lives at the root of the main checkout, never inside a worktree, so there
+is one place to look when resuming. It is git-ignored and never committed. It is
+temporary unfinished state, not a task tracker or permanent documentation.
+
+An agent working in a worktree writes only its own checkpoint file there. Its
+task packet gives the absolute path; that is the one path outside its worktree
+it may write.
 
 | State | Checkpoint behavior |
 | --- | --- |

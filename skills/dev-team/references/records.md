@@ -13,50 +13,139 @@ on the owning Issue.
 
 ### HTML documents, README indexes
 
-Write every project document as HTML (`.html`): requirements, decisions, technical
-packages, QA cases, support and security records, runbooks, and evaluations. Start
-from [the document template](../assets/document.html) so a page is self-contained
-and readable when opened straight from a checkout.
+Write every project document as HTML (`.html`): requirements, decisions, module
+and architecture documents, QA cases, support and security records, runbooks, and
+evaluations. Start from [the document template](../assets/document.html). Keep
+the HTML plain: semantic tags only, no inline styles or scripts. All documents
+share one stylesheet, [docs.css](../assets/docs.css), copied once to
+`docs/assets/docs.css`, so no document carries its own styling.
 
-`README.md` files are the index, because GitHub renders them. The root `README.md`
-lists the root `docs/` documents and links to every application/service
-`README.md`. Each of those lists its own documents. A docs subfolder with many
-documents may keep its own `README.md`, linked from its parent. Every document is
-therefore reachable from the root `README.md` by following links:
+Give every section heading a short, stable `id` in kebab-case, for example
+`<h2 id="admin">`. Every `id` is kebab-case, including one named after
+something in the code: the table `order_items` is `#order-items` and the
+operation `refundOrder` is `#refund-order`. Whenever you point anyone at a
+document, in a reply to the human, a task packet, an Issue, a PR, or another
+document, give the file and the section:
+`api/docs/modules/orders/rules.html#admin`. The human opens the exact place, and
+an agent reads that section instead of the whole file. Renaming an `id` breaks
+links, so change one only together with every link to it.
+
+`README.md` files are the index and the map, because GitHub renders them and they
+are the first thing an agent reads. Every document and every module is reachable
+from the root `README.md` by following links.
+
+The root `README.md` maps the applications and lists the root documents:
 
 ```markdown
+# Alpha Food
+
+One line on what the product is.
+
+## Applications
+
+| Application | What it is | Stack | Start here |
+| --- | --- | --- | --- |
+| API | One backend for every client | NestJS | [api](api/README.md) |
+| Customer mobile | Ordering app for customers | React Native | [frontend_domain_1](frontend_domain_1/README.md) |
+| Customer web | Public ordering site | Next.js | [web/frontend_domain_1](web/frontend_domain_1/README.md) |
+| Frontend core | Shared tokens, components, logic, SDK | Library | [frontend-core](frontend-core/README.md) |
+
 ## Documents
 
 | Document | Purpose | Owner |
 | --- | --- | --- |
 | [Business requirements](docs/requirements/business-requirements.html) | Agreed scope, rules, and AC sources | PO |
-
-## Applications and services
-
-- [API](api/README.md)
-- [Frontend](frontend/README.md)
 ```
 
-Whoever adds, renames, or removes a document updates the `README.md` that lists
-it in the same change. A document no `README.md` reaches is not published. Use
-relative links. Besides the indexes, the only Markdown the team writes is under
-`.AI/` (see [pause and resume](checkpoints.md)).
+Each application's `README.md` gives the commands, its modules with where their
+documents and code are, and its other documents:
+
+```markdown
+# API
+
+One backend for every client. NestJS, PostgreSQL, Redis.
+
+## Run, test, generate
+
+| Task | Command |
+| --- | --- |
+| Start | `yarn start:dev` |
+| Test | `yarn test` |
+| Generate the API spec | `yarn generate-openapi` |
+
+Environment keys are listed in `.env.example`; never write values here.
+
+## Modules
+
+| Module | Documents | Code | Tests |
+| --- | --- | --- | --- |
+| orders | [orders](docs/modules/orders/README.md) | `app/modules/orders/` | `app/modules/orders/*.spec.ts` |
+
+## Documents
+
+| Document | Purpose | Owner |
+| --- | --- | --- |
+| [Architecture](docs/architecture.html) | Module map and rules that cross modules | Technical Lead |
+```
+
+Whoever adds, renames, or removes a document or a module updates the `README.md`
+that lists it in the same change. A document or module no `README.md` reaches is
+not published. Use relative links. Besides these READMEs, the only Markdown the
+team writes is under `.AI/` (see [pause and resume](checkpoints.md)).
+
+### Navigate by documents, not by code
+
+An agent has no memory of the code base, and reading code to find its way is the
+most expensive thing it does. Reach the right files in a few reads:
+
+1. **The task packet** names the Issue, the worktree, and the documents to start
+   from.
+2. **The Issue** gives the purpose, the AC, readiness, and history. It does not
+   explain how anything works.
+3. **The root `README.md`** maps the applications. Follow one link.
+4. **The application's `README.md`** gives the commands and, for each module,
+   where its documents and its code are.
+5. **The module's `README.md`** says in one line what the module is for and
+   lists its documents: rules, flows, data, permissions, API, code map, debt.
+6. **Only the module documents the task needs**, and in them only the sections
+   it needs. `code-map.html` names the files and tests.
+7. **Then open only the files the code map names.**
+8. **The `.AI/` checkpoint**, only when resuming unfinished work.
+
+- Read only your path. Skip sibling modules and other applications unless the
+  change crosses into them.
+- Do not open generated files (`openapi.json`, the SDK), lockfiles, or build
+  output to learn the system; the module's `api-spec.html` says what they mean. Search
+  them for one specific name when you need it.
+- Search or read through code only when the documents do not answer. Then fix
+  the document in the same change, so the next agent does not pay the same cost.
+  When a document contradicts the code, trust the code, fix the document, and
+  say so.
+- Write for the next reader's budget. Start each document with one line saying
+  what it covers, state each fact once at the lowest level where it is true, and
+  link instead of repeating. A higher level gives one sentence and the link.
+
+One folder per module holds everything about that module, one document per
+subject: rules, flows, data, permissions, what its API operations mean, the code
+map, and known debt ([engineering practices](engineering.md)). Documents outside
+the modules cover only what spans them: the architecture overview and decisions.
 
 These are not project documents and keep their own formats: GitHub Issue and PR
 text, task packets, generated files such as `openapi.json`, and diagram or mockup
 assets linked from a document.
 
 In a project that already keeps non-HTML docs, write new documents as HTML and
-list the existing ones in the `README.md` index as they are. Converting them is a migration
-the human agrees first. Never keep two formats of the same truth.
+list the existing ones in the `README.md` index as they are. Converting them is a
+migration the human agrees first. Never keep two formats of the same truth.
 
 The following are example document locations in the
 [standard repository layout](stack.md), not a scaffold to create in every project.
 `frontend_domain_N` stands for a frontend domain named after the business:
 
 ```text
-README.md
+README.md               map of applications and root documents
 docs/
+  assets/docs.css       the one shared stylesheet
   requirements/business-requirements.html
   ui-system/
   qa/support/
@@ -65,23 +154,33 @@ docs/
   evaluation/{feature-slug}-{role}-{model}.html
 frontend_domain_N/
   README.md
-  docs/                 mobile flows, mockups, decisions
+  docs/
+    modules/{module}/   README.md index, then screens, routes, flows, code map, debt
+    mockups/
+    decisions/
 web/frontend_domain_N/
   README.md
-  docs/                 web flows, mockups, decisions
+  docs/                 the same shape as the mobile app's docs
 frontend-core/
   README.md
-  docs/                 tokens, shared components, SDK usage; apps link here
+  docs/
+    modules/{module}/   tokens, components, shared logic, SDK usage; apps link here
+    decisions/
 api/
   README.md
   docs/
-    architecture/
-    flows/
-    modules/            one document per module, with its rules
-    data-dictionary/
-    api-spec/openapi.json
-    roles-permissions/
+    architecture.html   module map and rules that cross modules
+    modules/{module}/   named like the code folder
+      README.md         purpose and index of the files below
+      rules.html
+      flows.html
+      data-dict.html
+      permissions.html
+      api-spec.html     what each operation means; shapes stay in openapi.json
+      code-map.html
+      tech-debt.html
     decisions/
+    api-spec/openapi.json   generated; never read whole
 infra/
   README.md
   docs/
@@ -112,7 +211,8 @@ A GitHub Issue is the ticket and the durable lifetime history for one feature:
 what was agreed, whether it is ready to implement, and what happened. Decisions
 themselves live in the docs, which the Issue links to, so an agent learns how
 something works from the docs and never needs the Issue for that. PO creates the
-Issue only after the human and PO agree on the business requirement and AC. The team
+Issue when the human says the feature is ready or asks to pause, and labels it
+with its status. The team
 works on GitHub only: when the repository's remote is another host, stop and ask
 the human instead of recording the feature elsewhere or inventing a substitute.
 Include:
@@ -129,21 +229,71 @@ The agreed requirement.
 ## Acceptance Criteria
 - [ ] **AC-1** An observable business outcome.
 
-## Technical Concerns
-Optional concerns, not a technical task checklist.
+## Design
+What Design Lead agreed with the human, in a few lines, linking the design documents.
 
-## Design Concerns
-Optional concerns, not a design task checklist.
+## Technical
+What Technical Lead agreed with the human, in a few lines, linking the decision documents.
+
+## Infrastructure
+What DevOps needs for this feature: environments, services, configuration names, cost.
+
+## Security
+- **SEC-1** A security or privacy requirement the feature must meet.
+
+## Definition of Done
+- [ ] **DOD-1** A condition, beyond the AC, that must hold before this feature is done.
 
 ## References
-Links to relevant authoritative documents.
+Links to relevant authoritative documents, as `file#section`.
 ```
+
+Each section belongs to one role, and only that role writes it:
+
+| Section | Owner |
+| --- | --- |
+| Purpose, Business Requirement, Acceptance Criteria | PO |
+| Design | Design Lead |
+| Technical | Technical Lead |
+| Infrastructure | DevOps, when Technical Lead calls it in |
+| Security | Cybersecurity, when Technical Lead calls it in |
+| Definition of Done | QA Lead |
+
+A section says what was agreed and links the document that holds the detail; it
+is not a task checklist. The Definition of Done is the exception: QA Lead agrees
+each item with the human, gives it a stable identifier (`DOD-1`, `DOD-2`, ...),
+and checks it only with evidence, as for an AC. An AC says what the product does
+for the user; a Definition of Done item says what else must be true, such as
+test coverage, a performance limit, or a support runbook. Each security
+requirement also carries a stable identifier (`SEC-1`, `SEC-2`, ...), so the
+technical documents and QA cases can cite it; it may forbid something, for
+example: "Do not store a customer's card number in our systems until the
+certification is passed." When Technical Lead decides not to follow one, the
+requirement stays in the section as Cybersecurity wrote it, and Technical Lead
+adds its decision and reason beneath it. Omit the section of a role the feature
+does not need.
+
+### Issue status
+
+Every feature Issue carries exactly one of these labels. PO sets it, and creates
+the label in the repository when it does not exist:
+
+| Label | Means | Team |
+| --- | --- | --- |
+| `draft` | The human paused before confirming. The requirement so far is recorded and pushed. | Does not start |
+| `ready to implement` | The human confirmed the feature is ready. | Starts |
+
+A `draft` Issue adds an `## Open questions` section listing what is still to be
+settled, under the role that owns each, with its options and what it blocks, so the discussion can
+continue from the Issue alone. Remove the section when the Issue becomes
+`ready to implement`.
 
 Purpose gives every stateless agent the context behind the requirement; keep it
 short. Every AC carries a stable identifier that is never renumbered or reused.
-Omit empty optional sections. PO must not create Design/Technical/QA/Security
-task checklists. Each responsible Lead owns the later work coordination for its
-domain. PO defines AC; QA Lead updates AC completion only after verification.
+Omit empty optional sections. Nobody creates Design/Technical/QA/Security task
+checklists on the Issue. Each responsible Lead owns the later work coordination
+for its domain. PO defines AC and QA Lead defines the Definition of Done; QA
+Lead updates the completion of both only after verification.
 
 Bugs and business, technical, design, QA/supportability, or security gaps normally
 continue in the original owning feature Issue. Organizer searches existing Issues

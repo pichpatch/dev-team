@@ -56,7 +56,7 @@ class InstallerTests(unittest.TestCase):
             ".gemini/config/skills/dev-team", ".config/opencode/skills/dev-team",
         ):
             self.assert_skill_link(self.home / relative)
-        for name in ("dev-team.md", "tech-lead.md"):
+        for name in ("dev-team.md", "po.md", "design-lead.md", "tech-lead.md", "qa-lead.md"):
             command = self.home / ".claude/commands" / name
             self.assertTrue(command.is_symlink())
             self.assertEqual(command.resolve(), ROOT / "commands" / name)

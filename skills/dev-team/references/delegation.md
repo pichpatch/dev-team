@@ -11,8 +11,8 @@ implicit part of routing work.
 
 Roles do not bind to models. Respect the human's explicit model/provider choices;
 otherwise use the configured available defaults, limited in both cases to models
-the human has approved as safe for private code ([contract](contract.md)). Record actual model identity
-when observable, and `unknown` when it is not. Do not claim a named provider ran
+the human has approved as safe for private code ([contract](contract.md)). Record
+actual model identity when observable, and `unknown` when it is not. Do not claim a named provider ran
 because another model role-played it. If genuine delegation is unavailable, report
 that limitation and preserve pending work rather than presenting self-review as
 independent role approval.
@@ -25,9 +25,9 @@ transport adaptation, not transfer of domain authority.
 ## Routing and invocation loop
 
 PO is not in this table: the host carries it out itself in conversation with the
-human. Technical Lead is delegated as shown, and the human can also talk to it
-directly ([orchestration](orchestration.md)). Each Lead reviews its own team's
-work; review is tied to the role, never to a model.
+human. The three Leads are delegated as shown, and the human can also talk to
+each of them directly ([orchestration](orchestration.md)). Each Lead reviews its
+own team's work; review is tied to the role, never to a model.
 
 | Delegating owner | Execution role | Approval/reporting owner |
 | --- | --- | --- |
@@ -37,10 +37,10 @@ work; review is tied to the role, never to a model.
 | Technical Lead | Senior Developer(s) | Technical Lead |
 | Organizer | QA Lead | QA Lead |
 | QA Lead | Senior QA(s) | QA Lead |
-| Organizer, coordinated with Technical Lead | DevOps | Technical Lead for technical integration; DevOps for infrastructure expertise |
-| Organizer | Cybersecurity | Cybersecurity |
+| Technical Lead | DevOps | Technical Lead |
+| Technical Lead | Cybersecurity | Technical Lead; an overruled security requirement is reported to the human |
 
-Do not add extra reviewer/worker roles from the old team. Assign investigation,
+Do not add extra reviewer/worker roles. Assign investigation,
 unit/integration work, E2E, and design critique to the appropriate existing role.
 PO, DevOps, and Cybersecurity do not gain invented Senior tiers.
 
@@ -76,10 +76,13 @@ Use [the handoff template](../assets/handoff.md) as needed. Each invocation gets
   are a reported dependency, not something an agent silently invents.
 - Owning feature Issue URL/identifier.
 - Repository/worktree path, relevant branch/revision and uncommitted work context.
-- Links/paths to current requirements, decisions, designs, and verification evidence.
+- The documents to start from: the application `README.md` and the module
+  documents for the task, plus the requirements, designs, and verification
+  evidence it needs. Name them, so the agent does not search for them.
 - Concrete task, constraints, scope/files owned, dependencies, and expected outputs.
 - Decision owner/receiving Lead, reporting route, and the existing approvals that apply.
-- Optional unfinished checkpoint, only if one exists for a valid reason.
+- The absolute path for its checkpoint, and the existing checkpoint to resume
+  from if there is one.
 
 Persist the meaningful assignment and decisions in the owning Issue/repo before
 handoff. A transient packet may carry links and execution details, but must not be
@@ -116,7 +119,10 @@ fields, not another status ceremony after approval.
 
 The main checkout is the human's workspace and may hold real secrets in ignored
 files such as `.env`. A git worktree contains tracked files only, so it starts
-without them. All repository writes for a feature happen in worktrees:
+without them. All repository writes for a feature happen in worktrees, with one
+exception: documents agreed live with the human before the Issue exists. PO and
+the Leads in conversation commit those on the default branch in the main
+checkout ([talking to the Leads](orchestration.md)).
 
 ```text
 projects/
@@ -137,6 +143,8 @@ projects/
   holding test-only credentials the human supplied for that purpose.
 - Name the worktree in the task packet. A Senior stays inside its worktree and
   does not read the main checkout, other worktrees, or the user's home directory.
+  The one exception is its own [checkpoint](checkpoints.md) file under the main
+  checkout's `.AI/`, at the path the packet gives.
 - Other Leads ask Technical Lead for a worktree when their Seniors write to the
   repository. When a Lead cannot run git itself, Organizer creates the worktree
   on that Lead's instruction.
@@ -152,8 +160,10 @@ Branches, commits, and pushing:
 - The responsible Lead reviews. Technical Lead then merges the approved branches
   into the feature branch and verifies the combined result.
 - Organizer pushes only the feature branch and opens the PR.
-- Nobody commits or pushes to the default branch, force-pushes, or rewrites
-  history that has been pushed.
+- Nobody commits to the default branch except for the documents agreed live
+  with the human, described above. PO pushes those commits when the human says
+  the feature is ready or asks to pause; nothing else is ever pushed to the
+  default branch. Nobody force-pushes or rewrites history that has been pushed.
 - After the human merges the PR, Technical Lead, or Organizer on its behalf,
   removes the feature's worktrees and local branches.
 
