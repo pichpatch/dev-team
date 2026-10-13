@@ -153,12 +153,50 @@ spelling in the result. Image models produce raster files, so a logo comes back
 as a PNG master to be redrawn as SVG; mark it "needs vectorizing". Never copy a
 competitor's mark.
 
-With an image tool available, generate from the pack, save each result at its
-final size and format to its intended path, and never overwrite an existing
-file. Without one, write the pack as an HTML brief in the frontend's docs that
-another tool or host can run as written, with a row per asset: name, purpose,
-prompt, final size, format, background, the exact path to save to, and status.
-Tell the human the file exists and what remains missing.
+### Images are generated with the Codex CLI
+
+Every image and logo is generated through the Codex CLI, on the human's ChatGPT
+sign-in. It is the team's one image tool, whichever host is organizing. Do not
+generate images with another model or service, and never with a pay-as-you-go
+API key.
+
+1. **Write the brief as an HTML document** in the owning frontend's docs,
+   listed in its `README.md`. Give each asset a section with its own `id`: name,
+   purpose, the prompt, the variations, final size, format, background, the
+   exact path to save to, and `Status: pending`.
+2. **Run Codex on the brief,** from the worktree the assets belong to, so it
+   can write only there:
+
+   ```bash
+   codex exec --sandbox workspace-write \
+     "Read frontend_domain_1/docs/assets/image-brief.html and generate every asset marked pending, exactly as it says."
+   ```
+
+   Check `codex exec --help` for the flags the installed version supports
+   instead of assuming these.
+3. **The brief tells Codex what to do with each result:** save it at its exact
+   path, resize or convert it to the final size and format, never overwrite an
+   existing file (write `name-v2` beside it), keep scratch files and variations
+   out of the repository, mark a logo's PNG master "needs vectorizing", and
+   report a table of asset, path, size, and status.
+4. **Check every result against the design** before using it: spelling of any
+   text in the image, the brand colors, and that it fits the layout at its
+   recorded width and height. Update each asset's status in the brief, and
+   commit the accepted files.
+
+Who runs it:
+
+- **When the host is Codex,** as Organizer or as Design Lead in conversation,
+  generate directly with Codex's built-in image tool from the same brief; do not
+  start a second Codex.
+- **On any other host,** the role that needs the image runs the command: Design
+  Lead, or a Senior Designer inside its worktree. A role that cannot start a CLI
+  returns the brief, and Organizer runs Codex on its behalf.
+
+If Codex is not installed, is signed out, or has reached its limit, do not
+substitute another generator. Leave the assets `pending`, tell the human what
+to do (`codex login`, or wait for the limit), and continue the work that does
+not depend on them.
 
 ## Review and handoff
 

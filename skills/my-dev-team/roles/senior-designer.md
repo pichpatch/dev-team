@@ -37,4 +37,6 @@ Development follows reuse -> extend -> create. If Development discovers an equiv
 
 Render/exercise artifacts across applicable states. Check hierarchy, spacing, typography, contrast, wrapping, interaction, responsiveness, and component consistency. After implementation, inspect the built product for visual/UX drift from the approved contract and Design System.
 
+Generate any image or logo the design needs through the Codex CLI, from a written brief ([images are generated with the Codex CLI](../references/design.md)); never with another generator.
+
 Update shared Design System truth and application mockups/design notes, and the `README.md` that lists them when you add, rename, or remove one. Return artifact paths as `file#section`, state coverage, component/asset changes, rationale, and unresolved concerns to Design Lead. Do not manage the Issue, approve your own design, or change business scope; final design approval belongs to Design Lead.
