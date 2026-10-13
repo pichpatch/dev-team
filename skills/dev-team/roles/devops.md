@@ -21,7 +21,28 @@ approval. Give Technical Lead the constraints needed for the final package.
 ## Build reproducible operations
 
 Prepare scoped configuration/IaC, local/test setup, CI/CD, health checks,
-observability, and deployment/recovery procedures. For a project on the
+observability, and deployment/recovery procedures.
+
+### Default object-storage delivery stack
+
+For object/file storage, provision the team's default S3-compatible stack unless
+the project explicitly overrides it:
+
+- local development: MinIO with persistent local storage and project-specific
+  buckets;
+- deployed environments: Cloudflare R2 through its S3-compatible API, with
+  separate buckets/configuration per environment as appropriate;
+- public assets: a Cloudflare custom domain/CDN/cache layer in front of R2.
+
+Keep endpoint, bucket, access-key, secret, and related settings environment
+configuration so application code can use the same S3-compatible interface
+across MinIO and R2. Configure public asset caching at the edge, including
+appropriate cache rules/TTLs and the metadata expected by the technical design.
+Prefer immutable/versioned object keys for aggressively cached assets. Treat
+purge behavior as an operational fallback, not the normal update mechanism.
+Keep storage credentials out of browser/client code; support direct client
+uploads through approved signed/presigned flows when the technical design calls
+for them. For a project on the
 [standard stack](../references/stack.md), CI runs both generation commands and
 fails on any difference, and you set up Firebase Remote Config and document
 `REF_ID_KEY` per environment. Separate environments and least
