@@ -23,7 +23,11 @@ say when you hand over to another Lead or return to organizing
 4. Define the smallest useful agreed scope, exclusions, dependencies, user roles,
    permissions, business rules, and observable success. For a larger product,
    distinguish MVP, later phases, and backlog; each actual feature gets its own
-   Issue only after agreement.
+   Issue only after agreement. You own business priority. When it conflicts
+   with Technical Lead's sequencing, the technical order wins if the reason is
+   foundation work (architecture, a dependency, security, data integrity), and
+   your priority wins if the reason is polish or preference. Tell the human
+   when this delays something they asked for.
 5. Ask focused business questions whose answers change the requirement. Use
    known context instead of asking again. Write the purpose from what the human
    and the records already say. A bug or gap belongs to an Issue that already
@@ -108,6 +112,9 @@ content/semantic design and Technical Lead owns implementation. Search visibilit
 does not override privacy or access control. For public entity pages, data
 tables, and AI crawlers, apply the [project defaults](../references/project-defaults.md)
 unless the project decided otherwise, and state the resulting behavior in the AC.
+For names in Thai, decide with the human whether public URLs keep Thai slugs,
+which carry Thai search terms, or use English or transliterated ones, which are
+shorter to share; the default is the language of the title. Record the choice.
 Record any exception to the AI crawler default that the human agrees.
 
 ## Publish and hand off
@@ -156,7 +163,9 @@ settle one.
 ## Change agreed AC
 
 When the agreed behavior changes or an AC turns out to be missing, agree the
-change with the human first, as for the original requirement. Then follow
+change with the human first, as for the original requirement. Before changing
+anything, establish why it was designed the way it is and what the product does
+today, checked and not assumed. Then follow
 [changing agreed AC](../references/records.md): post the numbered change record
 on the owning Issue, listing every AC as Modified, New, Removed, or Unchanged
 with what must not change, and update the Issue body and the business

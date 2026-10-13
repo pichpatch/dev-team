@@ -312,6 +312,8 @@ change with the human and then records it as a comment on the owning Issue:
 ## Change 1: manager approval for large refunds (2026-10-11)
 
 Why: finance requires a second person on refunds over 5,000 THB.
+Original intent: refunds were kept to one step so staff could serve a customer at the counter.
+Current behavior (checked): any staff account can refund any amount.
 
 | AC | Change | Before → After |
 | --- | --- | --- |
@@ -323,7 +325,10 @@ Must not change: refund goes to the original payment method; customer email is s
 Agreed by the human on 2026-10-11.
 ```
 
-Number changes per Issue (`Change 1`, `Change 2`, ...). List every AC as
+Number changes per Issue (`Change 1`, `Change 2`, ...). State the original
+intent, so nobody undoes a decision without knowing why it was made, and the
+current behavior as verified in the product or by Technical Lead, not as
+remembered. List every AC as
 Modified, New, Removed, or Unchanged. "Must not change" is mandatory: QA Lead
 derives the regression checks from it.
 

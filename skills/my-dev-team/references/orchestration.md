@@ -55,6 +55,10 @@ only. The order is the human's to change.
   is relevant next and why, and which are not needed for this feature. When a
   question belongs to another role, say so and offer to switch instead of
   answering it yourself.
+- **Ask one question at a time.** An answer often changes the next question,
+  so do not send a list. When a question has clear choices, offer them as
+  options, with your recommendation first and "something else" last. Do not ask
+  what the records already answer.
 - **Keep the roles apart.** Each role decides only its own domain. As Technical
   Lead you do not rewrite an AC; you tell PO it cannot work as written, and the
   human and PO change it. A role may disagree with another in front of the
@@ -191,8 +195,10 @@ revision and their report is in the PR, every security requirement Technical
 Lead decided not to follow is listed in the PR with its reason and the remaining
 risk, relevant docs match the implementation
 and are reachable through the [`README.md` indexes](records.md), and the PR
-links the owning Issue. Describe the resulting behavior, verification, and
-material limitations with links to records. Push only the feature branch, never
+links the owning Issue. Describe the resulting behavior, what the tests prove,
+why the change resolves the Issue, the documents updated, and material
+limitations, with links to records. Label a PR that includes refactoring
+`refactor`. Push only the feature branch, never
 the default branch, and follow repository branch/PR conventions. Use authorized
 GitHub tools/CLIs; do not trigger production operations or expose secrets while
 preparing the PR.

@@ -152,6 +152,21 @@ through two commands:
   `const { submit, isPending } = useCheckout()` and `onClick={submit}`. Record
   every global store, what changes when it changes, and every `subscribe` in the
   module's `flows.html#global-state` ([module documents](engineering.md)).
+- **One overlay manager.** A single overlay host is rendered once at the app
+  root, with a dispatch API (`openModal`, `openPopup`, `confirm`). Screens never
+  render their own modal or popup markup. The manager owns the focus trap,
+  scroll lock, ESC and backdrop behavior, and layering:
+  - Modals never stack: a second modal request waits until the first closes.
+  - A popup (a confirm or alert) may appear on top of an open modal, one at a
+    time.
+  - Layering comes from the design's
+    [overlay layer tokens](design.md), never a hard-coded `z-index`.
+  - Tooltips, dropdowns, and popovers anchored to their trigger are not routed
+    through the manager.
+- **Errors go where they belong.** A field error, from client validation or
+  returned by the server, shows inline at the field. A system error from a
+  submit (network, 500, timeout) shows as a toast through one shared toast host.
+  Never put a field error in a toast.
 - **Dates display in the user's time zone, through dayjs.** The API sends and
   receives UTC only; convert at the moment of display or input.
 - **Every user-facing string goes through the i18n library.** No hard-coded text.
@@ -251,6 +266,20 @@ through two commands:
   UTC plugin, and return ISO 8601 with `Z`. Never save or return a local time. A
   time zone the business needs, such as a shop's opening hours, is stored as its
   own named field beside the UTC value.
+- **Python uses Poetry:** `pyproject.toml` with a committed `poetry.lock`, a
+  `dev` dependency group for the formatter, linter, type checker, and tests, a
+  pinned Python version, and tool configuration in `pyproject.toml`. No bare
+  `pip` or `requirements.txt` for application dependencies.
+- **A secret never comes back out of the API.** Once an API key, token, client
+  secret, or password is saved, no endpoint returns it, in a detail, a list, or
+  a log:
+  - A read returns only whether it is set, for example `{ "hasApiKey": true }`,
+    so the screen can show the masked field ([design practices](design.md)).
+  - An update is a `PATCH`, where a missing or blank secret field means "keep
+    the stored value". A stored secret is never overwritten with empty.
+  - A change with a precondition, such as needing the current password, is its
+    own `POST`: `POST /account/change-password` with the current and the new.
+  - Secrets are encrypted at rest.
 - **Immutable data in TypeScript projects, through `readonly` types.** Declare
   fields `readonly` and collections `ReadonlyArray`, `ReadonlyMap`, or
   `ReadonlySet`, use `as const` for fixed values, and return a new value instead
@@ -281,7 +310,11 @@ through two commands:
 - **Local database: ask first.** Before setting up a local database or Redis,
   ask the human how it should run: docker-compose (recommended), the human sets
   it up, an existing or cloud development database, or something else. Record
-  the answer in the service's `README.md` so it is not asked again.
+  the answer in the service's `README.md` so it is not asked again. With
+  docker-compose, map backing services to non-default host ports (for example
+  PostgreSQL `5436`, Redis `6378`) so they do not clash with ones already
+  installed, mount the source for live reload, keep images multi-arch (arm64
+  and amd64), and add a small helper script for start, stop, shell, and clean.
 - **Never drop, reset, or re-seed a database without the human's explicit OK**,
   every time.
 

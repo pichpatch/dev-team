@@ -135,8 +135,11 @@ and document updated together is not done.
 
 ## Implementation and data
 
-- Follow existing patterns, formatter, and linter. Use clear boundaries, cohesive
-  functions/modules, and guard clauses where they clarify behavior.
+- Follow existing patterns, formatter, and linter. Use clear boundaries and
+  cohesive functions/modules.
+- **Fail case first.** Handle invalid input, missing permission, and edge cases
+  at the top of a function with guard clauses and early returns. The happy path
+  comes last and is not nested inside `if`/`else`.
 - **Do not duplicate code.** Before writing a function, component, query, or
   rule, look for one that already does it: the module's `code-map.html`, the
   shared library, and `frontend-core`. Reuse it, or extend it when the change is
@@ -163,6 +166,12 @@ and document updated together is not done.
   Scope private caches by user/tenant and clear or isolate them across auth/tenant
   transitions. Do not serve stale data for permissions, money, or other strict
   invariants.
+- Select only the columns the view uses, never `SELECT *`, and return a lean
+  payload. Use `VARCHAR(n)` with a known maximum for bounded values such as a
+  status or a name; keep `TEXT` for free-form descriptions.
+- Agree rate limits and IP allowlists with DevOps and PO, within what
+  Cybersecurity requires; the edge handles the rest. Build and run a load test
+  with DevOps when the human asks for one.
 - Ask the human how a local database should run before setting one up, and never
   drop, reset, or re-seed a database without the human's explicit OK
   ([standard stack](stack.md)). A Senior sends that question to its Lead.
@@ -216,7 +225,48 @@ Before editing code that no test covers, first add a test that locks today's
 behavior. Report pre-existing failures separately and preserve exit codes and
 diagnostic evidence. A test that matches implementation wording is not behavior evidence.
 
+### Read only results and errors
+
+Test runs, builds, linters, and installs print mostly lines about things that
+went fine. Reading them costs tokens and hides the one line that matters.
+
+- **Find the related tests first.** Before editing, run the tests connected to
+  the files you will change, and the type checker, which lists every caller of
+  a changed signature. They must pass before you start; report any that already
+  fail. Run the full suite once before returning the work.
+
+  | Stack | Related tests | Types |
+  | --- | --- | --- |
+  | Vitest | `vitest related <files> --run` | `tsc --noEmit --pretty false` |
+  | Jest | `jest --findRelatedTests <files>` | `tsc --noEmit --pretty false` |
+  | pytest | `pytest <module tests>` | `mypy <paths>` |
+  | .NET | `dotnet test --filter "FullyQualifiedName~<Area>"` | `dotnet build -v q` |
+
+- **Keep the exit code.** Never pipe a command straight into `tail`, `grep`, or
+  `head`: the pipe hides a failure. Save the output to a log, print the exit
+  code, then read the end of the log:
+
+  ```bash
+  log=$(mktemp); npx vitest related src/orders/order.repository.ts --run --reporter=dot > "$log" 2>&1
+  echo "exit=$?"; tail -n 25 "$log"
+  ```
+
+- **Failures in full, passes as a count.** To fix a failure you need the test
+  name, expected and actual, and the first lines of the stack trace. Read only
+  the failing part of the saved log; do not re-run everything with full output.
+- **Use each tool's quiet mode** instead of cutting output blindly:
+  `vitest run --reporter=dot`, `jest --silent`, `pytest -q --tb=short`,
+  `eslint --quiet`, `npm ci --loglevel=error --no-audit --no-fund`,
+  `poetry install -q`, `dotnet build -v q`.
+- **Sort every failure after your change:** a bug you caused, so fix the code;
+  or an intended change, so update the test and the rule in the module document
+  together and tell QA. Never edit a test only to make it pass.
+- Put the summary and the failures in a return or a PR, never a full log.
+
 Return revision, affected artifacts, behavior change, tests and results, doc
 updates, compatibility/recovery implications, limitations, and review questions.
+Say what the tests prove and why the change resolves the task, and list the
+documents updated. Label a change that includes refactoring `refactor` and ask
+QA Lead to regression-test the affected parts.
 Technical Lead inspects the diff and integrated behavior. Changes after approval
 must be assessed for invalidated review/test evidence and routed accordingly.
