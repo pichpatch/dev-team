@@ -10,12 +10,23 @@ Each host runs the four conversation roles on these models:
 
 | Role | Claude Code | Codex | OpenCode |
 | --- | --- | --- | --- |
-| PO | `claude-opus-5-5`, effort `xhigh` | `gpt-6-astra`, effort `medium` | `opencode-go/deepseek-v4.1-flash`, variant `max` |
+| PO | `claude-opus-5-5`, effort `high` | `gpt-6-astra`, effort `medium` | `opencode-go/deepseek-v4.1-flash`, variant `max` |
 | Design Lead | `claude-opus-5-5`, effort `high` | `gpt-6-astra`, effort `medium` | `opencode-go/qwen3.8-max`, variant `xhigh` |
 | Technical Lead | `claude-opus-5-5`, effort `high` | `gpt-6-astra`, effort `high` | `opencode-go/mimo-v2.6-pro` |
-| QA Lead | `claude-sonnet-5-5`, effort `xhigh` | `gpt-6.1-sol`, effort `high` | `opencode-go/glm-5.3-flash`, variant `max` |
+| QA Lead | `claude-sonnet-5-5`, effort `xhigh` | `gpt-6.1-sol`, effort `high` | `gpt-6-luna` |
 
 Antigravity has no binding: a role there runs on the model the session is using.
+
+## Delegated role mappings agreed so far
+
+| Role | Claude Code | Codex | OpenCode |
+| --- | --- | --- | --- |
+| Senior Developer | `claude-sonnet-5-5`, effort `medium` | `gpt-6-luna`, effort `high` | `opencode-go/deepseek-v4.1-flash`, variant `max` |
+
+Senior QA is still under discussion and is intentionally not bound by this PR yet.
+The remaining delegated roles (Senior Designer, Design Tester, DevOps,
+Cybersecurity, and delegated Lead executions) also remain unbound until the
+human explicitly chooses their models.
 
 ## How each host applies it
 
@@ -44,7 +55,7 @@ model would matter for the answer.
 
 ## Delegated roles
 
-The Seniors, Design Tester, DevOps, Cybersecurity, and the three Leads when they
-run as sub-agents have no binding yet. Until the human sets one, Organizer uses
-the host's own sub-agents and asks the human which model to use when the choice
+Only Senior Developer is bound so far. Senior QA and the remaining delegated
+roles stay unbound until the human sets them. Until then, Organizer uses the
+host's own sub-agents and asks the human which model to use when the choice
 matters.
