@@ -1,6 +1,6 @@
 ---
 description: Talk to the Design Lead directly to settle design direction.
-model: claude-opus-5-5
+model: claude-sonnet-5-5
 effort: high
 ---
 

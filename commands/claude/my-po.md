@@ -1,7 +1,7 @@
 ---
 description: Talk to the PO directly to agree the business requirement and AC.
-model: claude-opus-5-5
-effort: xhigh
+model: claude-sonnet-5-5
+effort: high
 ---
 
 Use the installed `my-dev-team` skill: read its `SKILL.md`, its shared contract,

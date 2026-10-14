@@ -10,10 +10,10 @@ Each host runs the four conversation roles on these models:
 
 | Role | Claude Code | Codex | OpenCode |
 | --- | --- | --- | --- |
-| PO | `claude-opus-5-5`, effort `xhigh` | `gpt-6-astra`, effort `medium` | `opencode-go/deepseek-v4.1-flash`, variant `max` |
-| Design Lead | `claude-opus-5-5`, effort `high` | `gpt-6-astra`, effort `medium` | `opencode-go/qwen3.8-max`, variant `xhigh` |
-| Technical Lead | `claude-opus-5-5`, effort `high` | `gpt-6-astra`, effort `high` | `opencode-go/mimo-v2.6-pro` |
-| QA Lead | `claude-sonnet-5-5`, effort `xhigh` | `gpt-6.1-sol`, effort `high` | `opencode-go/glm-5.3-flash`, variant `max` |
+| PO | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/deepseek-v4.1-flash`, variant `max` |
+| Design Lead | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
+| Technical Lead | `claude-opus-5-5`, effort `high` | `gpt-6.1-sol`, effort `high` | `opencode-go/mimo-v2.6-pro` |
+| QA Lead | `claude-sonnet-5-5`, effort `high` | `gpt-6-astra`, effort `medium` | `opencode-go/gpt-6-luna`, variant `xhigh` |
 
 Antigravity has no binding: a role there runs on the model the session is using.
 
@@ -44,7 +44,62 @@ model would matter for the answer.
 
 ## Delegated roles
 
-The Seniors, Design Tester, DevOps, Cybersecurity, and the three Leads when they
-run as sub-agents have no binding yet. Until the human sets one, Organizer uses
-the host's own sub-agents and asks the human which model to use when the choice
-matters.
+Organizer starts these as separate CLI runs, each in its own worktree, from
+whichever host is organizing.
+
+### Senior pool
+
+Senior Developer and Senior Designer work comes from this pool. Run up to three
+Seniors at once:
+
+| Order | Runs through | Subscription | Model | Effort |
+| --- | --- | --- | --- | --- |
+| 1 | OpenCode | OpenCode Go | `opencode-go/space-bunny` | `high` |
+| 2 | Codex | ChatGPT | `gpt-6-luna` | `high` |
+| 3 | Claude | Claude | `claude-haiku-5-5` | `high` |
+| 4 | OpenCode | OpenCode Go | `opencode-go/deepseek-v4.1-flash` | `high` |
+
+- **Spare the host's own subscription.** Seniors use the most tokens, and a
+  worker on the subscription the Organizer is running on competes with the
+  Leads for one limit. Take models from the top, but skip the one on the
+  host's subscription until the others are exhausted: in Claude Code,
+  `claude-haiku-5-5` is used last; in Codex, `gpt-6-luna` is used last.
+- **Match the slice to the model.** `gpt-6-luna` is the cheapest and the
+  weakest coder in the pool; give it the simplest, most self-contained slices.
+- **When a model reaches its limit,** continue that Senior's task on the next
+  model in the table that is not already running a task.
+
+### Testers
+
+The two testing roles each have their own model, kept out of the Senior pool so
+a tester never runs on the model that produced the work it tests:
+
+| Role | Runs through | Model | Effort |
+| --- | --- | --- | --- |
+| Design Tester | OpenCode | `opencode-go/qwen3.8-flash` | `xhigh` |
+| Senior QA | OpenCode | `opencode-go/mimo-v2.6-flash` | (none to set) |
+
+### When every model has reached its limit
+
+Use `opencode/space-bunny-free`, for a Senior or a tester. When that is also
+exhausted, stop: save a checkpoint, tell the human which limits were reached,
+and wait. Do not use any other free model; the others train on what they are
+sent.
+
+### Starting a run
+
+```bash
+opencode run -m opencode-go/space-bunny --variant high "<task packet>"
+codex exec -m gpt-6-luna -c model_reasoning_effort="high" --sandbox workspace-write "<task packet>"
+claude -p --model claude-haiku-5-5 --effort high "<task packet>"
+```
+
+Check each CLI's `--help` for the flags the installed version supports instead
+of assuming these, and run each from the worktree the task packet names.
+
+### Roles without a binding
+
+The three Leads, when they run as sub-agents, use the model their role has in
+the conversation table for the organizing host. DevOps and Cybersecurity have
+no binding yet: until the human sets one, Technical Lead asks which model to use
+when it calls them in.
