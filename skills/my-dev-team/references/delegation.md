@@ -10,13 +10,17 @@ of inventing command flags. Do not install tools or alter authentication as an
 implicit part of routing work.
 
 The role guides name no model; the [roster](roster.md) holds the human's
-bindings. Respect them and any explicit model/provider choice the human makes;
-otherwise use the configured available defaults, limited in every case to models
-the human has approved as safe for private code ([contract](contract.md)). Record
-actual model identity when observable, and `unknown` when it is not. Do not claim a named provider ran
-because another model role-played it. If genuine delegation is unavailable, report
-that limitation and preserve pending work rather than presenting self-review as
-independent role approval.
+bindings. For a delegated role, use a real sub-agent and explicitly select that
+role's binding for the current host. Do not silently inherit the parent session's
+model when the roster has a binding. Respect any explicit model/provider choice
+the human makes. If the bound model cannot be selected, report the limitation and
+ask the human when a model choice is required; do not silently fall back to the
+parent model. All models remain limited to those the human approved as safe for
+private code ([contract](contract.md)). Record actual model identity when
+observable, and `unknown` when it is not. Do not claim a named provider ran
+because another model role-played it. If genuine delegation is unavailable,
+report that limitation and preserve pending work rather than presenting
+self-review as independent role approval.
 
 Organizer dispatches owners; Leads determine Senior tasks and review their work.
 If nested agent calls are unavailable, Organizer can dispatch a Senior on a Lead's
@@ -27,8 +31,13 @@ transport adaptation, not transfer of domain authority.
 
 PO is not in this table: the host carries it out itself in conversation with the
 human. The three Leads are delegated as shown, and the human can also talk to
-each of them directly ([orchestration](orchestration.md)). Each Lead reviews its
-own team's work; review is tied to the role, never to a model.
+each of them directly ([orchestration](orchestration.md)). When a Lead, DevOps,
+or Cybersecurity is engaged directly by the human, it stays in the current
+conversation and uses the current session model; do not spawn a same-role
+sub-agent merely to satisfy the roster. When lifecycle work delegates that role,
+use a real sub-agent and its roster binding. Senior roles and Design Tester are
+execution roles and always use real sub-agents with their roster bindings. Each
+Lead reviews its own team's work; review is tied to the role, never to a model.
 
 | Delegating owner | Execution role | Approval/reporting owner |
 | --- | --- | --- |
