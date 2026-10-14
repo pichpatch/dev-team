@@ -98,9 +98,36 @@ def validate():
     for relative in ("agents/openai.yaml",):
         if not (SKILL / relative).is_file():
             errors.append(f"Missing skill metadata: {relative}")
-    for command in ("my-dev-team", "my-po", "my-design-lead", "my-tech-lead", "my-qa-lead"):
-        if not (ROOT / "commands" / f"{command}.md").is_file():
-            errors.append(f"Missing command wrapper: commands/{command}.md")
+    role_names = ("my-po", "my-design-lead", "my-tech-lead", "my-qa-lead")
+    for host in ("claude", "opencode"):
+        for command in ("my-dev-team",) + role_names:
+            if not (ROOT / "commands" / host / f"{command}.md").is_file():
+                errors.append(f"Missing command wrapper: commands/{host}/{command}.md")
+    # Each host binds a conversation role to its model in its own file; the
+    # roster reference lists the same bindings for people to read.
+    roster_path = SKILL / "references" / "roster.md"
+    roster = roster_path.read_text(encoding="utf-8") if roster_path.is_file() else ""
+    bindings = {
+        "claude": ("commands/claude/{}.md", r"^model: (\S+)$"),
+        "opencode": ("agents/opencode/{}.md", r"^model: (\S+)$"),
+        "codex": ("profiles/codex/{}.config.toml", r'^model = "([^"]+)"$'),
+    }
+    for host, (pattern, model_re) in bindings.items():
+        for role in role_names:
+            relative = pattern.format(role)
+            path = ROOT / relative
+            if not path.is_file():
+                errors.append(f"Missing role binding: {relative}")
+                continue
+            found = re.search(model_re, path.read_text(encoding="utf-8"), flags=re.M)
+            if not found:
+                errors.append(f"Role binding names no model: {relative}")
+            elif f"`{found.group(1)}`" not in roster:
+                errors.append(f"Roster does not list {found.group(1)} from {relative}")
+    for role in role_names:
+        command = (ROOT / "commands" / "opencode" / f"{role}.md").read_text(encoding="utf-8")
+        if f"\nagent: {role}\n" not in command:
+            errors.append(f"OpenCode command must name its agent: commands/opencode/{role}.md")
     # Role skills are the commands on hosts where a skill is called by name.
     for skill in ("my-po", "my-design-lead", "my-tech-lead", "my-qa-lead"):
         role_entry = ROOT / "skills" / skill / "SKILL.md"

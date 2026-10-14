@@ -1,5 +1,7 @@
 ---
 description: Talk to the QA Lead directly to agree the Definition of Done.
+model: claude-sonnet-5-5
+effort: xhigh
 ---
 
 Use the installed `my-dev-team` skill: read its `SKILL.md`, its shared contract,

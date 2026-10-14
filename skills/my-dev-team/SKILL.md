@@ -39,8 +39,8 @@ load every role guide into every agent.
 | DevOps | [DevOps](roles/devops.md) | Infrastructure; called in by Technical Lead |
 | Cybersecurity | [Cybersecurity](roles/cybersecurity.md) | Security and privacy requirements; called in by Technical Lead |
 
-Roles are model-independent. Use actual available agent/CLI capabilities and
-explicit model choices. [The shared contract](references/contract.md) defines
+The role guides name no model; the [roster](references/roster.md) binds each
+role to the model the human chose. Use actual available agent/CLI capabilities. [The shared contract](references/contract.md) defines
 the team; this skill is self-contained and needs no other skill installed.
 
 For a new project, follow the [project defaults](references/project-defaults.md)
@@ -59,6 +59,8 @@ Additional role-specific skills supplement this contract where applicable.
 - [Feature and release lifecycle](references/release-lifecycle.md): the ownership
   order before and after implementation, and for defects.
 - [Pause and resume](references/checkpoints.md): temporary `.AI` state and cleanup.
+- [Roster](references/roster.md): which model runs each role in each host, and
+  the rules for choosing one.
 - [Engineering practices](references/engineering.md): technical decisions in the
   docs, rule identifiers, API/data changes, implementation, and review; read for
   engineering assignments.

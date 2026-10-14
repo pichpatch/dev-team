@@ -5,6 +5,8 @@ set -euo pipefail
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 SKILLS_SOURCE="$REPO_DIR/skills"
 COMMANDS_SOURCE="$REPO_DIR/commands"
+AGENTS_SOURCE="$REPO_DIR/agents"
+PROFILES_SOURCE="$REPO_DIR/profiles"
 # The team skill, the role skills that act as commands where a host has no
 # separate command files, and the command wrappers for hosts that do.
 ROLE_SKILLS=(my-po my-design-lead my-tech-lead my-qa-lead)
@@ -30,13 +32,18 @@ Every host gets the my-dev-team skill and a way to call each role directly:
 my-dev-team, my-po, my-design-lead, my-tech-lead, my-qa-lead.
 
 Claude:      ~/.claude/skills/my-dev-team, and ~/.claude/commands/<name>.md
-             (call as /my-po)
-OpenCode:    ${XDG_CONFIG_HOME:-~/.config}/opencode/skills/my-dev-team, and
-             .../opencode/commands/<name>.md (call as /my-po)
+             (call as /my-po; each role command sets its model and effort)
+OpenCode:    ${XDG_CONFIG_HOME:-~/.config}/opencode/skills/my-dev-team,
+             .../opencode/commands/<name>.md (call as /my-po), and
+             .../opencode/agents/<role>.md (each role is an agent with its
+             model; switch agents with Tab)
 Antigravity: ~/.gemini/config/skills/<name>; a skill is the slash command
              (call as /my-po)
 Codex:       ${CODEX_HOME:-~/.codex}/skills/<name>; a skill is the command
-             (call as $my-po)
+             (call as $my-po), and ${CODEX_HOME:-~/.codex}/<role>.config.toml
+             (start a session on a role's model with: codex -p my-tech-lead)
+
+The model each role runs on is listed in the skill's roster reference.
 
 Requires bash and python3. Existing unrelated files, directories, or links are
 never replaced. Keep this checkout in place: installation uses symbolic links.
@@ -115,10 +122,23 @@ else
     esac
     destinations+=("$skills_dir/my-dev-team")
     sources+=("$SKILLS_SOURCE/my-dev-team")
+    # Each host binds a role to its model in its own way: Claude in the command,
+    # OpenCode in an agent the command names, Codex in a profile.
+    if [[ "$target" == opencode ]]; then
+      for role in "${ROLE_SKILLS[@]}"; do
+        destinations+=("${XDG_CONFIG_HOME:-$HOME/.config}/opencode/agents/$role.md")
+        sources+=("$AGENTS_SOURCE/opencode/$role.md")
+      done
+    elif [[ "$target" == codex ]]; then
+      for role in "${ROLE_SKILLS[@]}"; do
+        destinations+=("${CODEX_HOME:-$HOME/.codex}/$role.config.toml")
+        sources+=("$PROFILES_SOURCE/codex/$role.config.toml")
+      done
+    fi
     if [[ -n "$commands_dir" ]]; then
       for command in "${COMMANDS[@]}"; do
         destinations+=("$commands_dir/$command.md")
-        sources+=("$COMMANDS_SOURCE/$command.md")
+        sources+=("$COMMANDS_SOURCE/$target/$command.md")
       done
     else
       for skill in "${ROLE_SKILLS[@]}"; do

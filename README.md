@@ -65,10 +65,16 @@ Every host gets the `my-dev-team` skill and a way to call each role directly:
 
 `--target agy`, `antigravity`, and `gemini` all select Antigravity.
 
+The installer also links each host's role-to-model binding: `model` and `effort`
+in the Claude Code commands, an agent per role in
+`.../opencode/agents/`, and a profile per role in `${CODEX_HOME:-~/.codex}/`
+(`codex -p my-tech-lead`). The bindings are listed in the
+[roster](skills/my-dev-team/references/roster.md).
+
 Installation creates symlinks, so keep this checkout in place. Re-running is safe;
 existing unrelated files/directories/links cause a clear failure before links are
-created. The installer does not remove other skills, configure models, install
-CLIs, log in, or alter host permissions. Host discovery behavior and delegation
+created. The installer does not remove other skills, change a host's default
+model, install CLIs, log in, or alter host permissions. Host discovery behavior and delegation
 support must be verified in the target host; a successful link is not a live CLI test.
 Use `--skills-dir` when the host's configured discovery directory differs.
 

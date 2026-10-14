@@ -46,11 +46,17 @@ class InstallerTests(unittest.TestCase):
             # The role skill finds the team skill through the sibling link.
             self.assertTrue((link / "../my-dev-team/SKILL.md").is_file())
 
-    def assert_commands(self, commands_dir):
+    def assert_commands(self, commands_dir, host):
         for name in COMMANDS:
             command = commands_dir / f"{name}.md"
             self.assertTrue(command.is_symlink(), str(command))
-            self.assertEqual(command.resolve(), ROOT / "commands" / f"{name}.md")
+            self.assertEqual(command.resolve(), ROOT / "commands" / host / f"{name}.md")
+
+    def assert_links(self, directory, source_dir, suffix):
+        for name in ROLE_SKILLS:
+            link = directory / f"{name}{suffix}"
+            self.assertTrue(link.is_symlink(), str(link))
+            self.assertEqual(link.resolve(), ROOT / source_dir / f"{name}{suffix}")
 
     def test_custom_directory_and_idempotence(self):
         dest = self.home / "custom skills"
@@ -75,8 +81,11 @@ class InstallerTests(unittest.TestCase):
             self.assert_skill_link(self.home / relative)
         # Claude and OpenCode have command files; Codex and Antigravity call a
         # skill by name, so they get the role skills and no command files.
-        self.assert_commands(self.home / ".claude/commands")
-        self.assert_commands(self.home / ".config/opencode/commands")
+        self.assert_commands(self.home / ".claude/commands", "claude")
+        self.assert_commands(self.home / ".config/opencode/commands", "opencode")
+        # Each host's role-to-model binding: OpenCode agents and Codex profiles.
+        self.assert_links(self.home / ".config/opencode/agents", "agents/opencode", ".md")
+        self.assert_links(self.home / ".codex", "profiles/codex", ".config.toml")
         self.assert_role_skills(self.home / ".codex/skills")
         self.assert_role_skills(self.home / ".gemini/config/skills")
         for name in ROLE_SKILLS:

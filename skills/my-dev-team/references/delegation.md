@@ -9,8 +9,9 @@ installed tool/CLI help for supported invocation and resume mechanisms instead
 of inventing command flags. Do not install tools or alter authentication as an
 implicit part of routing work.
 
-Roles do not bind to models. Respect the human's explicit model/provider choices;
-otherwise use the configured available defaults, limited in both cases to models
+The role guides name no model; the [roster](roster.md) holds the human's
+bindings. Respect them and any explicit model/provider choice the human makes;
+otherwise use the configured available defaults, limited in every case to models
 the human has approved as safe for private code ([contract](contract.md)). Record
 actual model identity when observable, and `unknown` when it is not. Do not claim a named provider ran
 because another model role-played it. If genuine delegation is unavailable, report

@@ -1,0 +1,3 @@
+# PO of my-dev-team. Start a session as this role with: codex -p my-po
+model = "gpt-6-astra"
+model_reasoning_effort = "medium"

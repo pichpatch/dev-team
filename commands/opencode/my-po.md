@@ -1,5 +1,6 @@
 ---
 description: Talk to the PO directly to agree the business requirement and AC.
+agent: my-po
 ---
 
 Use the installed `my-dev-team` skill: read its `SKILL.md`, its shared contract,

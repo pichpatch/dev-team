@@ -1,5 +1,6 @@
 ---
 description: Talk to the Technical Lead directly to settle technical questions.
+agent: my-tech-lead
 ---
 
 Use the installed `my-dev-team` skill: read its `SKILL.md`, its shared contract,
