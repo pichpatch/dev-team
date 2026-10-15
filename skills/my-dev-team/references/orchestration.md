@@ -91,6 +91,19 @@ human there are items to settle, list them, and offer to switch to that Lead.
 Do not answer the items yourself. Resume the delegated work once the decisions
 are recorded in the feature worktree and noted on the Issue.
 
+## Shared completion gate for features, small changes, and bugs
+
+After Senior Developer finishes any behavioral implementation:
+
+1. Technical Lead reviews the completed code, including every small bug fix. Rejected work returns to Senior Developer.
+2. Senior QA executes acceptance and regression tests on the reviewed revision, reporting uncertainties to QA Lead.
+3. QA Lead reviews test evidence and approves or rejects verification.
+4. Organizer opens a draft PR after applicable security and delivery checks. Human approval is required before merge or deployment.
+
+When QA rejects a fix, Senior Developer corrects it, Technical Lead reviews the correction, and Senior QA and QA Lead repeat affected verification. Design Lead and Cybersecurity retain their applicable review responsibilities.
+
+The entry point differs by route: new features complete business, design, technical, and quality planning first; small behavioral changes receive a scoped technical check; bugs start with QA Lead investigation, followed by Senior QA reproduction under QA Lead's instructions, then Senior Developer fixing. Senior QA escalates unclear findings to QA Lead only when needed. Technical Lead joins a bug fix early when Senior Developer encounters significant risk or complexity, but reviews every completed fix regardless. Escalate urgent security, data-loss, or production risks immediately; undefined expected behavior returns to PO for clarification. Purely trivial non-behavior edits retain the separate trivial route.
+
 ## Feature sequence
 
 Preserve this high-level order, involving only relevant owners:
