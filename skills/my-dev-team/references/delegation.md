@@ -10,8 +10,8 @@ of inventing command flags. Do not install tools or alter authentication as an
 implicit part of routing work.
 
 The role guides name no model; the [roster](roster.md) holds the human's
-bindings. For a delegated role, use a real sub-agent and explicitly select that
-role's binding for the current host. Do not silently inherit the parent session's
+bindings. For a delegated role, use a real sub-agent and explicitly select an approved
+model consistent with the roster and cross-provider routing policy. Do not silently inherit the parent session's
 model when the roster has a binding. Respect any explicit model/provider choice
 the human makes. If the bound model cannot be selected, report the limitation and
 ask the human when a model choice is required; do not silently fall back to the
@@ -34,8 +34,16 @@ human. The three Leads are delegated as shown, and the human can also talk to
 each of them directly ([orchestration](orchestration.md)). When a Lead, DevOps,
 or Cybersecurity is engaged directly by the human, it stays in the current
 conversation and uses the current session model; do not spawn a same-role
-sub-agent merely to satisfy the roster. When lifecycle work delegates that role,
-use a real sub-agent and its roster binding. Senior roles and Design Tester are
+sub-agent merely to satisfy the roster. When Organizer or Technical Lead delegates Cybersecurity or QA Lead on any task,
+use a separate sub-agent with a different underlying model/provider from the
+Organizer; different effort settings do not count. Preferred routing: Claude
+Organizer -> GPT/Codex, then OpenCode if GPT is rate-limited; GPT/Codex
+Organizer -> Claude; OpenCode Organizer -> Claude, then GPT/Codex as fallback.
+Verify approved bindings and actual cross-CLI support; ask the human if they
+conflict, and never silently substitute or self-approve. When the human directly
+invokes Cybersecurity or QA Lead, the role stays in that conversation and is
+exempt from mandatory sub-agent spawning; its own work is not independently
+verified by that exception. Technical Lead may share Organizer context/model. Senior roles and Design Tester are
 execution roles and always use real sub-agents with their roster bindings. Each
 Lead reviews its own team's work; review is tied to the role, never to a model.
 
@@ -71,6 +79,9 @@ For each actual dispatch:
    reassigned instance, with updated artifact context. On approval, the owner records
    completion and evidence on the owning Issue when one exists, otherwise in the draft PR or linked repository records, and the next dependent stage can proceed.
 
+Keep handoffs lean: send relevant diffs, affected files, findings, decisions,
+requirements and test evidence, not the full conversation. Preserve unaffected
+approvals and recheck changed scope plus dependencies justified by risk.
 Reuse a live agent when useful, but do not assume it remembers decisions. Rebuild
 the packet from persistent records when changing context/model or resuming. Respect
 tool/runtime limits; queue excess work. If repeated attempts make no progress,
