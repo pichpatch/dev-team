@@ -104,7 +104,7 @@ These roles do not use the shared Senior pool. Direct human conversations remain
 | Role | Claude Code | Codex | OpenCode |
 | --- | --- | --- | --- |
 | DevOps | `claude-sonnet-5-5`, effort `medium` | `gpt-6-sol`, effort `medium` | `opencode-go/mimo-v2.6-flash` |
-| Cybersecurity | `claude-sonnet-5-5`, effort `high` | `gpt-6-sol`, effort `high` | `opencode-go/gpt-6-luna`, variant `high` |
+| Cybersecurity | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/gpt-6-luna`, variant `high` |
 
 Technical Lead reviews these roles' outputs. Verify model identifiers with each installed host before dispatch; never silently substitute a different model.
 
@@ -115,6 +115,17 @@ different underlying model/provider from Organizer, on every task. A different
 effort level of the same model is not independent. Preferred routes: Claude
 Organizer -> GPT/Codex (OpenCode fallback on GPT rate limit); GPT/Codex
 Organizer -> Claude; OpenCode Organizer -> Claude (GPT/Codex fallback).
+The model for each route:
+
+| Organizer | Delegated QA Lead and Cybersecurity run on | If that provider is rate-limited |
+| --- | --- | --- |
+| Claude Code | Codex: `gpt-6.1-sol`, effort `medium` | OpenCode: the role's OpenCode binding |
+| Codex | Claude: `claude-sonnet-5-5`, effort `high` | Stop and report the review as blocked |
+| OpenCode | Claude: `claude-sonnet-5-5`, effort `high` | Codex: `gpt-6.1-sol`, effort `medium` |
+
+This applies to the delegated roles only. A QA Lead the human talks to keeps its
+conversation binding above.
+
 Keep human-approved bindings and verify actual invocation support. If routing
 conflicts with bindings or no independent agent is available, ask the human or
 report a blocked review; never silently substitute. Direct human invocation

@@ -93,7 +93,8 @@ human you are returning to organizing.
 can and saves its blocked items in its [checkpoint](checkpoints.md). Tell the
 human there are items to settle, list them, and offer to switch to that Lead.
 Do not answer the items yourself. Resume the delegated work once the decisions
-are recorded in the feature worktree and noted on the Issue.
+are recorded in the feature worktree and noted on the Issue, or in the draft PR
+when the work has no Issue.
 
 ## Shared completion gate for features, small changes, and bugs
 

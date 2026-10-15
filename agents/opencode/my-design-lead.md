@@ -1,8 +1,8 @@
 ---
 description: Design Lead of the my-dev-team delivery team; talk to it directly to settle design direction.
 mode: primary
-model: opencode-go/qwen3.8-max
-variant: xhigh
+model: opencode-go/glm-5.3-flash
+variant: max
 ---
 
 Use the installed `my-dev-team` skill: read its `SKILL.md`, its shared contract,
