@@ -12,8 +12,7 @@ the owning Issue, relevant docs, and any checkpoint for this work. Preserve othe
 work. For a new feature, act as PO to agree it with the human before the Issue
 is created. Dispatch the team only for an Issue labeled `ready to implement`;
 for a `draft` Issue, continue the discussion with the human as the role whose
-questions are open. For a bug or gap, locate the existing feature Issue and route the
-specific problem to the responsible owner. Reuse still-valid decisions; do not
+questions are open. For a bug, route directly to QA Lead without requiring an Issue. If an existing Issue is relevant, reference it; do not create a new Issue by default. For a gap or requested behavior change, classify the work and use its appropriate route. Reuse still-valid decisions; do not
 pretend earlier approval covers changed scope or invalidate it without reason.
 
 Determine role relevance with the owners. If relevance is uncertain, ask that
@@ -162,8 +161,7 @@ reviewer. Never mark blocked/unrun verification as passed. When a necessary owne
 or tool cannot run, preserve pending work and the blocker; do not fabricate a
 substitute approval.
 
-For bugs and gaps, reuse the owning feature Issue and valid decisions, then enter
-the affected stages in this order. QA is the first investigation point for a
+For bugs, no Issue is required by default. Reference an existing Issue only when relevant, and reuse still-valid decisions. Route through QA Lead investigation, Senior QA reproduction, Senior Developer correction, and the shared completion gate. For gaps or behavior changes, classify and use the appropriate lifecycle. QA is the first investigation point for a
 reported defect: it reproduces it, gathers evidence, narrows the likely layer,
 and analyzes the impact before anyone claims a cause. Then send business
 ambiguity to PO, design problems to Design Lead, implementation to Technical
@@ -189,10 +187,12 @@ Scale the route to the change; do not run the full sequence for its own sake.
   Issue when one exists. Confirm from the diff that no env or credential file is
   included. The human's PR review is the review.
 - **Small:** behavior changes, but AC, approved design, API/data contracts,
-  security boundaries, and infrastructure do not. Technical Lead, or Design Lead
-  for a design-only change, confirms it is small and scopes it; a Senior
-  implements; the Lead reviews; QA Lead verifies the affected AC; Cybersecurity
-  runs its delivery check. Record the other owners as not applicable with the
+  security boundaries, and infrastructure do not. Technical Lead confirms the change is minor and scopes it; Senior Developer
+  implements, followed by the shared completion gate (Technical Lead review,
+  Senior QA tests, QA Lead approval, Organizer draft PR). No Issue is required.
+  If an existing Issue or its acceptance criteria must change, reclassify the
+  request into the normal change lifecycle. Cybersecurity retains applicable
+  delivery checks. Record the other owners as not applicable with the
   reason. Organizer proposes this route but does not decide it alone.
 
 When in doubt, or when the work turns out to reach beyond those limits, stop and
@@ -208,8 +208,9 @@ revision and their report is in the PR, every security requirement Technical
 Lead decided not to follow is listed in the PR with its reason and the remaining
 risk, relevant docs match the implementation
 and are reachable through the [`README.md` indexes](records.md), and the PR
-links the owning Issue. Describe the resulting behavior, what the tests prove,
-why the change resolves the Issue, the documents updated, and material
+links an owning Issue when one exists. Independent bugs and minor changes do
+not require a new Issue. Describe the resulting behavior, what the tests prove,
+why the change resolves the reported problem, the documents updated, and material
 limitations, with links to records. Label a PR that includes refactoring
 `refactor`. Push only the feature branch, never
 the default branch, and follow repository branch/PR conventions. Use authorized
