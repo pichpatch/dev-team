@@ -108,6 +108,19 @@ These roles do not use the shared Senior pool. Direct human conversations remain
 
 Technical Lead reviews these roles' outputs. Verify model identifiers with each installed host before dispatch; never silently substitute a different model.
 
+### Cross-provider independent reviewers
+
+Delegated Cybersecurity and QA Lead always run as separate sub-agents on a
+different underlying model/provider from Organizer, on every task. A different
+effort level of the same model is not independent. Preferred routes: Claude
+Organizer -> GPT/Codex (OpenCode fallback on GPT rate limit); GPT/Codex
+Organizer -> Claude; OpenCode Organizer -> Claude (GPT/Codex fallback).
+Keep human-approved bindings and verify actual invocation support. If routing
+conflicts with bindings or no independent agent is available, ask the human or
+report a blocked review; never silently substitute. Direct human invocation
+uses the current session model and is exempt from sub-agent spawning, but does
+not establish independent approval. Technical Lead can share Organizer context.
+
 ### Other delegated Leads
 
 The three Leads, when delegated, use their role bindings in the conversation table for the organizing host.
