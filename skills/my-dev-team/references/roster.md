@@ -23,10 +23,18 @@ Antigravity has no binding: a role there runs on the model the session is using.
 | --- | --- | --- | --- |
 | Senior Developer | `claude-sonnet-5-5`, effort `medium` | `gpt-6-luna`, effort `high` | `opencode-go/deepseek-v4.1-flash`, variant `max` |
 
-Senior QA is still under discussion and is intentionally not bound by this PR yet.
-The remaining delegated roles (Senior Designer, Design Tester, DevOps,
-Cybersecurity, and delegated Lead executions) also remain unbound until the
-human explicitly chooses their models.
+Senior QA, Senior Designer, Design Tester, and delegated Lead executions remain subject to separate reconciliation with `main` and are not changed by the DevOps/Cybersecurity decision.
+
+### Dedicated DevOps and Cybersecurity models
+
+These two roles do not use the shared Senior pool. When delegated, they run as real sub-agents with the host-specific mapping below. A direct human conversation with either role stays on the current session model.
+
+| Role | Claude Code | Codex | OpenCode |
+| --- | --- | --- | --- |
+| DevOps | `claude-sonnet-5-5`, effort `medium` | `gpt-6-sol`, effort `medium` | `opencode-go/mimo-v2.6-flash` |
+| Cybersecurity | `claude-sonnet-5-5`, effort `high` | `gpt-6-sol`, effort `high` | `opencode-go/gpt-6-luna`, variant `high` |
+
+Technical Lead reviews DevOps and Cybersecurity work. Security-sensitive production changes still require human approval; complex security cases may consult Technical Lead without silently switching the Cybersecurity model. Verify exact model identifiers against the installed provider before execution.
 
 ## How each host applies it
 
@@ -55,7 +63,4 @@ model would matter for the answer.
 
 ## Delegated roles
 
-Only Senior Developer is bound so far. Senior QA and the remaining delegated
-roles stay unbound until the human sets them. Until then, Organizer uses the
-host's own sub-agents and asks the human which model to use when the choice
-matters.
+Senior Developer, DevOps, and Cybersecurity have explicit mappings above. DevOps and Cybersecurity are dedicated roles and never draw from the Senior worker pool. For other delegated roles not yet reconciled on this PR branch, consult the current `main` roster before changing their mappings; do not silently substitute the parent model.
