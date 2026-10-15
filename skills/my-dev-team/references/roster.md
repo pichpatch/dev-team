@@ -72,12 +72,13 @@ Seniors at once:
 
 ### Testers
 
-The two testing roles each have their own model, kept out of the Senior pool so
-a tester never runs on the model that produced the work it tests:
+Both testing roles run on one model, kept out of the Senior pool so a tester
+never runs on the model that produced the work it tests. They may share it
+because they check different things and neither reviews the other:
 
 | Role | Runs through | Model | Effort |
 | --- | --- | --- | --- |
-| Design Tester | OpenCode | `opencode-go/qwen3.8-flash` | `xhigh` |
+| Design Tester | OpenCode | `opencode-go/mimo-v2.6-flash` | (none to set) |
 | Senior QA | OpenCode | `opencode-go/mimo-v2.6-flash` | (none to set) |
 
 ### When every model has reached its limit

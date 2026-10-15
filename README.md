@@ -133,7 +133,7 @@ is the authoritative copy and holds the rules; change both together.
 | Senior pool 2 | Codex `gpt-6-luna`, high | Simplest slices; used last when Codex organizes |
 | Senior pool 3 | Claude `claude-haiku-5-5`, high | Used last when Claude Code organizes |
 | Senior pool 4 | OpenCode `deepseek-v4.1-flash`, high | |
-| Design Tester | OpenCode `qwen3.8-flash`, xhigh | |
+| Design Tester | OpenCode `mimo-v2.6-flash` | Shared with Senior QA |
 | Senior QA | OpenCode `mimo-v2.6-flash` | |
 | DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated |
 | QA Lead and Cybersecurity, delegated | A different provider from the Organizer: Codex `gpt-6.1-sol` medium under Claude Code; Claude Sonnet 5.5 high under Codex or OpenCode | If that provider is rate-limited: OpenCode under Claude Code or Codex, Codex under OpenCode |
@@ -171,7 +171,7 @@ uses the limit. Wait is the time before the first words of an answer.
 | `deepseek-v4-pro` | OpenCode Go | max | 36 | $0.67 | 2 |
 | `minimax-m3` | OpenCode Go | none | 29 | $0.51 | 1 |
 
-`space-bunny`, `qwen3.8-flash`, and `gpt-6-sol` are not on the leaderboard. An
+`space-bunny` and `gpt-6-sol` are not on the leaderboard. An
 effort of "none" means the leaderboard lists a single result for the model.
 
 ## Check
