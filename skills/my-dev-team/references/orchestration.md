@@ -8,15 +8,18 @@ dispatch and [records](records.md) before changing project records.
 ## Establish the work
 
 Inspect repository instructions, current changes, available authorized tooling,
-the owning Issue, relevant docs, and any checkpoint for this work. Preserve other
+the owning Issue if one exists, relevant docs, and any checkpoint for this work. Preserve other
 work. For a new feature, act as PO to agree it with the human before the Issue
-is created. Dispatch the team only for an Issue labeled `ready to implement`;
-for a `draft` Issue, continue the discussion with the human as the role whose
-questions are open. For a bug, route directly to QA Lead without requiring an Issue. If an existing Issue is relevant, reference it; do not create a new Issue by default. For a gap or requested behavior change, classify the work and use its appropriate route. Reuse still-valid decisions; do not
+is created. For feature work, dispatch the team only for an Issue labeled `ready to implement`;
+for a `draft` feature Issue, continue the discussion with the human as the role whose
+questions are open. This feature-only readiness rule does not block issue-free
+bug or minor-change routes. For a bug, route directly to QA Lead without requiring an Issue. If an existing Issue is relevant, reference it; do not create a new Issue by default. For a gap or requested behavior change, classify the work and use its appropriate route. Reuse still-valid decisions; do not
 pretend earlier approval covers changed scope or invalidate it without reason.
 
-Determine role relevance with the owners. If relevance is uncertain, ask that
-owner for a quick check, not the human for a routine routing decision. Record a
+Determine role relevance with the owners after the route is established. If
+classification between feature, change, minor change, bug, security, or QA is
+unclear, Organizer must ask the human before dispatch. Once classified, owners
+can resolve routine domain relevance without unnecessary human questions. Record a
 reasoned not-applicable result; this is not approval of work that was never reviewed.
 
 Inspect the host's real delegation/CLI capabilities and use
