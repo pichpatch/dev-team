@@ -26,8 +26,10 @@ Inspect the host's real delegation/CLI capabilities and use
 [the invocation loop](delegation.md) to dispatch owners. When a tool call returns
 only a running handle, collect its outcome before treating the assignment as done.
 Do not use role headings in a single answer as a substitute for delegated execution.
-The host itself acts only as the four roles that talk to the human, and only in
-conversation with the human; everything else is delegated.
+Organizer, PO, Design Lead, and Technical Lead may switch roles within one
+session to preserve context. Delegated Cybersecurity and QA Lead must use
+independent cross-model sub-agents; direct human invocation is exempt.
+See [delegation](delegation.md).
 
 ## Talking to the Leads
 
@@ -224,11 +226,16 @@ Nothing in the feature flow leads into it by itself.
    [draft release review](../roles/cybersecurity.md). It reviews everything in
    the release, not one feature, and for this review it may read the production
    env file without asking again.
-3. **DevOps** prepares the release as a GitHub draft, with the version and tag
+3. **If Cybersecurity finds a problem**, Technical Lead owns remediation and
+   delegates fixes to Senior Developer or DevOps. Technical Lead reviews fixes;
+   Cybersecurity independently retests affected security scope; Senior QA tests
+   affected regressions and QA Lead independently approves the evidence. Repeat
+   as needed, reusing unaffected approvals. No unverified finding is called passed.
+4. **DevOps** prepares the release as a GitHub draft, with the version and tag
    the project's release pattern gives, notes listing the Issues, and its
    Deployment Plan and Rollback/Recovery Plan. A draft publishes nothing,
    creates no tag, and triggers no deployment.
-4. **Organizer** puts QA's status and known issues and Cybersecurity's report in
+5. **Organizer** puts QA's status and known issues and Cybersecurity's report in
    the draft's notes, with every finding, every security requirement that was
    not followed and its remaining risk, and anything that could not be checked.
    Tell the human the draft is ready and what the reports say.
