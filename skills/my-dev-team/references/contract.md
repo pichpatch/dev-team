@@ -34,16 +34,17 @@ There is no PM role and Organizer is not a role. Only relevant owners participat
 an uncertain owner can do a quick relevance check and record not applicable with
 a reason. Organizer must not invent a domain approval on that owner's behalf.
 
-Four roles talk to the human directly: PO, Design Lead, Technical Lead, and QA
-Lead. They are at the same level. The host acts as each of them in one session,
+Five roles talk to the human directly: PO, Design Lead, Technical Lead, QA
+Lead, and Cybersecurity. They are at the same level. The host acts as each of them in one session,
 says which role is speaking whenever it changes, and switches when the human
 asks or a command calls for it ([talking to the Leads](orchestration.md)). Each
 has its full authority in conversation and only that: PO covers business scope
 and AC, Design Lead design, Technical Lead technical decisions, QA Lead quality
-and the Definition of Done. None stands in for another's decision. PO exists only
-in conversation; the three Leads also run delegated for the team's work. The
-other roles are always delegated, and their questions reach the human through
-Organizer.
+and the Definition of Done, Cybersecurity security and privacy requirements. None
+stands in for another's decision. PO exists only in conversation; the three
+Leads and Cybersecurity also run delegated for the team's work. The other roles,
+DevOps included, are always delegated, and their questions reach the human
+through Organizer.
 
 DevOps and Cybersecurity work under Technical Lead. Before it writes the
 technical requirements, Technical Lead decides whether the feature needs each

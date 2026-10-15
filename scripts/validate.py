@@ -98,7 +98,7 @@ def validate():
     for relative in ("agents/openai.yaml",):
         if not (SKILL / relative).is_file():
             errors.append(f"Missing skill metadata: {relative}")
-    role_names = ("my-po", "my-design-lead", "my-tech-lead", "my-qa-lead")
+    role_names = ("my-po", "my-design-lead", "my-tech-lead", "my-qa-lead", "my-security")
     for host in ("claude", "opencode"):
         for command in ("my-dev-team",) + role_names:
             if not (ROOT / "commands" / host / f"{command}.md").is_file():
@@ -129,7 +129,7 @@ def validate():
         if f"\nagent: {role}\n" not in command:
             errors.append(f"OpenCode command must name its agent: commands/opencode/{role}.md")
     # Role skills are the commands on hosts where a skill is called by name.
-    for skill in ("my-po", "my-design-lead", "my-tech-lead", "my-qa-lead"):
+    for skill in role_names:
         role_entry = ROOT / "skills" / skill / "SKILL.md"
         if not role_entry.is_file():
             errors.append(f"Missing role skill: skills/{skill}/SKILL.md")

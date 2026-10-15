@@ -10,13 +10,17 @@ of inventing command flags. Do not install tools or alter authentication as an
 implicit part of routing work.
 
 The role guides name no model; the [roster](roster.md) holds the human's
-bindings. Respect them and any explicit model/provider choice the human makes;
-otherwise use the configured available defaults, limited in every case to models
-the human has approved as safe for private code ([contract](contract.md)). Record
-actual model identity when observable, and `unknown` when it is not. Do not claim a named provider ran
-because another model role-played it. If genuine delegation is unavailable, report
-that limitation and preserve pending work rather than presenting self-review as
-independent role approval.
+bindings. For a delegated role, use a real sub-agent and explicitly select an approved
+model consistent with the roster and cross-provider routing policy. Do not silently inherit the parent session's
+model when the roster has a binding. Respect any explicit model/provider choice
+the human makes. If the bound model cannot be selected, report the limitation and
+ask the human when a model choice is required; do not silently fall back to the
+parent model. All models remain limited to those the human approved as safe for
+private code ([contract](contract.md)). Record actual model identity when
+observable, and `unknown` when it is not. Do not claim a named provider ran
+because another model role-played it. If genuine delegation is unavailable,
+report that limitation and preserve pending work rather than presenting
+self-review as independent role approval.
 
 Organizer dispatches owners; Leads determine Senior tasks and review their work.
 If nested agent calls are unavailable, Organizer can dispatch a Senior on a Lead's
@@ -27,8 +31,22 @@ transport adaptation, not transfer of domain authority.
 
 PO is not in this table: the host carries it out itself in conversation with the
 human. The three Leads are delegated as shown, and the human can also talk to
-each of them directly ([orchestration](orchestration.md)). Each Lead reviews its
-own team's work; review is tied to the role, never to a model.
+each of them directly ([orchestration](orchestration.md)). When a Lead or
+Cybersecurity is engaged directly by the human, it stays in the conversation, on
+the model its role command sets; do not spawn a same-role sub-agent merely to
+satisfy the roster. DevOps is never engaged directly. When Organizer or Technical Lead delegates Cybersecurity or QA Lead on any task,
+use a separate sub-agent with a different underlying model/provider from the
+Organizer; different effort settings do not count. Preferred routing: Claude
+Organizer -> GPT/Codex, then OpenCode if GPT is rate-limited; GPT/Codex
+Organizer -> Claude, then OpenCode if Claude is rate-limited; OpenCode Organizer
+-> Claude, then GPT/Codex as fallback.
+Verify approved bindings and actual cross-CLI support; ask the human if they
+conflict, and never silently substitute or self-approve. When the human directly
+invokes Cybersecurity or QA Lead, the role stays in that conversation and is
+exempt from mandatory sub-agent spawning; its own work is not independently
+verified by that exception. Technical Lead may share Organizer context/model. Senior roles and Design Tester are
+execution roles and always use real sub-agents with their roster bindings. Each
+Lead reviews its own team's work; review is tied to the role, never to a model.
 
 | Delegating owner | Execution role | Approval/reporting owner |
 | --- | --- | --- |
@@ -60,8 +78,11 @@ For each actual dispatch:
    timeouts, and missing outputs as incomplete rather than inventing a verdict.
 5. On rejection, return actionable corrections to the same Senior or an explicitly
    reassigned instance, with updated artifact context. On approval, the owner records
-   completion and evidence on the Issue and the next dependent stage can proceed.
+   completion and evidence on the owning Issue when one exists, otherwise in the draft PR or linked repository records, and the next dependent stage can proceed.
 
+Keep handoffs lean: send relevant diffs, affected files, findings, decisions,
+requirements and test evidence, not the full conversation. Preserve unaffected
+approvals and recheck changed scope plus dependencies justified by risk.
 Reuse a live agent when useful, but do not assume it remembers decisions. Rebuild
 the packet from persistent records when changing context/model or resuming. Respect
 tool/runtime limits; queue excess work. If repeated attempts make no progress,
@@ -75,7 +96,7 @@ Use [the handoff template](../assets/handoff.md) as needed. Each invocation gets
 - Assigned role and the absolute path to this skill's entrypoint and role guide.
 - Applicable additional skills and where to load them; missing required skills
   are a reported dependency, not something an agent silently invents.
-- Owning feature Issue URL/identifier.
+- Owning feature Issue URL/identifier when one exists; otherwise the descriptive branch name and task purpose.
 - Repository/worktree path, relevant branch/revision and uncommitted work context.
 - The documents to start from: the application `README.md` and the module
   documents for the task, plus the requirements, designs, and verification
@@ -85,7 +106,7 @@ Use [the handoff template](../assets/handoff.md) as needed. Each invocation gets
 - The absolute path for its checkpoint, and the existing checkpoint to resume
   from if there is one.
 
-Persist the meaningful assignment and decisions in the owning Issue/repo before
+Persist the meaningful assignment and decisions in the owning Issue (when one exists) or repository records before
 handoff. A transient packet may carry links and execution details, but must not be
 the only copy of important knowledge. Do not create `.AI` checkpoints for routine active
 assignments. The parent must not assume a child inherited conversation context,
@@ -100,12 +121,12 @@ or use isolated worktrees with explicit integration responsibility. Respect the
 host's concurrency limit; queue extra work without creating not-started checkpoints.
 
 Seniors return artifact paths, changes, test/research evidence, limitations,
-remaining work, and evidenced challenges. They do not update the Issue or approve
+remaining work, and evidenced challenges. They do not update the Issue (if any) or approve
 their own work. The Lead inspects outputs and relevant evidence, integrates them,
 and approves or returns specific corrections. Verify the integrated result where
 combination can change behavior; individual task success is not integration proof.
 
-Approved scope is complete. The Lead records the outcome on the Issue and routes
+Approved scope is complete. The Lead records the outcome on the owning Issue if present, otherwise on the draft PR or linked repository records, and routes
 the durable handoff. A rejected scope remains unfinished. Correct Senior challenges
 should change the Lead's decision when warranted and count positively in evaluation.
 
@@ -154,10 +175,11 @@ projects/
 
 Branches, commits, and pushing:
 
-- The feature branch is `feat/{issue-number}-{slug}`, and each Senior's branch is
-  that name plus `-{instance}`, unless the project already has a convention.
+- Feature branches use `feat/{issue-number}-{slug}`. Issue-free bugs and minor changes
+  use `fix/{descriptive-slug}` without an issue number. Each Senior's branch is
+  the owning branch name plus `-{instance}`, unless the project already has a convention.
 - A Senior commits its own work on its own branch, in small commits that
-  reference the Issue. It does not merge, push, or touch another branch.
+  reference the Issue when one exists; otherwise use the descriptive task name. It does not merge, push, or touch another branch.
 - The responsible Lead reviews. Technical Lead then merges the approved branches
   into the feature branch and verifies the combined result.
 - Organizer pushes only the feature branch and opens the PR.

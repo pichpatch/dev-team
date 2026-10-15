@@ -6,7 +6,7 @@ it here and in the host file listed below in the same edit.
 
 ## Roles the human talks to
 
-Each host runs the four conversation roles on these models:
+Each host runs the five conversation roles on these models:
 
 | Role | Claude Code | Codex | OpenCode |
 | --- | --- | --- | --- |
@@ -14,6 +14,7 @@ Each host runs the four conversation roles on these models:
 | Design Lead | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
 | Technical Lead | `claude-opus-5-5`, effort `high` | `gpt-6.1-sol`, effort `high` | `opencode-go/mimo-v2.6-pro` |
 | QA Lead | `claude-sonnet-5-5`, effort `high` | `gpt-6-astra`, effort `medium` | `opencode-go/gpt-6-luna`, variant `xhigh` |
+| Cybersecurity | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
 
 Antigravity has no binding: a role there runs on the model the session is using.
 
@@ -97,9 +98,44 @@ claude -p --model claude-haiku-5-5 --effort high "<task packet>"
 Check each CLI's `--help` for the flags the installed version supports instead
 of assuming these, and run each from the worktree the task packet names.
 
-### Roles without a binding
+### Dedicated DevOps and Cybersecurity models
 
-The three Leads, when they run as sub-agents, use the model their role has in
-the conversation table for the organizing host. DevOps and Cybersecurity have
-no binding yet: until the human sets one, Technical Lead asks which model to use
-when it calls them in.
+These roles do not use the shared Senior pool. DevOps is always delegated.
+Cybersecurity in conversation uses its row in the conversation table above;
+delegated, it follows the cross-provider routes below.
+
+| Role | Claude Code | Codex | OpenCode |
+| --- | --- | --- | --- |
+| DevOps | `claude-sonnet-5-5`, effort `medium` | `gpt-6-sol`, effort `medium` | `opencode-go/mimo-v2.6-flash` |
+| Cybersecurity | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
+
+Technical Lead reviews these roles' outputs. Verify model identifiers with each installed host before dispatch; never silently substitute a different model.
+
+### Cross-provider independent reviewers
+
+Delegated Cybersecurity and QA Lead always run as separate sub-agents on a
+different underlying model/provider from Organizer, on every task. A different
+effort level of the same model is not independent. Preferred routes: Claude
+Organizer -> GPT/Codex (OpenCode fallback on GPT rate limit); GPT/Codex
+Organizer -> Claude (OpenCode fallback on Claude rate limit); OpenCode
+Organizer -> Claude (GPT/Codex fallback).
+The model for each route:
+
+| Organizer | Delegated QA Lead and Cybersecurity run on | If that provider is rate-limited |
+| --- | --- | --- |
+| Claude Code | Codex: `gpt-6.1-sol`, effort `medium` | OpenCode: the role's OpenCode binding |
+| Codex | Claude: `claude-sonnet-5-5`, effort `high` | OpenCode: the role's OpenCode binding |
+| OpenCode | Claude: `claude-sonnet-5-5`, effort `high` | Codex: `gpt-6.1-sol`, effort `medium` |
+
+This applies to the delegated roles only. A QA Lead the human talks to keeps its
+conversation binding above.
+
+Keep human-approved bindings and verify actual invocation support. If routing
+conflicts with bindings or no independent agent is available, ask the human or
+report a blocked review; never silently substitute. Direct human invocation
+uses the role's conversation binding and is exempt from sub-agent spawning, but
+does not establish independent approval. Technical Lead can share Organizer context.
+
+### Other delegated Leads
+
+The three Leads, when delegated, use their role bindings in the conversation table for the organizing host.

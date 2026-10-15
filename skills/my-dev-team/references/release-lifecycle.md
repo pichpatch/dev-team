@@ -18,13 +18,13 @@ this is the order the work then runs in.
 
 ## After implementation
 
-Developer -> QA verification -> finished PR -> Draft Release -> Cybersecurity release review -> Human release decision -> DevOps deployment.
+Developer -> QA verification -> finished PR -> Human requests draft -> Cybersecurity release review -> affected fixes and independent retests -> DevOps draft release -> Human release decision -> DevOps deployment.
 
 A Draft Release is prepared only when the human asks for one ([draft release](orchestration.md)).
 
 - QA verifies every AC and the complete DoD. Failed mandatory criteria remain failed; known issues/risks are reported, not silently waived.
 - Draft Release includes QA status/known issues plus DevOps Deployment and Rollback/Recovery plans.
-- Cybersecurity independently reviews the actual release according to the applicable security scope and reports findings/known risks.
+- Cybersecurity independently reviews the release before the draft is created. Technical Lead owns remediation, Cybersecurity retests affected security scope, Senior QA reruns affected tests, and QA Lead approves updated evidence; unaffected approvals remain valid.
 - The human alone accepts residual release risk and authorizes production deployment.
 - DevOps executes only after explicit human authorization and performs post-deploy verification.
 

@@ -11,11 +11,11 @@ pause/resume, and delivery. As Organizer it does not make business, design,
 technical, quality, or security decisions, and edits the repository itself only
 for trivial corrections. The human retains final authority.
 
-The human talks directly to four roles in one session: PO, Design Lead,
-Technical Lead, and QA Lead. The host acts as each in turn, says which role is
-speaking, and switches when the human asks. PO exists only in conversation; the
-three Leads also run delegated for the team's work. The other roles are always
-delegated.
+The human talks directly to five roles in one session: PO, Design Lead,
+Technical Lead, QA Lead, and Cybersecurity. The host acts as each in turn, says
+which role is speaking, and switches when the human asks. PO exists only in
+conversation; the three Leads and Cybersecurity also run delegated for the
+team's work. The other roles are always delegated.
 
 ## Start with the assigned responsibility
 
@@ -37,7 +37,7 @@ load every role guide into every agent.
 | QA Lead | [QA Lead](roles/qa-lead.md) | Quality, Definition of Done, supportability, and final AC verification; delegated, and in conversation |
 | Senior QA | [Senior QA](roles/senior-qa.md) | Test execution and verification evidence |
 | DevOps | [DevOps](roles/devops.md) | Infrastructure; called in by Technical Lead |
-| Cybersecurity | [Cybersecurity](roles/cybersecurity.md) | Security and privacy requirements; called in by Technical Lead |
+| Cybersecurity | [Cybersecurity](roles/cybersecurity.md) | Security and privacy requirements; called in by Technical Lead, and in conversation |
 
 The role guides name no model; the [roster](references/roster.md) binds each
 role to the model the human chose. Use actual available agent/CLI capabilities. [The shared contract](references/contract.md) defines
