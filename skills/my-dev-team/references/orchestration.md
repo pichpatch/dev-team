@@ -132,26 +132,13 @@ Preserve this high-level order, involving only relevant owners:
    covering every AC before implementation. Loop back to an owner only for
    something ambiguous, contradictory, missing, or untestable.
 9. **Senior Developer(s):** implement scoped tasks delegated by Technical Lead.
-10. **Responsible Lead:** review its own team's outputs and evidence; rejection
-    returns work for correction, approval completes that scope. A Lead integrates
-    parallel outputs. For a change to the UI, Design Lead also has the
-    implemented screens checked against the approved design; drift goes to
-    Technical Lead for correction, and anything needing a new design decision
-    returns to Design first.
-11. **QA execution + verification:** Senior QA executes verification and supplies
-    actual results and regression evidence.
-12. **QA Lead:** review quality requirements, test coverage, every AC, regression,
-    and relevant supportability requirements. Check AC only when evidence supports it.
-13. **Cybersecurity, called in by Technical Lead:** check the delivered
-    revision's ignore rules and tracked secret files, even when the feature
-    needed no security review; for a public site, also check and report the AI
-    crawler rules.
-14. **Organizer:** prepare/open the finished implementation PR linked to the Issue.
-15. **Human:** receive the PR for the final decision.
+10. **Applicable domain reviews:** Design Lead verifies implemented UI against approved design when relevant; drift returns to Senior Developer through Technical Lead, and new design decisions return to Design Lead. Cybersecurity, called in by Technical Lead, checks the delivered revision's ignore rules and tracked secrets even if no earlier security review was required; for public sites it also checks AI crawler rules. Record findings and resolve blockers before PR delivery.
+11. **Shared completion gate:** follow the single [shared completion gate](#shared-completion-gate-for-features-small-changes-and-bugs): Technical Lead reviews completed implementation, Senior QA tests the reviewed revision, QA Lead approves evidence, and Organizer opens a draft PR after applicable security and delivery checks. Do not duplicate these gates here.
+12. **Human:** receives the draft PR and decides whether to approve merge or deployment. Neither action is automatic.
 
 Parallelize independent tasks within these stages where useful. Do not start a
 dependent stage before its necessary owner decisions are available. Do not add a
-second completion ceremony after Lead approval. If a change invalidates a design,
+second completion ceremony after the shared completion gate. If a change invalidates a design,
 security, quality, or technical decision, route that change back to its owner and
 repeat affected verification before proceeding.
 
@@ -164,9 +151,9 @@ substitute approval.
 For bugs, no Issue is required by default. Reference an existing Issue only when relevant, and reuse still-valid decisions. Route through QA Lead investigation, Senior QA reproduction, Senior Developer correction, and the shared completion gate. For gaps or behavior changes, classify and use the appropriate lifecycle. QA is the first investigation point for a
 reported defect: it reproduces it, gathers evidence, narrows the likely layer,
 and analyzes the impact before anyone claims a cause. Then send business
-ambiguity to PO, design problems to Design Lead, implementation to Technical
-Lead, test/support gaps to QA Lead, and security findings to Cybersecurity
-through Technical Lead. Owners determine the impact on prior approvals and
+ambiguity to PO, design problems to Design Lead, implementation fixes to Senior
+Developer (escalating material technical risk to Technical Lead), test/support
+gaps to QA Lead, and security findings to Cybersecurity through Technical Lead. Owners determine the impact on prior approvals and
 tests. This avoids restarting unchanged feature design while preserving necessary
 reviews, correction, QA retest, and PR traceability.
 
