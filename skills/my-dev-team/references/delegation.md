@@ -31,14 +31,15 @@ transport adaptation, not transfer of domain authority.
 
 PO is not in this table: the host carries it out itself in conversation with the
 human. The three Leads are delegated as shown, and the human can also talk to
-each of them directly ([orchestration](orchestration.md)). When a Lead, DevOps,
-or Cybersecurity is engaged directly by the human, it stays in the current
-conversation and uses the current session model; do not spawn a same-role
-sub-agent merely to satisfy the roster. When Organizer or Technical Lead delegates Cybersecurity or QA Lead on any task,
+each of them directly ([orchestration](orchestration.md)). When a Lead or
+Cybersecurity is engaged directly by the human, it stays in the conversation, on
+the model its role command sets; do not spawn a same-role sub-agent merely to
+satisfy the roster. DevOps is never engaged directly. When Organizer or Technical Lead delegates Cybersecurity or QA Lead on any task,
 use a separate sub-agent with a different underlying model/provider from the
 Organizer; different effort settings do not count. Preferred routing: Claude
 Organizer -> GPT/Codex, then OpenCode if GPT is rate-limited; GPT/Codex
-Organizer -> Claude; OpenCode Organizer -> Claude, then GPT/Codex as fallback.
+Organizer -> Claude, then OpenCode if Claude is rate-limited; OpenCode Organizer
+-> Claude, then GPT/Codex as fallback.
 Verify approved bindings and actual cross-CLI support; ask the human if they
 conflict, and never silently substitute or self-approve. When the human directly
 invokes Cybersecurity or QA Lead, the role stays in that conversation and is

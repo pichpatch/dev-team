@@ -13,7 +13,7 @@ work. For a new feature, act as PO to agree it with the human before the Issue
 is created. For feature work, dispatch the team only for an Issue labeled `ready to implement`;
 for a `draft` feature Issue, continue the discussion with the human as the role whose
 questions are open. This feature-only readiness rule does not block issue-free
-bug or minor-change routes. For a bug, route directly to QA Lead without requiring an Issue. If an existing Issue is relevant, reference it; do not create a new Issue by default. For a gap or requested behavior change, classify the work and use its appropriate route. Reuse still-valid decisions; do not
+bug or minor-change routes. For a bug, route directly to QA Lead. A bug creates no new Issue: it falls under the feature Issue whose behavior is wrong, so reference that Issue and record the fix there. When the bug turns out to be a requirement gap, PO updates that Issue with a change record. A minor change needs no Issue. For a gap or requested behavior change, classify the work and use its appropriate route. Reuse still-valid decisions; do not
 pretend earlier approval covers changed scope or invalidate it without reason.
 
 Determine role relevance with the owners after the route is established. If
@@ -33,8 +33,8 @@ See [delegation](delegation.md).
 
 ## Talking to the Leads
 
-Four roles talk to the human directly, in one session: PO, Design Lead,
-Technical Lead, and QA Lead. They are at the same level, and each writes its own
+Five roles talk to the human directly, in one session: PO, Design Lead,
+Technical Lead, QA Lead, and Cybersecurity. They are at the same level, and each writes its own
 requirements for the feature. The host acts as each of them in turn instead of
 delegating, because agreeing a feature needs a live discussion.
 
@@ -44,6 +44,7 @@ delegating, because agreeing a feature needs a live discussion.
 | Design Lead | Direction, flows, brand and visual changes | `/my-design-lead` |
 | Technical Lead | Whether and how it can work, cost, technical constraints | `/my-tech-lead` |
 | QA Lead | The Definition of Done and how each AC will be proven | `/my-qa-lead` |
+| Cybersecurity | Security and privacy requirements, such as what may be stored | `/my-security` |
 
 A new feature usually runs business, then design, then technical, then quality.
 Not every feature needs every Lead: a logo change may need PO and Design Lead
@@ -71,11 +72,12 @@ only. The order is the human's to change.
 - **Each role records what it agreed,** in its own documents and its own section
   of the Issue ([one feature, one Issue](records.md)). The delegated team never
   sees this conversation, so nothing may live only in it.
-- **DevOps and Cybersecurity stay delegated, under Technical Lead.** When the
-  technical discussion shows the feature needs one of them, Technical Lead calls
-  it in as a sub-agent during the conversation and brings what it requires to
-  the human, so it is known before the human says the feature is ready. Their
-  questions for the human come through Technical Lead.
+- **DevOps stays delegated, under Technical Lead,** and so does Cybersecurity
+  unless the human talks to it with `/my-security`. When the technical
+  discussion shows the feature needs one of them, Technical Lead calls it in as
+  a sub-agent during the conversation and brings what it requires to the human,
+  so it is known before the human says the feature is ready. DevOps's questions
+  for the human come through Technical Lead.
 
 Before the Issue exists, each role commits its agreed documents on the default
 branch in the main checkout: PO the business requirements, Design Lead the
@@ -154,7 +156,7 @@ reviewer. Never mark blocked/unrun verification as passed. When a necessary owne
 or tool cannot run, preserve pending work and the blocker; do not fabricate a
 substitute approval.
 
-For bugs, no Issue is required by default. Reference an existing Issue only when relevant, and reuse still-valid decisions. Route through QA Lead investigation, Senior QA reproduction, Senior Developer correction, and the shared completion gate. For gaps or behavior changes, classify and use the appropriate lifecycle. QA is the first investigation point for a
+For bugs, create no new Issue: reference the feature Issue the bug falls under, record the fix there, and reuse still-valid decisions. A bug that reveals a requirement gap goes to PO, who updates that Issue with a change record. Route through QA Lead investigation, Senior QA reproduction, Senior Developer correction, and the shared completion gate. For gaps or behavior changes, classify and use the appropriate lifecycle. QA is the first investigation point for a
 reported defect: it reproduces it, gathers evidence, narrows the likely layer,
 and analyzes the impact before anyone claims a cause. Then send business
 ambiguity to PO, design problems to Design Lead, implementation fixes to Senior

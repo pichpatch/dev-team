@@ -9,8 +9,8 @@ AGENTS_SOURCE="$REPO_DIR/agents"
 PROFILES_SOURCE="$REPO_DIR/profiles"
 # The team skill, the role skills that act as commands where a host has no
 # separate command files, and the command wrappers for hosts that do.
-ROLE_SKILLS=(my-po my-design-lead my-tech-lead my-qa-lead)
-COMMANDS=(my-dev-team my-po my-design-lead my-tech-lead my-qa-lead)
+ROLE_SKILLS=(my-po my-design-lead my-tech-lead my-qa-lead my-security)
+COMMANDS=(my-dev-team my-po my-design-lead my-tech-lead my-qa-lead my-security)
 dry_run=0
 custom_dir=""
 targets=()
@@ -29,7 +29,7 @@ With no target, install for hosts whose configuration directories already exist.
 --dry-run prints planned links and checks conflicts without changing files.
 
 Every host gets the my-dev-team skill and a way to call each role directly:
-my-dev-team, my-po, my-design-lead, my-tech-lead, my-qa-lead.
+my-dev-team, my-po, my-design-lead, my-tech-lead, my-qa-lead, my-security.
 
 Claude:      ~/.claude/skills/my-dev-team, and ~/.claude/commands/<name>.md
              (call as /my-po; each role command sets its model and effort)

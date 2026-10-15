@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "skills/my-dev-team"
-ROLE_SKILLS = ("my-po", "my-design-lead", "my-tech-lead", "my-qa-lead")
+ROLE_SKILLS = ("my-po", "my-design-lead", "my-tech-lead", "my-qa-lead", "my-security")
 COMMANDS = ("my-dev-team",) + ROLE_SKILLS
 
 

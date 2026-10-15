@@ -4,10 +4,11 @@ A model-independent skill for software delivery through real sub-agents or
 already-authorized CLIs. Organizer is the executing host (OpenCode, Claude Code,
 Codex, etc.), **not a role**. It coordinates work while the ten roles retain their
 domain authority and the human retains final authority. You talk directly to
-four roles in one session: PO, Design Lead, Technical Lead, and QA Lead. The host
-acts as each in turn, tells you which is speaking, and switches when you ask or
-call `/my-po`, `/my-design-lead`, `/my-tech-lead`, or `/my-qa-lead`. The other roles are
-always delegated, and each Lead reviews its own team's work.
+five roles in one session: PO, Design Lead, Technical Lead, QA Lead, and
+Cybersecurity. The host acts as each in turn, tells you which is speaking, and
+switches when you ask or call `/my-po`, `/my-design-lead`, `/my-tech-lead`,
+`/my-qa-lead`, or `/my-security`. The other roles are always delegated, and each
+Lead reviews its own team's work.
 
 Each role guide covers its working method, inputs, evidence, review, handoffs,
 and authority boundaries.
@@ -108,6 +109,70 @@ There is no launcher or OS sandbox. Every repository is treated as private and
 sent only to models the human approved as safe. Every agent asks before reading
 any credential. Technical Lead gives each Senior a git worktree that holds no real
 env file. The team works on GitHub only.
+
+## Models
+
+Which model runs each role. The [roster](skills/my-dev-team/references/roster.md)
+is the authoritative copy and holds the rules; change both together.
+
+### Roles you talk to
+
+| Role | Claude Code | Codex | OpenCode |
+| --- | --- | --- | --- |
+| PO | Sonnet 5.5, high | GPT-6.1 Sol, medium | `deepseek-v4.1-flash`, max |
+| Design Lead | Sonnet 5.5, high | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
+| Technical Lead | Opus 5.5, high | GPT-6.1 Sol, high | `mimo-v2.6-pro` |
+| QA Lead | Sonnet 5.5, high | GPT-6 Astra, medium | `gpt-6-luna`, xhigh |
+| Cybersecurity | Sonnet 5.5, high | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
+
+### Delegated roles
+
+| Role | Model | Notes |
+| --- | --- | --- |
+| Senior pool 1 | OpenCode `space-bunny`, high | Senior Developer and Senior Designer; up to three at once |
+| Senior pool 2 | Codex `gpt-6-luna`, high | Simplest slices; used last when Codex organizes |
+| Senior pool 3 | Claude `claude-haiku-5-5`, high | Used last when Claude Code organizes |
+| Senior pool 4 | OpenCode `deepseek-v4.1-flash`, high | |
+| Design Tester | OpenCode `qwen3.8-flash`, xhigh | |
+| Senior QA | OpenCode `mimo-v2.6-flash` | |
+| DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated |
+| QA Lead and Cybersecurity, delegated | A different provider from the Organizer: Codex `gpt-6.1-sol` medium under Claude Code; Claude Sonnet 5.5 high under Codex or OpenCode | If that provider is rate-limited: OpenCode under Claude Code or Codex, Codex under OpenCode |
+| Every model at its limit | OpenCode `space-bunny-free` | Then stop and report |
+
+### Scores
+
+[Artificial Analysis Intelligence Index](https://artificialanalysis.ai/leaderboards/models),
+read on 2026-10-14. The index measures general intelligence, not coding alone.
+Cost per task is from API prices; on a subscription, read it as how fast a model
+uses the limit. Wait is the time before the first words of an answer.
+
+| Model | Through | Effort | Score | Cost per task | Wait (s) |
+| --- | --- | --- | --- | --- | --- |
+| Claude Opus 5.5 | Claude | xhigh | 56 | $3.46 | 159 |
+| Claude Opus 5.5 | Claude | high | 54 | $1.82 | 53 |
+| Claude Sonnet 5.5 | Claude | xhigh | 52 | $2.01 | 38 |
+| Claude Sonnet 5.5 | Claude | high | 47 | $0.88 | 14 |
+| Claude Sonnet 5.5 | Claude | medium | 41 | $0.48 | 1 |
+| Claude Haiku 5.5 | Claude | high | 38 | $0.08 | 25 |
+| GPT-6 Astra | Codex | high | 51 | $1.73 | 111 |
+| GPT-6 Astra | Codex | medium | 50 | $1.54 | 6 |
+| GPT-6.1 Sol | Codex | high | 50 | $0.32 | 60 |
+| GPT-6.1 Sol | Codex | medium | 48 | $0.21 | 8 |
+| GPT-6 Luna | Codex or OpenCode Go | xhigh | 35 | $0.04 | 42 |
+| GPT-6 Luna | Codex or OpenCode Go | high | 33 | $0.03 | 20 |
+| `mimo-v2.6-pro` | OpenCode Go | none | 46 | $0.13 | 4 |
+| `glm-5.3` | OpenCode Go | max | 45 | $2.01 | 3 |
+| `qwen3.8-max` | OpenCode Go | none | 45 | $5.41 | 3 |
+| `kimi-k3` | OpenCode Go | max | 44 | $2.00 | 3 |
+| `claude-haiku-5-5` | OpenCode Go | max | 43 | $0.21 | 310 |
+| `glm-5.3-flash` | OpenCode Go | none | 42 | $0.28 | 3 |
+| `deepseek-v4.1-flash` | OpenCode Go | max | 39 | $0.27 | 1 |
+| `mimo-v2.6-flash` | OpenCode Go | none | 38 | $0.06 | 3 |
+| `deepseek-v4-pro` | OpenCode Go | max | 36 | $0.67 | 2 |
+| `minimax-m3` | OpenCode Go | none | 29 | $0.51 | 1 |
+
+`space-bunny`, `qwen3.8-flash`, and `gpt-6-sol` are not on the leaderboard. An
+effort of "none" means the leaderboard lists a single result for the model.
 
 ## Check
 

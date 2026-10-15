@@ -295,11 +295,13 @@ checklists on the Issue. Each responsible Lead owns the later work coordination
 for its domain. PO defines AC and QA Lead defines the Definition of Done; QA
 Lead updates the completion of both only after verification.
 
-Bugs and minor changes do not require an Issue by default. If an existing Issue
-is relevant, reference it without forcing a new one. Independent bugs and minor
-changes use `fix/{descriptive-slug}` branches, with task context, decisions,
-verification evidence, and outcomes recorded in the draft PR and linked repository
-documents. Other business, technical, design, QA/supportability, or security gaps
+A minor change (the small route) needs no Issue: it uses a
+`fix/{descriptive-slug}` branch and records its context, decisions, verification
+evidence, and outcome in its draft PR. A bug needs no new Issue either: it
+belongs to the feature Issue whose behavior is wrong, so its branch and PR
+reference that Issue and the outcome is recorded on it. A bug that reveals a
+requirement gap is a change to agreed AC, and PO updates that Issue with a
+[change record](#changing-agreed-ac). Other business, technical, design, QA/supportability, or security gaps
 are classified by impact and routed to the appropriate owner. Do not attach work
 to an unrelated Issue just to avoid creating one. If ownership
 is unclear, route to the appropriate owner; PO resolves genuine new feature scope
