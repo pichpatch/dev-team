@@ -295,10 +295,13 @@ checklists on the Issue. Each responsible Lead owns the later work coordination
 for its domain. PO defines AC and QA Lead defines the Definition of Done; QA
 Lead updates the completion of both only after verification.
 
-Bugs and business, technical, design, QA/supportability, or security gaps normally
-continue in the original owning feature Issue. Organizer searches existing Issues
-(including closed ones), references, and related PRs before proposing a new Issue.
-Do not attach work to an unrelated Issue just to avoid creating one. If ownership
+Bugs and minor changes do not require an Issue by default. If an existing Issue
+is relevant, reference it without forcing a new one. Independent bugs and minor
+changes use `fix/{descriptive-slug}` branches, with task context, decisions,
+verification evidence, and outcomes recorded in the draft PR and linked repository
+documents. Other business, technical, design, QA/supportability, or security gaps
+are classified by impact and routed to the appropriate owner. Do not attach work
+to an unrelated Issue just to avoid creating one. If ownership
 is unclear, route to the appropriate owner; PO resolves genuine new feature scope
 with the human before creating its Issue. Record later fixes on the same feature
 even when its original implementation already shipped.
@@ -356,7 +359,8 @@ AC stays as written and the correction follows the bug route.
 ## Durable updates
 
 Leads record their scope, decisions, review outcomes, evidence links, and remaining
-work on the owning Issue. Specialists record their own domain results; Seniors
+work on the owning Issue when present, or in the draft PR and linked repository
+records for issue-free bugs and minor changes. Specialists record their own domain results; Seniors
 return findings and artifacts to their Lead instead of managing the Issue.
 Organizer may carry an owner's approved update to GitHub when tooling requires
 it, clearly attributing the owner, without authoring its verdict.
@@ -366,11 +370,14 @@ sections. Prefer attributable comments for independent updates when simultaneous
 body edits could overwrite work. Keep history when a decision changes; update
 current repo truth and link the reason from the Issue.
 
-Meaningful handoffs must point to saved files/commits and durable Issue records.
+Meaningful handoffs must point to saved files/commits and durable Issue records
+when present, or draft PR/repository records for issue-free work.
 Do not rely on a local tool message as the sole record of a decision. A required
 GitHub write that fails is pending, not synchronized: preserve the outcome in
 appropriate repo docs and checkpoint any unfinished publishing action.
 
-PRs link to the owning feature Issue and relevant verification evidence. Existing
+Feature PRs link to their owning Issue and relevant verification evidence. Bug and
+minor-change PRs without Issues record the request, fix, reviews, and QA evidence
+directly. Existing
 Issue lifecycle conventions may be followed; do not require auto-closing an Issue
 to prove completion or create a second Issue for a follow-up in the same feature.
