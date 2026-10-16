@@ -109,7 +109,7 @@ After Senior Developer finishes any behavioral implementation:
    match verified evidence on the reviewed revision, and links the evidence on
    the Issue. Unverified criteria remain unchecked; the Issue update is part of
    QA approval, not a second approval stage.
-5. Organizer opens a draft PR after applicable security and delivery checks.4. Organizer opens a draft PR after applicable security and delivery checks. Human approval is required before merge or deployment.
+5. Organizer opens a draft PR after applicable security and delivery checks. Human approval is required before merge or deployment.
 
 When QA rejects a fix, Senior Developer corrects it, Technical Lead reviews the correction, and Senior QA and QA Lead repeat affected verification. Design Lead and Cybersecurity retain their applicable review responsibilities.
 
