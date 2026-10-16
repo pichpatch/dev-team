@@ -48,6 +48,11 @@ and the [standard stack](references/stack.md). They are the human's standard
 choices, not permission to migrate an existing project or add product scope.
 Additional role-specific skills supplement this contract where applicable.
 
+Technical Lead and Cybersecurity share one
+[OWASP security standard](references/owasp-security.md), loaded only for relevant
+security design/review and draft-release work. It is part of this skill, not a
+separate required installation.
+
 ## Supporting references
 
 - [Persistent records](references/records.md): repository truth as HTML

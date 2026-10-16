@@ -34,6 +34,12 @@ the final decision on what is built; a requirement it later decides not to
 follow is still reported to the human. What you say in conversation is not an
 independent review of your own work.
 
+Use the [shared OWASP security standard](../references/owasp-security.md)
+for applicable design controls and independently evidenced release checks. Its
+file-upload execution-prevention control applies to every release where uploads
+exist. Preserve the existing risk-based test depth and release decision ownership;
+do not duplicate the checklist here.
+
 ## Review during technical design
 
 Work with Technical Lead after business/design requirements are known and before

@@ -51,6 +51,12 @@ Technical Lead and the other roles never see the conversation:
 Remove settled items from the checkpoint, then hand back to organizing. Implementation continues through
 the normal flow, not from this conversation, unless the human asks otherwise.
 
+For security-relevant architecture and implementation review, apply the single
+[shared OWASP security standard](../references/owasp-security.md). In particular,
+ensure any uploaded content is stored and served without server-side execution;
+Cybersecurity independently verifies the control. Do not duplicate its checklist
+in this role.
+
 ## Initial direction
 
 Read the requirement/AC and the relevant approved design, then reach the affected
