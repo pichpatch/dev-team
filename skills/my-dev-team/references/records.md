@@ -295,13 +295,9 @@ checklists on the Issue. Each responsible Lead owns the later work coordination
 for its domain. PO defines AC and QA Lead defines the Definition of Done; QA
 Lead updates the completion of both only after verification.
 
-As part of final evidence review, QA Lead edits the existing Issue body to
-synchronize AC and DoD checkboxes: `[x]` only for verified passes on the reviewed
-revision, `[ ]` for all others. Preserve stable IDs, wording, and every other
-role-owned section. Comment with evidence links and explain failed, blocked,
-unrun, and not-applicable criteria. Refresh stale checkmarks after fixes or
-revision changes. If GitHub editing fails, report the blocker rather than
-claiming completion.
+QA Lead keeps the Issue's AC and DoD checkboxes matched to verified evidence,
+changing only the boxes
+([sync the Issue checkboxes](../roles/qa-lead.md#sync-the-issue-checkboxes)).
 
 A minor change (the small route) needs no Issue: it uses a
 `fix/{descriptive-slug}` branch and records its context, decisions, verification

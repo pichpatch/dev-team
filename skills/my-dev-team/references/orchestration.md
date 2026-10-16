@@ -105,10 +105,9 @@ After Senior Developer finishes any behavioral implementation:
 1. Technical Lead reviews the completed code, including every small bug fix. Rejected work returns to Senior Developer.
 2. Senior QA executes acceptance and regression tests on the reviewed revision, reporting uncertainties to QA Lead.
 3. QA Lead reviews test evidence and approves or rejects verification.
-4. For work with an owning Issue, QA Lead updates AC and DoD checkboxes to
-   match verified evidence on the reviewed revision, and links the evidence on
-   the Issue. Unverified criteria remain unchecked; the Issue update is part of
-   QA approval, not a second approval stage.
+4. For work with an owning Issue, QA Lead
+   [syncs its AC and DoD checkboxes](../roles/qa-lead.md#sync-the-issue-checkboxes)
+   to the verified evidence as part of its approval.
 5. Organizer opens a draft PR after applicable security and delivery checks. Human approval is required before merge or deployment.
 
 When QA rejects a fix, Senior Developer corrects it, Technical Lead reviews the correction, and Senior QA and QA Lead repeat affected verification. Design Lead and Cybersecurity retain their applicable review responsibilities.

@@ -89,15 +89,9 @@ QA Lead checks each AC only with actual verification evidence. Open blockers,
 unmet mandatory criteria, or an unmet agreed coverage gate prevent a passing
 quality verdict. Lower-severity findings receive explicit dispositions based on
 their effect on requirements; human risk acceptance does not become test success.
-For work with an owning feature Issue, QA Lead must synchronize the Issue's
-AC and DoD checkboxes to the evidence on the final tested revision before its
-approval is treated as complete. Mark only evidenced passes `[x]`; leave all
-other statuses unchecked and record failures, blockers, unrun/not-applicable
-reasons, and evidence in an Issue comment. Preserve PO-authored AC text and
-QA-authored DoD text, stable identifiers, and unrelated sections. On retest or
-subsequent code changes, refresh affected checkboxes and evidence; never keep
-stale passes. This is an update to the existing Issue, not a new tracker or
-additional review gate.
+With an owning Issue, QA Lead's approval includes
+[syncing the Issue's AC and DoD checkboxes](../roles/qa-lead.md#sync-the-issue-checkboxes)
+to this evidence.
 
 Final evidence and limitations accompany the finished PR. After code changes,
 assess which checks/approvals must be refreshed rather than citing stale success.
