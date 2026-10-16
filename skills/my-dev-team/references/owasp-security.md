@@ -69,3 +69,29 @@ Prefer read-only review, unit/integration tests, configuration evidence, and non
 For each check record: check ID; OWASP edition and specific reference; release revision; affected endpoint/component; applicability and rationale; procedure/tool and authorized environment; expected result; observed result; evidence link (sanitized); status **PASS / FAIL / NOT APPLICABLE / NOT TESTED**; severity and owner if unresolved; remediation and retest revision. `PASS` requires positive verification evidence, not just absence of scanner alerts. `NOT APPLICABLE` needs an inspected-scope rationale; `NOT TESTED` states the blocker and residual risk.
 
 Summarize the coverage matrix, blocking findings, untested controls, deviations, monitoring gaps, and human decisions in the existing Cybersecurity release report. Failures follow the existing Technical Lead fix -> Cybersecurity retest -> QA regression -> DevOps draft-release path; this document creates no new approval role or parallel release lifecycle.
+
+## Authentication and session lifecycle (OW-02)
+
+This section is a shared design and independent-verification checklist, not a universal product login policy. Technical Lead proposes risk-based session/device limits, idle and absolute lifetimes, reauthentication triggers, and logout scope; PO approves the business policy. Cybersecurity verifies the resulting security requirements independently, and QA verifies acceptance criteria and regression behavior. Record project-specific choices and exceptions before implementation; never infer a one-device or unlimited-device default.
+
+### Design requirements and examples
+
+- Validate access-token integrity, issuer/audience, intended use, expiry, and authorization at the trusted server boundary. Extracting a user ID from an unverified token is not authentication. Prevent cross-user, cross-tenant, and unauthorized access regardless of device policy.
+- Define allowed simultaneous sessions (one device, web plus mobile, or multiple), replacement behavior, and whether logout revokes this session or all sessions. For one-device policies, use an atomic session replacement so concurrent logins cannot both remain active.
+- Revoke sessions server-side on logout, replacement, account disablement, and other approved triggers; reject revoked access tokens promptly even if cryptographic expiry has not elapsed. Store a session identifier or token hash rather than a raw bearer token in the session store. Keep revocation state until the affected token can no longer be accepted.
+- A cache may speed validation, but a cache miss is **unknown**, not **valid** or **revoked**. Use distinct active/revoked/unknown states. Verify token signature and claims before trusting its user/session identifiers. Cache active session state and revocation markers with appropriate expiration and consistency rules. A durable authoritative store must survive cache restart/eviction; a bounded database fallback may resolve unknown states. If neither cache nor authoritative store can verify authorization, fail closed. Prevent repeated misses, invalid tokens, or cache outages from exhausting the database through rate limits, request coalescing, bounded concurrency, and appropriate resilience measures. Document cache invalidation/race conditions and session-state propagation.
+- Issue separate refresh-token credentials per device/session; do not share one refresh token across devices. Protect refresh tokens in storage and transit, rotate on successful refresh, invalidate the prior token, and detect replay/reuse. Define safe handling of simultaneous refresh requests so races do not accidentally create parallel valid tokens or lock out legitimate sessions.
+- While the approved session remains eligible, automatic refresh-token rotation is the default. Renewal never overrides revocation, inactivity timeout, absolute session lifetime, forced reauthentication, or risk-based step-up authentication. Technical Lead proposes these limits and PO approves; do not hardcode a universal six-month lifetime or indefinite login. Define behavior at expiry, logout, password reset, account recovery, and device loss.
+- Document latency and availability budgets for the gateway/session store, realistic peak traffic, cache restarts, database fallback, and recovery. A secure control that collapses authentication under load is not a complete design.
+
+### Cybersecurity verification and evidence
+
+For each applicable case, record OW-02 and relevant project SEC IDs, approved policy, test environment/revision, expected and actual behavior, sanitized evidence, and PASS / FAIL / NOT APPLICABLE / NOT TESTED:
+
+1. Test successful/failed login, token signature/claim/expiry checks, unauthenticated and cross-user/tenant attempts, and login throttling or abuse controls.
+2. Test each approved device policy, concurrent logins, atomic replacement, current-device logout and logout-everywhere where applicable.
+3. Capture a valid access token, revoke its session, and prove it is rejected before natural expiry, including after cache eviction/restart and during cache/database inconsistencies. Verify revoked markers do not cause unbounded database queries.
+4. Test refresh rotation, rejection and alerting of reused old refresh tokens, session/device isolation, expiry boundaries, simultaneous refreshes, and the approved idle/absolute lifetime and step-up rules.
+5. With authorized, bounded staging tests, verify gateway latency and database load under realistic traffic, cache misses/restarts, store slowdown/outage, and repeated invalid requests. Confirm fail-closed behavior when authoritative verification is unavailable; coordinate performance and operational evidence with QA and DevOps.
+
+A documented example (Redis session cache plus durable database fallback) is an option, not a mandated architecture. Security properties and measured evidence are mandatory where applicable.
