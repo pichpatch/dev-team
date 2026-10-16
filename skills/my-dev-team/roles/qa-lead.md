@@ -32,4 +32,16 @@ Verify every AC and every applicable DoD item. After a [change to agreed AC](../
 
 Route defects based on evidence to the responsible Lead and require retest. QA is the first investigation point for reported bugs; do not throw raw symptoms at Development when QA can reasonably reproduce and narrow the failure.
 
+Before approving verification for a feature or bug with an owning GitHub Issue,
+reconcile the Issue's `## Acceptance Criteria` and `## Definition of Done`
+checkboxes with the actual reviewed QA evidence. Check `[x]` only for verified
+passing items; leave failed, blocked, unrun, or not-applicable items unchecked,
+and explain each in a concise Issue comment with the test/revision/evidence links.
+Preserve IDs, wording, order, and all other role-owned Issue sections; never
+rewrite an AC or DoD requirement while marking results. Reconcile existing
+checked boxes too: stale checkmarks are not proof of the latest revision. If
+Issue update access is unavailable, report the blocker and do not claim the
+Issue is synchronized. Senior QA supplies evidence; QA Lead owns the checklist
+update and final verdict.
+
 Record final quality status against the tested revision, evidence, open issues/risks, and limitations. QA may report known issues and risk but never silently waive a failed mandatory requirement. Human risk acceptance is explicit and is never relabeled as a passed test. PO need not re-check AC after QA has proven complete AC coverage. QA approval never authorizes deployment.
