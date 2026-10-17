@@ -223,38 +223,44 @@ through two commands:
 
 ## Backend
 
-- **Layers: controller, service, repository.** A controller handles the
-  transport only: input validation, permissions, and the response. A service
-  holds the business rules. A repository is the only place that talks to the
-  database. A controller never calls a repository, and a service never builds a
-  query.
-- **A repository owns one table.** It saves and reads that table and keeps each
+- **Layers: controller, service, repository.** A controller is a transport
+  adapter: it handles input validation, permissions, and the response. For a
+  cross-service operation, it may invoke a dedicated controller/workflow/
+  orchestrator boundary that holds sequencing and recovery; it does not hide
+  domain rules in a service. A service holds its domain's business rules. A
+  repository is the only place that talks to the database. A controller never
+  calls a repository, and a service never builds a query. Service ownership,
+  workflow boundaries, and multi-write transaction/recovery requirements are
+  defined in [engineering practices](engineering.md).
+- **A repository owns one table.** It saves and reads its table and keeps each
   record consistent with itself: when one column changes, it clears or resets
-  the columns of the same record that depend on it. It never updates another
-  table, calls another repository, sends a webhook, or triggers anything
-  external.
-- **A service orchestrates.** Anything that spans tables or leaves the database
-  belongs to the service: it calls each repository in turn, wraps the calls in
-  one transaction when they must succeed or fail together, and triggers external
-  effects only after the transaction commits.
+  dependent columns on that same record. It does not update another table,
+  trigger external effects, or own another service's data.
+- **A service owns its domain and data access.** It may use repositories for
+  data owned by that service. Cross-service operations are coordinated by a
+  controller, workflow, or orchestrator, not by direct service-to-service
+  orchestration. Put an external effect after the required database operation
+  commits, or use the documented workflow recovery rules when it spans
+  independent transaction boundaries.
 
-  For example, when a user disconnects Google:
+  For example, when a user disconnects Google and both records below belong to
+  the same Account service domain:
 
   ```text
-  AccountService.unbindGoogle(userId)          one transaction
+  AccountService.unbindGoogle(userId)          Account domain operation
     1. userRepository.clearGoogleId(userId)    also clears google_refresh_token,
                                                a column of the same record
-    2. storageRepository.disallowGoogleDrive(userId)
-                                               another table, so the service
-                                               calls it, not userRepository
+    2. accountStorageRepository.disallowGoogleDrive(userId)
+                                               another Account-owned table;
+                                               repository keeps table ownership
   ```
 
   Clearing `google_refresh_token` stays in `userRepository`, because no caller
-  should be able to leave a token behind without a `google_id`. Removing the
-  Google Drive permission is in the service, because it is another table.
+  should be able to leave a token behind without a `google_id`. If the Drive
+  permission belongs to another service, the workflow layer coordinates that
+  service through its interface; the Account service does not query its table.
   Record the same-record rule in the module's `data-dict.html` and every side
-  effect in its `flows.html#side-effects`
-  ([module documents](engineering.md)).
+  effect in its `flows.html#side-effects` ([module documents](engineering.md)).
 - **ORM:** TypeORM with NestJS, behind the repositories. Prisma in a standalone
   Next.js application.
 - **Runs in 2 GB of memory.** Design for an instance of that size: paginate or
