@@ -70,6 +70,48 @@ For each check record: check ID; OWASP edition and specific reference; release r
 
 Summarize the coverage matrix, blocking findings, untested controls, deviations, monitoring gaps, and human decisions in the existing Cybersecurity release report. Failures follow the existing Technical Lead fix -> Cybersecurity retest -> QA regression -> DevOps draft-release path; this document creates no new approval role or parallel release lifecycle.
 
+## Authorization and roles (OW-01)
+
+This section is design guidance for a project that chooses role-based access
+control (RBAC); it is not a mandatory model for every application.
+
+### Design direction
+
+- Keep **authentication** (who the user is), **authorization** (what the user
+  may do, and to which resources), and the delivery team's own roles separate.
+- With RBAC, model users, roles, and permissions as many-to-many: a role holds
+  many permissions, a user may hold several roles, and a permission may belong
+  to several roles. A user gets the union of their roles' permissions.
+- Grant no direct per-user permission overrides by default; an exception needs
+  an explicit project requirement.
+- Enforce every permission on the server at the protected operation. Hiding an
+  action in the frontend is not an authorization check.
+- No role permission, however broad, overrides resource ownership, tenant or
+  organization isolation, or another contextual constraint. A union of roles
+  must never widen access across those boundaries.
+- Deny by default, and prevent privilege escalation, including a user assigning
+  roles or permissions they do not hold.
+- Role names such as Admin, Staff, or Operations are examples, not mandated
+  roles.
+
+### Decided per project by PO
+
+- The roles, the permission catalog, membership rules, and which actions each
+  role may perform.
+- Whether administrators may change roles and permissions at runtime.
+- Whether a role hierarchy exists, its order, and who may view, edit, assign
+  roles to, or disable other users. No hierarchy rule applies by default.
+- Separation of duties, delegated privileges, and sensitive approval flows.
+
+### Who does what
+
+PO defines the business authorization requirements and AC. Technical Lead
+designs the data model and the server-side checks. Cybersecurity independently
+tests horizontal and vertical privilege escalation, combinations of roles,
+ownership and tenant boundaries, unauthorized role or permission changes, and
+server-side enforcement, using the OW-01 evidence format above. QA Lead
+verifies the AC and the regressions around them.
+
 ## Authentication and session lifecycle (OW-02)
 
 This section is a shared design and independent-verification checklist, not a universal product login policy. Technical Lead proposes risk-based session/device limits, idle and absolute lifetimes, reauthentication triggers, and logout scope; PO approves the business policy. Cybersecurity verifies the resulting security requirements independently, and QA verifies acceptance criteria and regression behavior. Record project-specific choices and exceptions before implementation; never infer a one-device or unlimited-device default.
