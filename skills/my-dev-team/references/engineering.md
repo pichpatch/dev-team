@@ -98,7 +98,7 @@ Every side effect and every use of global state is written in the module's
 `flows.html`, because neither is visible from the code that triggers it:
 
 - **`#side-effects`:** one row per effect: what triggers it, what else changes,
-  where it runs (repository, service, action hook, or `subscribe`), and the
+  where it runs (repository, service, workflow, action hook, or `subscribe`), and the
   rule it implements. Backend example: "Unbind Google → `google_refresh_token`
   cleared (userRepository); Google Drive permission removed (AccountService)".
 - **`#global-state`,** in a frontend module: one row per global store or Context
@@ -137,6 +137,15 @@ and document updated together is not done.
 
 - Follow existing patterns, formatter, and linter. Use clear boundaries and
   cohesive functions/modules.
+- Keep production source lines to 150 characters or fewer. Generated code,
+  vendor files, URLs, hashes, and values that cannot sensibly be broken are
+  exceptions; do not use an exception to keep ordinary source lines long.
+- Keep source files at or below 2,000 lines, with generated and vendor files
+  excepted. Treat 2,000 as a ceiling, not a target: split files by responsibility
+  well before reaching it. Each file has one primary responsibility. A service
+  domain may span multiple focused files; for example, `userService.ts`,
+  `userCache.ts`, `helpers/user.ts`, and `types/user.ts` can live within the user
+  service domain. Give each concern its narrowest sensible ownership.
 - **Fail case first.** Handle invalid input, missing permission, and edge cases
   at the top of a function with guard clauses and early returns. The happy path
   comes last and is not nested inside `if`/`else`.
@@ -145,17 +154,66 @@ and document updated together is not done.
   shared library, and `frontend-core`. Reuse it, or extend it when the change is
   small. Copying code needs Technical Lead's decision. Do not build an
   abstraction for a single use either.
+- Put genuinely shared helpers, types, and code in an explicit shared location
+  such as `/lib`, `/helper`, or a shared package, following repository
+  conventions. Do not place shared code inside one page or service and make
+  unrelated pages or domains import that internal implementation.
 - **Comment usefully.** Every exported function, class, component, and module
   gets a short comment saying what it is for. Inside the code, comment why: the
   rule identifier, a non-obvious constraint, a workaround and its cause, a
   performance choice and its evidence. Never restate what the code already says,
   and update a comment in the change that makes it untrue.
 - Enforce permissions on the server and validate data at trust boundaries. Put
-  each side effect at its level: a repository keeps its own record consistent,
-  and a service orchestrates everything that crosses tables or leaves the
-  database ([backend layers](stack.md)). Use transactions where the invariant
-  requires atomic changes. Define idempotency/retry behavior for
-  operations that may be repeated.
+  each side effect at its level: a repository keeps its own record consistent;
+  services own their domain's business logic and data access; a workflow layer
+  coordinates business operations across services ([backend layers](stack.md)).
+- Treat each backend service domain as a microservice boundary, even in a
+  modular monolith. Keep its interfaces and dependencies clear enough that it
+  can be extracted as a service without redesigning its business logic.
+- Give each repository/table exactly one owning service. Other services must
+  not import that service's repository or directly query its tables; use the
+  owning service's interface or an approved cross-service communication path.
+- Put cross-service workflows in a controller, workflow, or orchestrator layer,
+  rather than having one service directly orchestrate another. A reusable flow
+  can be an explicit workflow module with parameters. Where appropriate, use
+  the existing queue/event mechanism for one-way communication. Kafka is not
+  currently part of the stack: do not introduce it automatically; discuss it
+  with the Technical Lead when requirements justify considering it.
+- Keep frontend and backend application logic horizontally scalable and
+  stateless: correctness must not depend on process-local memory. Disposable
+  local caches and other performance optimizations are fine when losing them
+  does not change correctness.
+- **Multi-table/repository write integrity (hard rule):** before implementing
+  any business workflow that creates, updates, or deletes data in more than one
+  table/repository, define its failure and rollback/recovery behavior. Treat
+  transaction scope as the whole business operation, not a set of nearby
+  queries. Identify required dependent writes separately from optional side
+  effects such as analytics or notifications. A required write failure must
+  roll back or compensate the operation; optional side effects should normally
+  retry without undoing completed core business work.
+- When all required writes share one safe database transaction boundary, prefer
+  a database transaction so they commit or roll back atomically. Do not use
+  compensation when a normal database transaction can safely provide
+  atomicity. When required writes cross services or independent transaction
+  boundaries, coordinate them through the workflow/orchestrator and use
+  explicit saga-style compensation or recovery; do not imply that a distributed
+  database transaction exists. For example, if checkout deducts a user's
+  balance and later order creation or processing fails, the workflow must
+  reverse/compensate the deduction or record and recover the incomplete work.
+- Track which workflow steps succeeded. Make compensation idempotent where
+  practical, never swallow a partial failure or report success, and include
+  workflow and compensation identifiers in logs. Compensation is not always a
+  delete: it may reverse a balance transaction, cancel or mark a record failed,
+  restore prior state, delete a newly created record, or enqueue compensation.
+  If compensation fails, durably record the recovery need and retry or escalate
+  it; never claim rollback succeeded when it did not. Define idempotency and
+  retry behavior for operations that may be repeated.
+- Example: creating a Website and its required initial BlogOffer is
+  one business operation. If both writes share a safe transaction boundary,
+  roll back the Website when BlogOffer creation fails. If they are owned by
+  separate services/transaction boundaries, orchestrate `WebsiteService` and
+  `BlogOfferService` and safely compensate or recover the Website creation if
+  the required BlogOffer step fails.
 - Check data types, constraints, nullability, pagination, query cost, indexes, and
   N+1 risks against actual access patterns. Document destructive changes and
   compatibility with existing clients/data.
@@ -196,6 +254,14 @@ Use the approved design/UI system and actual state behavior; read
 with relevant loading/empty/retry states. Follow the
 [shared frontend](stack.md) conventions: TanStack Query on the SDK, the i18n
 library for every string, Firebase Remote Config flags, and the list thresholds.
+- Give each route-, screen-, or endpoint-specific UI its own entry/module/file.
+  Small presentation or layout duplication is acceptable when it keeps local
+  code clear, easy to debug, and within the file-size guidance. Do not duplicate
+  business, security, or state logic.
+- Every page must initialize independently from authentication context and its
+  route parameters. It may reuse valid application state or cache according to
+  the cache rules, but must not depend on the user navigating through another
+  page first.
 
 For public web content, implement agreed indexability, meaningful rendered content,
 titles/descriptions, canonical links, redirects/status codes, sitemaps, language

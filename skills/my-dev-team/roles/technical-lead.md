@@ -188,7 +188,10 @@ module's `rules.html`, the test name, and the code; that the module's
 `code-map.html`, its `README.md` index, and the application `README.md` match the
 files as they now are; that new debt is recorded in `tech-debt.html` with a
 severity you set; that no repository touches another table or an external
-service, and cross-table work sits in a service inside one transaction; that on
+service; that work across tables inside one service's domain sits in that
+service, in one transaction where the writes must succeed together; that work
+across services goes through the workflow layer with defined recovery, and no
+service reads another service's tables; that on
 the frontend stores stay pure and side effects sit in action hooks or a
 registered `subscribe`; that every side effect and global state dependency is
 recorded in the module's `flows.html`; that the
