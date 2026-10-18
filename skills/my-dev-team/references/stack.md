@@ -322,7 +322,23 @@ through two commands:
   installed, mount the source for live reload, keep images multi-arch (arm64
   and amd64), and add a small helper script for start, stop, shell, and clean.
 - **Never drop, reset, or re-seed a database without the human's explicit OK**,
-  every time.
+  every time. The one exception is a worker's own database, below.
+- **Each worker gets its own database.** Parallel Seniors and testers must not
+  share data, so each creates one on the local database server, named after its
+  worktree, for example `myapp_wt_fix_login_2`, runs the migrations and seed
+  data, and drops it when its task is finished or abandoned. Redis gets its own
+  key prefix or database number per worker.
+  - **Workers connect as a limited local user** that may create databases but
+    is not an administrator, so PostgreSQL itself only lets it drop databases it
+    created. It cannot drop the human's development database even by mistake.
+    Creating that user needs admin rights, so Technical Lead asks the human once
+    how to set it up (a single SQL statement, or a step in the project's
+    docker-compose) and records it in the service's `README.md`.
+  - **Its credentials are test values** in the `.env.test` the Lead places in
+    the worktree; never the human's own database credentials.
+  - **The drop exception covers only** a database the worker created itself,
+    with the `_wt_` name, on the local machine. Anything shared or remote, and
+    any other database, still needs the human's OK.
 
 ## Identifiers and public URLs
 

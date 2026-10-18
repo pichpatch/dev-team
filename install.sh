@@ -41,7 +41,8 @@ Antigravity: ~/.gemini/config/skills/<name>; a skill is the slash command
              (call as /my-po)
 Codex:       ${CODEX_HOME:-~/.codex}/skills/<name>; a skill is the command
              (call as $my-po), and ${CODEX_HOME:-~/.codex}/<role>.config.toml
-             (start a session on a role's model with: codex -p my-tech-lead)
+             (start a session on a role's model with: codex -p my-tech-lead;
+             organize with: codex -p my-dev-team)
 
 The model each role runs on is listed in the skill's roster reference.
 
@@ -130,7 +131,7 @@ else
         sources+=("$AGENTS_SOURCE/opencode/$role.md")
       done
     elif [[ "$target" == codex ]]; then
-      for role in "${ROLE_SKILLS[@]}"; do
+      for role in my-dev-team "${ROLE_SKILLS[@]}"; do
         destinations+=("${CODEX_HOME:-$HOME/.codex}/$role.config.toml")
         sources+=("$PROFILES_SOURCE/codex/$role.config.toml")
       done

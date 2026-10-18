@@ -1,0 +1,5 @@
+# Organizer for my-dev-team. Start a session with: codex -p my-dev-team
+# The Organizer starts other CLIs as sub-agents, which cannot run inside Codex's
+# sandbox, and must reach the local database. Delegated Codex workers still run
+# sandboxed, as the roster describes. The model is your Codex default.
+sandbox_mode = "danger-full-access"

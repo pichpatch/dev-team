@@ -90,14 +90,34 @@ sent.
 
 ### Starting a run
 
+Run each from the worktree the task packet names, so it works on its own
+files and its [own database](stack.md):
+
 ```bash
 opencode run -m opencode-go/space-bunny --variant high "<task packet>"
-codex exec -m gpt-6-luna -c model_reasoning_effort="high" --sandbox workspace-write "<task packet>"
+codex exec -m gpt-6-luna -c model_reasoning_effort="high" \
+  --sandbox workspace-write -c sandbox_workspace_write.network_access=true \
+  -c 'sandbox_workspace_write.writable_roots=["<main checkout>/.AI"]' "<task packet>"
 claude -p --model claude-haiku-5-5 --effort high "<task packet>"
+agy -p --model <model> "<task packet>"
 ```
 
+What each needs, tested on the human's machine:
+
+| CLI as a worker | Sandbox | Reaches the local database | Commits in its worktree |
+| --- | --- | --- | --- |
+| Codex | `workspace-write`, network on | Yes | No: the Organizer commits for it |
+| Claude | None; runs with the human's Claude Code permissions | Yes | Yes |
+| OpenCode | None | Yes | Yes |
+| Antigravity | None (never pass `--sandbox`) | Yes | Yes |
+
+The host that organizes must run without an OS sandbox: OpenCode cannot run
+inside Codex's sandbox at all, so Codex organizes from the `my-dev-team` profile
+(`codex -p my-dev-team`), which turns its sandbox off. Claude Code, OpenCode,
+and Antigravity have no OS sandbox by default.
+
 Check each CLI's `--help` for the flags the installed version supports instead
-of assuming these, and run each from the worktree the task packet names.
+of assuming these.
 
 ### Dedicated DevOps and Cybersecurity models
 

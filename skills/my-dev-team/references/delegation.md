@@ -162,7 +162,16 @@ projects/
 - Do not switch branches or leave uncommitted changes in the main checkout.
 - Never copy a real env file into a worktree. When the work needs runnable
   configuration, provide values derived from `.env.example`, or a `.env.test`
-  holding test-only credentials the human supplied for that purpose.
+  holding test-only credentials the human supplied for that purpose, including
+  the limited user for the worker's [own database](stack.md).
+- **Sandboxes.** The Organizer, and any role the human talks to, runs without an
+  OS sandbox, so it can reach the database and start other CLIs as sub-agents.
+  A delegated Codex worker runs in Codex's `workspace-write` sandbox with
+  network on, so it can reach the local database while it can still write only
+  inside its worktree and its checkpoint file. Codex's sandbox also stops it
+  writing into git, so it does not commit: it leaves its changes in the worktree
+  and the Organizer commits them on its branch, attributed to it, after review.
+  The [roster](roster.md) gives each CLI's start command.
 - Name the worktree in the task packet. A Senior stays inside its worktree and
   does not read the main checkout, other worktrees, or the user's home directory.
   The one exception is its own [checkpoint](checkpoints.md) file under the main

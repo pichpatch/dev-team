@@ -86,6 +86,9 @@ class InstallerTests(unittest.TestCase):
         # Each host's role-to-model binding: OpenCode agents and Codex profiles.
         self.assert_links(self.home / ".config/opencode/agents", "agents/opencode", ".md")
         self.assert_links(self.home / ".codex", "profiles/codex", ".config.toml")
+        organizer = self.home / ".codex/my-dev-team.config.toml"
+        self.assertTrue(organizer.is_symlink(), str(organizer))
+        self.assertEqual(organizer.resolve(), ROOT / "profiles/codex/my-dev-team.config.toml")
         self.assert_role_skills(self.home / ".codex/skills")
         self.assert_role_skills(self.home / ".gemini/config/skills")
         for name in ROLE_SKILLS:

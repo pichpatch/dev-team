@@ -1,3 +1,6 @@
 # PO of my-dev-team. Start a session as this role with: codex -p my-po
 model = "gpt-6.1-sol"
 model_reasoning_effort = "medium"
+# A role you talk to may organize and start other CLIs as sub-agents, which
+# cannot run inside Codex's sandbox, and must reach the local database.
+sandbox_mode = "danger-full-access"
