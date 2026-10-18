@@ -163,7 +163,7 @@ projects/
 - Never copy a real env file into a worktree. When the work needs runnable
   configuration, provide values derived from `.env.example`, or a `.env.test`
   holding test-only credentials the human supplied for that purpose, including
-  the limited user for the worker's [own database](stack.md).
+  the local connection for the worker's [own database](stack.md).
 - **Sandboxes.** The Organizer runs without an OS sandbox, so it can reach the
   database and start any other CLI as a sub-agent. In Codex, a role the human
   talks to keeps the sandbox with network on: it reaches the database and can

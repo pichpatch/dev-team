@@ -328,17 +328,24 @@ through two commands:
   worktree, for example `myapp_wt_fix_login_2`, runs the migrations and seed
   data, and drops it when its task is finished or abandoned. Redis gets its own
   key prefix or database number per worker.
-  - **Workers connect as a limited local user** that may create databases but
-    is not an administrator, so PostgreSQL itself only lets it drop databases it
-    created. It cannot drop the human's development database even by mistake.
-    Creating that user needs admin rights, so Technical Lead asks the human once
-    how to set it up (a single SQL statement, or a step in the project's
-    docker-compose) and records it in the service's `README.md`.
-  - **Its credentials are test values** in the `.env.test` the Lead places in
-    the worktree; never the human's own database credentials.
-  - **The drop exception covers only** a database the worker created itself,
-    with the `_wt_` name, on the local machine. Anything shared or remote, and
-    any other database, still needs the human's OK.
+  - **All local work uses the same local server and user,** with the worker's
+    own database name, in the `.env.test` the Lead places in the worktree:
+
+    ```text
+    Host=localhost;Port=5432;Database={worker-database};Username=postgres;Password=postgres
+    postgresql://postgres:postgres@localhost:5432/{worker-database}
+    ```
+
+    These are fixed local development values, not secrets. Never put them in
+    `.env.example` or any deployed environment.
+  - **Before dropping, check where the database is.** Drop only when the host is
+    `localhost`, `127.0.0.1`, or `::1` and the name is the worker's own `_wt_`
+    database. If the host is anything else, do not drop it: leave it, and alert
+    the human with the host and database name. The `postgres` user can drop any
+    database on the server, so these checks are what keep the human's own
+    databases safe; never drop a database by any other name.
+  - **The drop exception covers only** that case. Anything shared or remote,
+    and any other database, still needs the human's OK.
 
 ## Identifiers and public URLs
 
