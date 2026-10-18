@@ -98,7 +98,7 @@ Every side effect and every use of global state is written in the module's
 `flows.html`, because neither is visible from the code that triggers it:
 
 - **`#side-effects`:** one row per effect: what triggers it, what else changes,
-  where it runs (repository, service, action hook, or `subscribe`), and the
+  where it runs (repository, service, workflow, action hook, or `subscribe`), and the
   rule it implements. Backend example: "Unbind Google → `google_refresh_token`
   cleared (userRepository); Google Drive permission removed (AccountService)".
 - **`#global-state`,** in a frontend module: one row per global store or Context
@@ -208,7 +208,7 @@ and document updated together is not done.
   If compensation fails, durably record the recovery need and retry or escalate
   it; never claim rollback succeeded when it did not. Define idempotency and
   retry behavior for operations that may be repeated.
-- Blogdrip example: creating a Website and its required initial BlogOffer is
+- Example: creating a Website and its required initial BlogOffer is
   one business operation. If both writes share a safe transaction boundary,
   roll back the Website when BlogOffer creation fails. If they are owned by
   separate services/transaction boundaries, orchestrate `WebsiteService` and
