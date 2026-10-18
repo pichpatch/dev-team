@@ -164,8 +164,11 @@ projects/
   configuration, provide values derived from `.env.example`, or a `.env.test`
   holding test-only credentials the human supplied for that purpose, including
   the limited user for the worker's [own database](stack.md).
-- **Sandboxes.** The Organizer, and any role the human talks to, runs without an
-  OS sandbox, so it can reach the database and start other CLIs as sub-agents.
+- **Sandboxes.** The Organizer runs without an OS sandbox, so it can reach the
+  database and start any other CLI as a sub-agent. In Codex, a role the human
+  talks to keeps the sandbox with network on: it reaches the database and can
+  start Claude or Antigravity, but not OpenCode, so a review that would fall
+  back to OpenCode from there is reported as blocked.
   A delegated Codex worker runs in Codex's `workspace-write` sandbox with
   network on, so it can reach the local database while it can still write only
   inside its worktree and its checkpoint file. Codex's sandbox also stops it

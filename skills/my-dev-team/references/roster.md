@@ -113,7 +113,8 @@ What each needs, tested on the human's machine:
 
 The host that organizes must run without an OS sandbox: OpenCode cannot run
 inside Codex's sandbox at all, so Codex organizes from the `my-dev-team` profile
-(`codex -p my-dev-team`), which turns its sandbox off. Claude Code, OpenCode,
+(`codex -p my-dev-team`), which turns its sandbox off. The Codex role profiles
+(`codex -p my-tech-lead` and the others) keep the sandbox with network on. Claude Code, OpenCode,
 and Antigravity have no OS sandbox by default.
 
 Check each CLI's `--help` for the flags the installed version supports instead

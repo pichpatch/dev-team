@@ -1,6 +1,10 @@
 # QA Lead of my-dev-team. Start a session as this role with: codex -p my-qa-lead
 model = "gpt-6-astra"
 model_reasoning_effort = "medium"
-# A role you talk to may organize and start other CLIs as sub-agents, which
-# cannot run inside Codex's sandbox, and must reach the local database.
-sandbox_mode = "danger-full-access"
+# A role you talk to keeps Codex's sandbox, with network on so it can reach the
+# local database and start Claude or Antigravity as a sub-agent. Organizing,
+# which may also start OpenCode, uses the my-dev-team profile instead.
+sandbox_mode = "workspace-write"
+
+[sandbox_workspace_write]
+network_access = true
