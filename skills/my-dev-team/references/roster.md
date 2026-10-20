@@ -117,12 +117,15 @@ Organizer checks a subscription, not each model:
 
 - **Before using it,** send `hi` through that CLI at its lowest effort. An
   explicit limit or quota error means it is limited. No answer within 45
-  seconds means it is unavailable. Either way, use the next choice for the role.
+  seconds is a failed check, not proof the quota is used up. Either way, use
+  the next choice for the role for new work.
   A successful answer counts for 10 minutes; check again after that.
 - **While a delegated run is working,** check its subscription the same way
-  every 10 minutes. If it answers, the run is only slow: keep waiting. If it is
-  limited, stop that worker and continue the same task on the next model, from
-  what is already in its worktree plus a checkpoint, not from the start.
+  every 10 minutes. If it answers, the run is only slow: keep waiting. A failed
+  check alone never stops a running worker. Hand the task over only on an
+  explicit limit error or the run's own failure: confirm the worker has stopped,
+  then continue the same task on the next model from its worktree and `.AI`
+  record ([model fallback](ai-task-delegation.md)), not from the start.
 - Record each switch in the worker's result, with the model that actually ran.
 
 ### When every model has reached its limit
@@ -140,31 +143,19 @@ are sent, and stop when those are exhausted.
 ### Starting a run
 
 Run each from the worktree the task packet names, so it works on its own
-files and its [own database](stack.md):
+files and its [own database](stack.md). None runs in an OS sandbox
+([delegation](delegation.md)):
 
 ```bash
 opencode run -m opencode-go/deepseek-v4.1-flash --variant high "<task packet>"
-codex exec -m gpt-6-luna -c model_reasoning_effort="high" \
-  --sandbox workspace-write -c sandbox_workspace_write.network_access=true \
-  -c 'sandbox_workspace_write.writable_roots=["<main checkout>/.AI"]' "<task packet>"
+codex exec -m gpt-6-luna -c model_reasoning_effort="high" --sandbox danger-full-access "<task packet>"
 claude -p --model claude-haiku-5-5 --effort high "<task packet>"
 agy -p --model <model> "<task packet>"
 ```
 
-What each needs, tested on the human's machine:
-
-| CLI as a worker | Sandbox | Reaches the local database | Commits in its worktree |
-| --- | --- | --- | --- |
-| Codex | `workspace-write`, network on | Yes | No: the Organizer commits for it |
-| Claude | None; runs with the human's Claude Code permissions | Yes | Yes |
-| OpenCode | None | Yes | Yes |
-| Antigravity | None (never pass `--sandbox`) | Yes | Yes |
-
-The host that organizes must run without an OS sandbox: OpenCode cannot run
-inside Codex's sandbox at all, so Codex organizes from the `my-dev-team` profile
-(`codex -p my-dev-team`), which turns its sandbox off. The Codex role profiles
-(`codex -p my-tech-lead` and the others) keep the sandbox with network on. Claude Code, OpenCode,
-and Antigravity have no OS sandbox by default.
+The Codex profiles (`codex -p my-dev-team`, `codex -p my-tech-lead`, and the
+other roles) also turn Codex's sandbox off. OpenCode cannot run inside Codex's
+sandbox at all, and a sandboxed Codex worker cannot commit.
 
 Check each CLI's `--help` for the flags the installed version supports instead
 of assuming these.

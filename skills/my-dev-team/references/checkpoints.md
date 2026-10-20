@@ -2,7 +2,9 @@
 
 `.AI/` lives at the root of the main checkout, never inside a worktree, so there
 is one place to look when resuming. It is git-ignored and never committed. It is
-temporary unfinished state, not a task tracker or permanent documentation.
+temporary execution state, including active delegated task packets and progress
+as defined in [local AI task delegation](ai-task-delegation.md), not permanent
+requirements or documentation.
 
 An agent working in a worktree writes only its own checkpoint file there. Its
 task packet gives the absolute path; that is the one path outside its worktree
@@ -11,17 +13,17 @@ it may write.
 | State | Checkpoint behavior |
 | --- | --- |
 | Not started | No checkpoint |
-| Currently working | Normally no checkpoint |
+| Currently working | Update the worker's assignment/progress record at meaningful milestones; no separate interruption checkpoint required |
 | Paused or interrupted | Save resumable state |
 | Blocked or cannot finish | Save resumable state |
 | Context/model handoff | Save resumable unfinished state |
-| Finished | Remove that agent's checkpoint |
+| Finished | Keep delivered progress/evidence through review and integration, then clean up with the feature |
 | Cancelled | Transfer durable knowledge, then remove that agent's checkpoint |
 
 Everything under `.AI/` is Markdown. Use `.AI/{feature-slug}/{role}.md`, for example
 `.AI/meetup-create-event/senior-developer.md`. If multiple agents have the same
 role, use stable instance suffixes so they cannot overwrite one another.
-Create no empty folders or checkpoints for future tasks.
+Create no empty folders or records for unassigned future tasks.
 
 When the human tells Organizer to pause, stop scheduling new work and have each
 active unfinished agent save a checkpoint. Where possible request checkpointing

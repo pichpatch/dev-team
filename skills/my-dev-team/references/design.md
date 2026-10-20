@@ -164,11 +164,11 @@ API key.
    listed in its `README.md`. Give each asset a section with its own `id`: name,
    purpose, the prompt, the variations, final size, format, background, the
    exact path to save to, and `Status: pending`.
-2. **Run Codex on the brief,** from the worktree the assets belong to, so it
-   can write only there:
+2. **Run Codex on the brief,** from the worktree the assets belong to, with no
+   OS sandbox like every CLI in the team ([delegation](delegation.md)):
 
    ```bash
-   codex exec --sandbox workspace-write \
+   codex exec --sandbox danger-full-access \
      "Read frontend_domain_1/docs/assets/image-brief.html and generate every asset marked pending, exactly as it says."
    ```
 

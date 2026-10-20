@@ -57,6 +57,7 @@ separate required installation.
 
 - [Persistent records](references/records.md): repository truth as HTML
   documents indexed by `README.md`, feature Issues, support requirements, and Issue updates.
+- [Local AI task delegation](references/ai-task-delegation.md): temporary assignments, worker progress, model handover, and automatic worktree cleanup.
 - [Delegation](references/delegation.md): stateless task packets, real agent calls,
   Lead review, and model evaluation.
 - [Orchestration](references/orchestration.md): talking to the Leads, feature
