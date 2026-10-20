@@ -147,6 +147,10 @@ Preserve this high-level order, involving only relevant owners:
 11. **Shared completion gate:** follow the single [shared completion gate](#shared-completion-gate-for-features-small-changes-and-bugs): Technical Lead reviews completed implementation, Senior QA tests the reviewed revision, QA Lead approves evidence, and Organizer opens a draft PR after applicable security and delivery checks. Do not duplicate these gates here.
 12. **Human:** receives the draft PR and decides whether to approve merge or deployment. Neither action is automatic.
 
+Organizer keeps the Issue's status label current ([Issue status](records.md#issue-status)):
+`in progress` when Technical Lead starts the work, `done` when the human merges
+the PR. Task-by-task progress stays on the local `.AI` board, never on the Issue.
+
 Parallelize independent tasks within these stages where useful. Do not start a
 dependent stage before its necessary owner decisions are available. Do not add a
 second completion ceremony after the shared completion gate. If a change invalidates a design,

@@ -275,13 +275,21 @@ does not need.
 
 ### Issue status
 
-Every feature Issue carries exactly one of these labels. PO sets it, and creates
-the label in the repository when it does not exist:
+The Issue shows where the feature stands, never the progress of each task;
+that lives in the local [`.AI` board](ai-task-delegation.md). Every feature
+Issue carries exactly one status label, created in the repository when it does
+not exist:
 
-| Label | Means | Team |
+| Label | Means | Set by |
 | --- | --- | --- |
-| `draft` | The human paused before confirming. The requirement so far is recorded and pushed. | Does not start |
-| `ready to implement` | The human confirmed the feature is ready. | Starts |
+| `draft` | The human paused before confirming. The requirement so far is recorded and pushed. | PO |
+| `ready to implement` | Pending: the human confirmed the feature; work has not started. | PO |
+| `in progress` | Technical Lead has started the work. | Organizer |
+| `done` | The human merged the feature's PR. | Organizer |
+
+A `bug` label is added beside the status while a bug recorded on the Issue is
+open, by QA Lead when it confirms the bug, and removed when QA Lead verifies the
+fix. The team starts work only from `ready to implement`.
 
 A `draft` Issue adds an `## Open questions` section listing what is still to be
 settled, under the role that owns each, with its options and what it blocks, so the discussion can

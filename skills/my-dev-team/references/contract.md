@@ -115,9 +115,15 @@ review occurred or switch an explicitly selected provider without authorization.
 
 Treat every repository as private. Send repository content only to models and
 providers the human has approved as safe for private code. A free, public, or
-unknown-data-use model is not approved; ask before using one the human has not
-approved. No launcher or OS sandbox enforces these rules, so every agent is
-responsible for following them.
+unknown-data-use model is not approved, except the free last-resort models in
+the [roster](roster.md), which never receive client work; ask before using any
+other. No launcher or OS sandbox enforces these rules: the human relies on
+worktrees instead, so every agent is responsible for following them.
+
+When an agent is not sure a command is safe to run, it asks Cybersecurity before
+running it: what the command does, why it is needed, and what it could affect.
+Cybersecurity answers from what it can verify. When Cybersecurity cannot answer
+with confidence, the question goes to the human, and the command waits.
 
 Ask the human before reading any credential, in any environment, and wait for
 the answer: SSH keys, `.env` and `.env.*` files such as `.env.prod`, cloud and
