@@ -131,12 +131,17 @@ Ask the human before reading any credential, in any environment, and wait for
 the answer: SSH keys, `.env` and `.env.*` files such as `.env.prod`, cloud and
 CLI credential stores, keychains, tokens, certificates, CI secrets, and
 secret-manager values. This applies to every role, including Leads, DevOps, and
-Cybersecurity. Three things need no question: `.env.example`, which holds fake
-values; an env file a Lead deliberately placed in your assigned worktree, such
-as `.env.test` with test-only credentials (see [delegation](delegation.md)); and
-the production env file, for Cybersecurity alone, during a
-[draft release](orchestration.md) review the human asked for. The human's
-request for the draft release is the permission, for that review only.
+Cybersecurity. Two things need no question: `.env.example`, which holds fake
+values, and an env file a Lead deliberately placed in your assigned worktree,
+such as `.env.test` with test-only credentials (see [delegation](delegation.md)).
+
+**Production configuration is asked for every time.** Before reading any file
+that holds production settings or secrets, such as `.env.prod`,
+`appsettings.Production.json`, or anything under `~/.secrets/`, ask the human
+for that file by name and wait. This holds even inside work the human asked
+for, such as an investigation on production or a draft release review: the
+request for the work is not permission to read the file. A yes covers that file,
+that task, and the agent asking, nothing more.
 
 Authorization covers the specific operation it was given for. An authorized CLI
 session is not permission to read its stored credentials. Prefer redacted

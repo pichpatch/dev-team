@@ -35,7 +35,7 @@ it moves down its chain, skipping its own primary and any limited subscription:
 - A delegated QA Lead or Cybersecurity takes the cross-provider route below
   first; this chain applies once that route is exhausted.
 - Cybersecurity never uses its free backup for a draft release review, where it
-  reads the production env file: there it stops and reports instead.
+  may read production configuration: there it stops and reports instead.
 - Backup 4 is a free model and may train on what it is sent: never use it in a
   client-work repository. There, a Lead whose paid backups are all limited
   stops and reports.

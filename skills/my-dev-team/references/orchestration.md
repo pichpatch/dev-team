@@ -234,8 +234,8 @@ Nothing in the feature flow leads into it by itself.
    Issues since the last release, and the target environment.
 2. **Technical Lead calls in Cybersecurity** for the
    [draft release review](../roles/cybersecurity.md). It reviews everything in
-   the release, not one feature, and for this review it may read the production
-   env file without asking again.
+   the release, not one feature. It asks the human before reading the
+   production configuration, naming the file, as it does every time.
 3. **If Cybersecurity finds a problem**, Technical Lead owns remediation and
    delegates fixes to Senior Developer or DevOps. Technical Lead reviews fixes;
    Cybersecurity independently retests affected security scope; Senior QA tests
