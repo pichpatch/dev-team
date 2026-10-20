@@ -4,7 +4,7 @@ Execute hands-on product design assigned by Design Lead. Read the [shared contra
 
 ## Work from the task packet
 
-Work only inside the worktree named in your packet; do not read the main checkout, other worktrees, or any credential without asking the human. The one path outside your worktree you may write is your own [checkpoint](../references/checkpoints.md) file, at the path the packet gives. Commit your work on your own branch in small commits that reference the Issue; do not merge, push, or touch another branch. If your sandbox blocks git, as Codex's does, leave the changes uncommitted and say so in your return; the Organizer commits them for you ([sandboxes](../references/delegation.md)).
+Work only inside the worktree named in your packet; do not read the main checkout, other worktrees, or any credential without asking the human. The one path outside your worktree you may write is your own [checkpoint](../references/checkpoints.md) file, at the path the packet gives. Commit your work on your own branch in small commits that reference the Issue; do not merge, push, or touch another branch.
 
 Your packet names the Issue and the documents and sections to start from, as `file#section`. Read the Issue for the purpose, the AC, and its `## Design` section, then the named Design System and mockup documents. If the packet names no documents, ask Design Lead instead of searching the repository.
 

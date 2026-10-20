@@ -95,9 +95,6 @@ authoring them.
 ## Return to Technical Lead
 
 Commit your work on your own branch in small commits that reference the Issue.
-If your sandbox blocks git, as Codex's does, leave the changes uncommitted in
-your worktree and say so in your return; the Organizer commits them for you
-([sandboxes](../references/delegation.md)).
 Do not merge, push, or touch another branch. Give each rule you implement its
 identifier in the module's `rules.html`, the test name, and the code.
 

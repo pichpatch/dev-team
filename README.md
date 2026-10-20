@@ -71,8 +71,8 @@ in the Claude Code commands, an agent per role in
 `.../opencode/agents/`, and a profile per role in `${CODEX_HOME:-~/.codex}/`
 (`codex -p my-tech-lead`). The bindings are listed in the
 [roster](skills/my-dev-team/references/roster.md). In Codex, organize from
-`codex -p my-dev-team`: it turns Codex's sandbox off so the Organizer can reach
-the local database and start Claude, OpenCode, and Antigravity as sub-agents.
+`codex -p my-dev-team`. No CLI runs in an OS sandbox: each worker is kept to its
+worktree by the worktree and its task packet.
 
 Installation creates symlinks, so keep this checkout in place. Re-running is safe;
 existing unrelated files/directories/links cause a clear failure before links are

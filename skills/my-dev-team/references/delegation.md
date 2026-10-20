@@ -101,10 +101,15 @@ Use [the handoff template](../assets/handoff.md) as needed. Each invocation gets
 - The documents to start from: the application `README.md` and the module
   documents for the task, plus the requirements, designs, and verification
   evidence it needs. Name them, so the agent does not search for them.
-- Concrete task, constraints, scope/files owned, dependencies, and expected outputs.
-- Decision owner/receiving Lead, reporting route, and the existing approvals that apply.
-- The absolute path for its checkpoint, and the existing checkpoint to resume
-  from if there is one.
+- The objective and a measurable definition of done.
+- Concrete task, constraints, scope/files owned, forbidden changes,
+  dependencies, prerequisite approvals, and expected outputs.
+- Milestones and deliverables, with the tests and evidence expected for each.
+- Decision owner/receiving Lead, reporting route, escalation route, and the
+  existing approvals that apply.
+- The absolute path of its `.AI` progress record and checkpoint, and the record
+  to resume from if there is one
+  ([local AI task delegation](ai-task-delegation.md)).
 
 Persist the meaningful assignment and decisions in the owning Issue (when one exists) or repository records before
 handoff. A transient packet may carry links and execution details, but must not be
@@ -160,22 +165,20 @@ projects/
   `../worktrees/{repo}/{feature-slug}` for the feature branch and
   `../worktrees/{repo}/{feature-slug}-{instance}` for each Senior, unless the
   project already has a convention. One worktree and branch per agent instance.
-- Do not switch branches or leave uncommitted changes in the main checkout.
+- Do not switch branches or leave uncommitted changes in the main checkout. The
+  one exception is work the human explicitly authorized there
+  ([direct-checkout exception](ai-task-delegation.md)); it may leave changes
+  uncommitted, and says so to the human.
 - Never copy a real env file into a worktree. When the work needs runnable
   configuration, provide values derived from `.env.example`, or a `.env.test`
   holding test-only credentials the human supplied for that purpose, including
   the local connection for the worker's [own database](stack.md).
-- **Sandboxes.** The Organizer runs without an OS sandbox, so it can reach the
-  database and start any other CLI as a sub-agent. In Codex, a role the human
-  talks to keeps the sandbox with network on: it reaches the database and can
-  start Claude or Antigravity, but not OpenCode, so a review that would fall
-  back to OpenCode from there is reported as blocked.
-  A delegated Codex worker runs in Codex's `workspace-write` sandbox with
-  network on, so it can reach the local database while it can still write only
-  inside its worktree and its checkpoint file. Codex's sandbox also stops it
-  writing into git, so it does not commit: it leaves its changes in the worktree
-  and the Organizer commits them on its branch, attributed to it, after review.
-  The [roster](roster.md) gives each CLI's start command.
+- **No OS sandbox.** No CLI runs in an OS sandbox, Codex included: each worker
+  is kept to its worktree by the worktree and its task packet, the same way for
+  Codex, Claude, OpenCode, and Antigravity. This lets every worker reach the
+  local database, commit on its own branch, and write its `.AI` record, and lets
+  any host start the others as sub-agents. The [roster](roster.md) gives each
+  CLI's start command.
 - Name the worktree in the task packet. A Senior stays inside its worktree and
   does not read the main checkout, other worktrees, or the user's home directory.
   The one exception is its own [checkpoint](checkpoints.md) file under the main

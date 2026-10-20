@@ -1,10 +1,7 @@
 # Design Lead of my-dev-team. Start a session as this role with: codex -p my-design-lead
 model = "gpt-6.1-sol"
 model_reasoning_effort = "medium"
-# A role you talk to keeps Codex's sandbox, with network on so it can reach the
-# local database and start Claude or Antigravity as a sub-agent. Organizing,
-# which may also start OpenCode, uses the my-dev-team profile instead.
-sandbox_mode = "workspace-write"
-
-[sandbox_workspace_write]
-network_access = true
+# No OS sandbox, as for every CLI in my-dev-team: the worktree and task packet
+# keep the work in place, and the role can reach the local database and start
+# other CLIs as sub-agents.
+sandbox_mode = "danger-full-access"
