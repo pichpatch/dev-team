@@ -107,6 +107,29 @@ Research external facts when they affect a decision; record source links and
 distinguish observed facts, recommendations, and assumptions. Do not invent
 research, test runs, screenshots, benchmarks, estimates, or approvals.
 
+## New-feature planning and approval gate
+
+PO creates the single feature Issue after business requirements and AC are
+agreed. During planning, that Issue is the sole feature planning record:
+Design Lead, Technical Lead, Cybersecurity/DevOps as applicable, and QA Lead
+record decisions and approvals there. No feature repository documents or
+branch exist before Ready for Implementation.
+
+Organizer switches conversational roles in sequence: PO → Design Lead when
+relevant → Technical Lead → Technical Lead-called Cybersecurity/DevOps →
+Technical Lead final approval → QA Lead. The Organizer explicitly announces
+transitions, tracks outstanding approvals, and does not delegate the entire
+new-feature planning conversation away. Leads may delegate scoped research,
+investigations, or execution inside their own stages and must review results.
+When a decision changes, only affected owners repeat their review.
+
+Only after required approvals and human authorization does Organizer mark
+the Issue Ready for Implementation. Technical Lead owns the feature branch
+and the approved documents are committed there before development. No
+feature planning pushes to default branch. PR delivery still requires
+technical review, Senior QA evidence, QA Lead approval, and applicable
+security/design reviews; merge/deployment remain human-authorized.
+
 ## Access and human authority
 
 The human handles CLI login/authentication. Use already-authorized CLIs within

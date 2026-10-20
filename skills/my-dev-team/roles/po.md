@@ -119,38 +119,25 @@ Record any exception to the AI crawler default that the human agrees.
 
 ## Publish and hand off
 
-You work in the main checkout, on the default branch, because you agree the
-requirement live with the human. Do these in order:
+PO works conversationally with the human; it does not write feature documents to
+the default branch. Once the human and PO agree the business requirement and
+acceptance criteria, PO creates or updates the **single feature GitHub Issue**
+with purpose, scope, business rules, and stable AC identifiers. Label it
+`draft` while planning; PO/business readiness is **not** `ready to implement`.
 
-1. **Record the requirement.** When the human and you agree, update
-   `docs/requirements/business-requirements.html` or the existing root equivalent
-   so it states the current requirement only; an older version is read from git
-   history, not kept in the document. Commit it on the default branch. This
-   exception covers business documents under the root `docs/` only: never code,
-   configuration, or another owner's documents.
-2. **Suggest the next Lead.** Say which of Design Lead, Technical Lead, and QA
-   Lead this feature needs and why, and offer to switch; the human can also ask
-   for one at any point, even before the business part is finished. If their
-   discussion changes the requirement or an AC, agree the change with the human
-   as PO and update the document.
-3. **Ask the human which it is:** the feature is ready, or pause here and
-   continue later. Ask plainly; do not assume either from the discussion.
-4. **Push and create the Issue, in both cases.** Push any document commits not yet
-   pushed to the default branch, then create the feature Issue with a short purpose, the
-   requirement, the identified AC checklist, and references as `file#section`.
-   Design, Technical, and Definition of Done are written by their Leads; do not
-   write them as PO, and do not create task checklists. Give it one status label
-   ([Issue status](../references/records.md)):
+Organizer then explicitly switches to Design Lead (if applicable), Technical
+Lead, Cybersecurity/DevOps when called by Technical Lead, back to Technical
+Lead for final technical approval, and QA Lead for DoD/test strategy. Each
+owner writes its decisions and approval status to its own Issue section.
+PO does not create design, technical, or QA verdicts.
 
-   | The human said | Label | What happens next |
-   | --- | --- | --- |
-   | The feature is ready | `ready to implement` | The team starts |
-   | Pause, continue later | `draft` | Nothing is dispatched; the Issue lists what is still open |
-
-To continue a `draft`, read the Issue and the documents, settle the open items
-with the human, update the documents and the Issue body, push, and change the
-label to `ready to implement` when the human says the feature is ready. Do not
-create a second Issue.
+No feature branch, repository requirements document, commit, or push occurs
+during planning. If the human pauses, keep the Issue as `draft` with open
+questions and the next responsible role. Resume from the same Issue without
+repeating approved decisions. After all required owners approve and the
+human authorizes proceeding, Organizer marks the Issue `ready to implement`;
+Technical Lead creates the feature branch and the approved baseline documents
+are published **on that branch**, before implementation.
 
 Include useful onboarding/help concepts in existing requirements when the
 feature introduces them; do not add an onboarding project to every request.
@@ -168,8 +155,7 @@ anything, establish why it was designed the way it is and what the product does
 today, checked and not assumed. Then follow
 [changing agreed AC](../references/records.md): post the numbered change record
 on the owning Issue, listing every AC as Modified, New, Removed, or Unchanged
-with what must not change, and update the Issue body and the business
-requirements document to the current truth. Modified and new AC become unchecked;
+with what must not change, and update the Issue body to the current truth. After implementation readiness, update the approved business requirements document on the feature branch; never publish planning-stage feature docs on the default branch. Modified and new AC become unchecked;
 a removed AC is struck through and its identifier is never reused.
 
 A bug is not a change: when the product does not do what an AC says, leave the
