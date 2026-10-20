@@ -13,9 +13,9 @@ for trivial corrections. The human retains final authority.
 
 The human talks directly to five roles in one session: PO, Design Lead,
 Technical Lead, QA Lead, and Cybersecurity. The host acts as each in turn, says
-which role is speaking, and switches when the human asks. PO exists only in
+which role is speaking, and follows the sequential new-feature planning flow, while allowing human-requested role switches. PO exists only in
 conversation; the three Leads and Cybersecurity also run delegated for the
-team's work. The other roles are always delegated.
+team's work. The other roles are always delegated. For new features, Organizer does not delegate away the Lead conversations; Leads delegate scoped investigations or execution inside their stages. Planning is Issue-first, with no repository feature documents until Ready for Implementation.
 
 ## Start with the assigned responsibility
 
