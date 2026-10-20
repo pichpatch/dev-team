@@ -12,6 +12,18 @@ Use three layers for each delegated task:
 2. **On-demand authoritative references:** links or precise paths to original GitHub requirements, architecture decisions, relevant source files, and supporting documents. Never treat a generated summary as a substitute for the authoritative source. Worker reads more when a reference is necessary or a task is ambiguous.
 3. **Execution and handover record:** the existing local gitignored `.AI/<feature>/...` worker packet containing milestones, completed work, blockers, evidence pointers, and uncertain side effects. On resume, inspect actual code/worktree and verification evidence rather than trusting status text alone.
 
+## Optional experiment: local PostgreSQL semantic retrieval (pgvector)
+The owner already has a local PostgreSQL instance. Evaluate whether a local vector index can reduce repeated context loading without introducing another service.
+
+- Store **embeddings of selected retrievable chunks**, not the model's entire live context. Each record should include source URI/path, revision or commit SHA, section/chunk boundaries, timestamps, access scope, and a content hash. The canonical content stays in GitHub/files/`.AI`, not in the vector database.
+- Consider PostgreSQL with **pgvector** for similarity search, plus keyword/full-text or hybrid search for exact names, symbols, issue IDs, and constraints. Retrieval returns a small ranked set of excerpts with source links, not an entire history dump.
+- On task delegation, always supply the essential task packet. Search the index only when useful; verify retrieved passages against current authoritative sources, especially for approved decisions, security requirements, and acceptance criteria.
+- Indexing and embedding have compute/API cost; local embeddings may reduce provider calls but use local resources. Stale or poorly ranked results can omit critical context, increase retries, or cause incorrect work. Enforce permissions and exclude secrets, credentials, sensitive `.env` values, and unapproved private data.
+- Plan for incremental re-indexing on document/code changes, deletion/retention, and isolation across projects/worktrees. Avoid blindly indexing all generated tool output or every conversation.
+- **Benchmark against a simpler baseline**: exact GitHub/file references and targeted keyword search. Measure total tokens/usage, retrieval overhead, missed requirements, task correctness, and rework. Adopt pgvector only if its net benefit justifies maintenance.
+
+This is a **discussion option**, not a requirement or authorization to provision PostgreSQL, install extensions, index data, or change any runtime.
+
 ## Safety and correctness guardrails
 - Never omit approved requirements, acceptance criteria, security constraints, or consequential decisions solely to shrink a prompt. If essential details cannot fit, pause and retrieve/split work rather than silently discard them.
 - Workers confirm their interpretation of objective, boundaries, and completion criteria before substantial implementation. Escalate genuine ambiguity to Technical Lead; avoid routine expensive review for trivial work.
