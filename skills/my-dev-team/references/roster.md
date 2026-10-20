@@ -182,9 +182,10 @@ Technical Lead reviews these roles' outputs. Verify model identifiers with each 
 
 ### Cross-provider independent reviewers
 
-Delegated Cybersecurity and QA Lead always run as separate sub-agents on a
-different underlying model/provider from Organizer, on every task. A different
-effort level of the same model is not independent. Preferred routes: Claude
+Delegated Cybersecurity and QA Lead always run as separate sub-agents, and
+prefer a different underlying model/provider from Organizer. The preference is
+not forced: provider limits, Codex's token limit included, must not block the
+work. A different effort level of the same model is not independent. Preferred routes: Claude
 Organizer -> GPT/Codex (OpenCode fallback on GPT rate limit); GPT/Codex
 Organizer -> Claude (OpenCode fallback on Claude rate limit); OpenCode
 Organizer -> Claude (GPT/Codex fallback).
@@ -199,12 +200,18 @@ The model for each route:
 This applies to the delegated roles only. A QA Lead the human talks to keeps its
 conversation binding above.
 
-Keep human-approved bindings and verify actual invocation support. If routing
-conflicts with bindings or no independent agent is available, ask the human or
-report a blocked review; never silently substitute. Direct human invocation
+Keep human-approved bindings and verify actual invocation support. When the
+preferred route and its fallback are both unavailable or limited, use any other
+approved model, the Organizer's own provider if need be, as a separate
+sub-agent. Record the model that actually ran and state in the review record that
+it was not cross-provider; never present it as an independent provider review,
+and never self-approve. Direct human invocation
 uses the role's conversation binding and is exempt from sub-agent spawning, but
 does not establish independent approval. Technical Lead can share Organizer context.
 
 ### Other delegated Leads
 
-The three Leads, when delegated, use their role bindings in the conversation table for the organizing host.
+Design Lead and Technical Lead, when delegated, use their role bindings in the
+conversation table for the organizing host. QA Lead and Cybersecurity, when
+delegated, take the cross-provider route above first and fall back to the
+bindings in the conversation table when that route is unavailable.

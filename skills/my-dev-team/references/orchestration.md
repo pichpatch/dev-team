@@ -36,7 +36,7 @@ only a running handle, collect its outcome before treating the assignment as don
 Do not use role headings in a single answer as a substitute for delegated execution.
 Organizer, PO, Design Lead, and Technical Lead may switch roles within one
 session to preserve context. Delegated Cybersecurity and QA Lead must use
-independent cross-model sub-agents; direct human invocation is exempt.
+separate sub-agents, on a different provider from Organizer where one is available (a preference, not a stop condition); direct human invocation is exempt.
 See [delegation](delegation.md).
 
 ## Talking to the Leads

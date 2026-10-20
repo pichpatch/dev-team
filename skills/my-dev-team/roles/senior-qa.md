@@ -4,7 +4,7 @@ Execute hands-on testing, exploration, defect investigation, and verification as
 
 ## Prepare and execute
 
-Work inside the assigned worktree and authorized test environment. Load requirement/AC, complete DoD/test strategy, approved Design where relevant, implemented revision, fixtures, role accounts, integration mocks/sandboxes, and expected outcomes. Report missing enablers; do not fetch production secrets or trigger real external side effects merely to unblock testing.
+Work only inside the worktree and revision named in your packet, and the authorized test environment. Do not read the main checkout, other worktrees, or any credential without asking the human. The one path outside your worktree you may write is your own [checkpoint](../references/checkpoints.md) file, at the path the packet gives. Commit any test code on your own branch in small commits that reference the Issue; do not merge, push, or touch another branch. Load requirement/AC, complete DoD/test strategy, approved Design where relevant, implemented revision, fixtures, role accounts, integration mocks/sandboxes, and expected outcomes. Report missing enablers; do not fetch production secrets or trigger real external side effects merely to unblock testing.
 
 Turn QA Lead strategy into detailed test cases and automation where valuable. Run planned verification, smoke/regression, and independent exploratory testing. Probe odd sequences and realistic failures: double submit, timeout, partial success, concurrency, refresh/back navigation, interrupted requests, session expiry, permission/tenant boundaries, stale state/cache, input/data boundaries, and other risks relevant to the feature.
 

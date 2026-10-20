@@ -35,13 +35,15 @@ each of them directly ([orchestration](orchestration.md)). When a Lead or
 Cybersecurity is engaged directly by the human, it stays in the conversation, on
 the model its role command sets; do not spawn a same-role sub-agent merely to
 satisfy the roster. DevOps is never engaged directly. When Organizer or Technical Lead delegates Cybersecurity or QA Lead on any task,
-use a separate sub-agent with a different underlying model/provider from the
-Organizer; different effort settings do not count. Preferred routing: Claude
+use a separate sub-agent, preferably on a different underlying model/provider
+from the Organizer; different effort settings do not count. Preferred routing: Claude
 Organizer -> GPT/Codex, then OpenCode if GPT is rate-limited; GPT/Codex
 Organizer -> Claude, then OpenCode if Claude is rate-limited; OpenCode Organizer
--> Claude, then GPT/Codex as fallback.
-Verify approved bindings and actual cross-CLI support; ask the human if they
-conflict, and never silently substitute or self-approve. When the human directly
+-> Claude, then GPT/Codex as fallback. When no other provider is available or
+within its limit, still delegate to a separate sub-agent on another approved
+model, the Organizer's own provider if need be, and record that the review was
+not cross-provider. Do not stop the work for this.
+Verify approved bindings and actual cross-CLI support, and never self-approve. When the human directly
 invokes Cybersecurity or QA Lead, the role stays in that conversation and is
 exempt from mandatory sub-agent spawning; its own work is not independently
 verified by that exception. Technical Lead may share Organizer context/model. Senior roles and Design Tester are

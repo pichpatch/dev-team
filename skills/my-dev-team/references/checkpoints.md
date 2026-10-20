@@ -12,7 +12,8 @@ it may write.
 
 | State | Checkpoint behavior |
 | --- | --- |
-| Not started | No checkpoint |
+| No task assigned | No record. A role with no task has no card or file |
+| Task assigned, not started | The assigning Lead has already created its `todo` card ([board](ai-task-delegation.md)); no separate checkpoint |
 | Currently working | Update the worker's assignment/progress record at meaningful milestones; no separate interruption checkpoint required |
 | Paused or interrupted | Save resumable state |
 | Blocked or cannot finish | Save resumable state |
@@ -20,9 +21,10 @@ it may write.
 | Finished | Keep delivered progress/evidence through review and integration, then clean up with the feature |
 | Cancelled | Transfer durable knowledge, then remove that agent's checkpoint |
 
-Everything under `.AI/` is Markdown. Use `.AI/{feature-slug}/{role}.md`, for example
-`.AI/meetup-create-event/senior-developer.md`. If multiple agents have the same
-role, use stable instance suffixes so they cannot overwrite one another.
+Everything under `.AI/` is Markdown. Use `.AI/{feature-slug}/{role}-{instance}.md`, for example
+`.AI/meetup-create-event/senior-developer-1.md`. The instance suffix is always
+present, so two agents with the same role cannot overwrite one another. The
+worker's card and its checkpoint are the same file.
 Create no empty folders or records for unassigned future tasks.
 
 When the human tells Organizer to pause, stop scheduling new work and have each
