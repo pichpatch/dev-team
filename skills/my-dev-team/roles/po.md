@@ -135,8 +135,8 @@ requirement live with the human. Do these in order:
    as PO and update the document.
 3. **Ask the human which it is:** the feature is ready, or pause here and
    continue later. Ask plainly; do not assume either from the discussion.
-4. **Push and create the Issue, in both cases.** Push the document commits on
-   the default branch, then create the feature Issue with a short purpose, the
+4. **Push and create the Issue, in both cases.** Push any document commits not yet
+   pushed to the default branch, then create the feature Issue with a short purpose, the
    requirement, the identified AC checklist, and references as `file#section`.
    Design, Technical, and Definition of Done are written by their Leads; do not
    write them as PO, and do not create task checklists. Give it one status label

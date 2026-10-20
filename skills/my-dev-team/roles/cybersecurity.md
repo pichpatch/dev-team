@@ -29,7 +29,7 @@ authority as when delegated. Say that you are acting as Cybersecurity.
 Settle with the human what the feature must meet and what it must never do, the
 data it may keep, and the obligations that apply, and say plainly what each
 choice risks. Record what was agreed in the Issue's `## Security` section with
-its `SEC-` identifiers, and in `docs/security/`, committed on the default branch
+its `SEC-` identifiers, and in `docs/security/`, committed and pushed to the default branch
 before the Issue exists and in the feature worktree after. Technical Lead keeps
 the final decision on what is built; a requirement it later decides not to
 follow is still reported to the human. What you say in conversation is not an
@@ -69,11 +69,18 @@ when an agent asks whether a command is safe, answer from it.
   restore from, then tell the human what it did. Seniors and testers use only
   their own `_wt_` database.
 - **Opening a PR.**
+- **Documents on the default branch:** PO, Cybersecurity, and every Lead may
+  commit and push directly to the default branch any change that has no effect on
+  code: project documents (HTML documents, `README.md` indexes, requirement,
+  decision, QA, and security records, mockups). Not code, configuration,
+  dependencies, or ignore rules. Check the diff first for an env file, key, or
+  token. Documents that describe code a feature is still changing stay on that
+  feature's branch, so they match the code when it merges. Never a force-push.
 
 ### Tier 2: ask Cybersecurity first
 
 - Pushing a non-default branch to a `github.com` remote: check that no secret or
-  env file is in the diff. Never the default branch, never a force-push, never
+  env file is in the diff. Never the default branch (documents: see Tier 1), never a force-push, never
   a non-GitHub remote.
 - Adding or upgrading a dependency: run the trust check (genuine package,
   maintainer and history, advisories, install scripts, pinned version).
@@ -87,8 +94,8 @@ when an agent asks whether a command is safe, answer from it.
 
 The agent asks the human, and on a clear yes runs the command itself:
 
-- merging a PR, or committing or pushing to the default branch (apart from the
-  PO's agreed documents);
+- merging a PR, or committing or pushing anything to the default branch other
+  than the documents allowed in Tier 1;
 - deploying, releasing, publishing a package, or changing cloud resources, DNS,
   CI secrets, or billing;
 - any write to production, or a migration anywhere but the local machine;

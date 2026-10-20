@@ -39,9 +39,9 @@ Technical Lead and the other roles never see the conversation:
 
 - **Before the Issue exists,** write each decision the human made as a decision
   document under the application's or the root `docs/decisions/` and commit it
-  on the default branch, as PO does for the requirement. Decision documents
-  only: module documents and code change later, in the feature worktree. PO
-  pushes them with the requirement when it creates the Issue. Tell PO if a
+  on the default branch and push it, as PO does for the requirement. Decision
+  documents only: module documents and code change later, in the feature
+  worktree. Tell PO if a
   decision changes the requirement.
 - **Once the Issue exists,** record the decision in the domain docs in the
   feature worktree and note on the Issue that it was settled, with a link.

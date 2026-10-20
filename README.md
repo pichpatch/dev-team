@@ -92,8 +92,8 @@ delegation tool is available, it reports the limitation instead of claiming that
 review occurred.
 
 The intended flow is: you agree the feature with PO and whichever of Design
-Lead, Technical Lead, and QA Lead it needs, in one conversation → PO pushes the
-agreed documents and creates the feature Issue, `ready to implement` or `draft`
+Lead, Technical Lead, and QA Lead it needs, in one conversation → each role pushes its
+agreed documents and PO creates the feature Issue, `ready to implement` or `draft`
 → relevant Design, Technical, QA, and Cybersecurity preparation → final technical
 package → Senior implementation → Lead approval → QA execution and final AC
 verification → Cybersecurity delivery checks (secret files, AI crawler rules) →

@@ -93,8 +93,9 @@ design direction, Technical Lead decision documents, QA Lead the quality
 requirements. Documents only; code, mockup production, and module documents
 come later in the feature worktree.
 
-The discussion ends in one of two ways, and PO does the same in both: push those
-commits and create the Issue, with every role's section in it, labeled
+Each role pushes its own documents to the default branch as soon as they are
+agreed. The discussion ends in one of two ways, and PO does the same in both:
+push any commits not yet pushed and create the Issue, with every role's section in it, labeled
 `ready to implement` when the human says the feature is ready or `draft` when
 the human pauses. A `draft` lists the open questions per role. Then tell the
 human you are returning to organizing.
@@ -127,7 +128,7 @@ The entry point differs by route: new features complete business, design, techni
 Preserve this high-level order, involving only relevant owners:
 
 1. **Human + PO (the host):** agree the purpose, business requirement, and AC;
-   PO commits them to the business documents on the default branch.
+   PO commits and pushes them to the business documents on the default branch.
 2. **Human + the other relevant Leads (the host):** Design Lead, Technical Lead,
    and QA Lead each settle with the human what their domain needs, in the same
    session and in the order the human wants.

@@ -149,7 +149,7 @@ The main checkout is the human's workspace and may hold real secrets in ignored
 files such as `.env`. A git worktree contains tracked files only, so it starts
 without them. All repository writes for a feature happen in worktrees, with one
 exception: documents agreed live with the human before the Issue exists. PO and
-the Leads in conversation commit those on the default branch in the main
+the Leads in conversation commit and push those on the default branch in the main
 checkout ([talking to the Leads](orchestration.md)).
 
 ```text
@@ -201,10 +201,10 @@ Branches, commits, and pushing:
 - The responsible Lead reviews. Technical Lead then merges the approved branches
   into the feature branch and verifies the combined result.
 - Organizer pushes only the feature branch and opens the PR.
-- Nobody commits to the default branch except for the documents agreed live
-  with the human, described above. PO pushes those commits when the human says
-  the feature is ready or asks to pause; nothing else is ever pushed to the
-  default branch. Nobody force-pushes or rewrites history that has been pushed.
+- Nobody commits to the default branch except PO, Cybersecurity, and the Leads,
+  and only for documents that have no effect on code (the documents agreed live
+  with the human, described above, and other project documents). Each pushes
+  its own commits; nothing else is ever pushed to the default branch. Nobody force-pushes or rewrites history that has been pushed.
 - Do not leave integrated worker worktrees waiting for the PR merge. Remove the
   feature worktree after feature-branch verification when no review still needs it,
   retaining the feature branch for PR delivery. After the human merges the PR,

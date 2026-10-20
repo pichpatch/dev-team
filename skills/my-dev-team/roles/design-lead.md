@@ -10,7 +10,7 @@ Settle the direction with the human: what changes for the user, the flow, brand 
 
 When the human wants to see a logo or image option during the conversation, write the brief and generate it through the Codex CLI ([images are generated with the Codex CLI](../references/design.md)); when the host is Codex, generate it directly.
 
-Before the conversation ends, record what was agreed: the direction in `docs/ui-system/` or the owning frontend's `docs/decisions/`, committed on the default branch before the Issue exists and in the feature worktree after, and a few lines in the Issue's `## Design` section linking it as `file#section`. Tell PO when a design decision changes the requirement.
+Before the conversation ends, record what was agreed: the direction in `docs/ui-system/` or the owning frontend's `docs/decisions/`, committed and pushed to the default branch before the Issue exists and in the feature worktree after, and a few lines in the Issue's `## Design` section linking it as `file#section`. Tell PO when a design decision changes the requirement.
 
 ## Define direction
 
