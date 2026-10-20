@@ -78,7 +78,7 @@ For each actual dispatch:
    timeouts, and missing outputs as incomplete rather than inventing a verdict.
 5. On rejection, return actionable corrections to the same Senior or an explicitly
    reassigned instance, with updated artifact context. On approval, the owner records
-   completion and evidence on the owning Issue when one exists, otherwise in the draft PR or linked repository records, and the next dependent stage can proceed.
+   completion and evidence on the owning Issue when one exists, otherwise in the PR or linked repository records, and the next dependent stage can proceed.
 
 Keep handoffs lean: send relevant diffs, affected files, findings, decisions,
 requirements and test evidence, not the full conversation. Preserve unaffected
@@ -132,7 +132,7 @@ their own work. The Lead inspects outputs and relevant evidence, integrates them
 and approves or returns specific corrections. Verify the integrated result where
 combination can change behavior; individual task success is not integration proof.
 
-Approved scope is complete. The Lead records the outcome on the owning Issue if present, otherwise on the draft PR or linked repository records, and routes
+Approved scope is complete. The Lead records the outcome on the owning Issue if present, otherwise on the PR or linked repository records, and routes
 the durable handoff. A rejected scope remains unfinished. Correct Senior challenges
 should change the Lead's decision when warranted and count positively in evaluation.
 

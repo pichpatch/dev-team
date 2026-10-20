@@ -55,7 +55,7 @@ explicitly, or use a custom skill directory:
 ```
 
 Every host gets the `my-dev-team` skill and a way to call each role directly:
-`my-dev-team`, `my-po`, `my-design-lead`, `my-tech-lead`, and `my-qa-lead`.
+`my-dev-team`, `my-po`, `my-design-lead`, `my-tech-lead`, `my-qa-lead`, and `my-security`.
 
 | Host | Skill | Role commands | Call a role as |
 | --- | --- | --- | --- |
@@ -84,7 +84,7 @@ Use `--skills-dir` when the host's configured discovery directory differs.
 ## Use
 
 Invoke `my-dev-team` in the host's skill or command syntax with the feature goal
-or owning Issue. Call `my-po`, `my-design-lead`, `my-tech-lead`, or `my-qa-lead`
+or owning Issue. Call `my-po`, `my-design-lead`, `my-tech-lead`, `my-qa-lead`, or `my-security`
 the same way to talk to that role directly, or just ask for it in the
 conversation. Organizer loads only relevant
 role guides and sends a complete task packet to each actual agent/CLI. If no real
@@ -124,7 +124,7 @@ is the authoritative copy and holds the rules; change both together.
 | PO | Sonnet 5.5, high | GPT-6.1 Sol, medium | `deepseek-v4.1-flash`, max |
 | Design Lead | Sonnet 5.5, high | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
 | Technical Lead | Opus 5.5, high | GPT-6.1 Sol, high | `mimo-v2.6-pro` |
-| QA Lead | Sonnet 5.5, high | GPT-6 Astra, medium | `gpt-6-luna`, xhigh |
+| QA Lead | Sonnet 5.5, high | GPT-6 Astra, medium | `openai/gpt-6-sol`, high |
 | Cybersecurity | Sonnet 5.5, high | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
 
 ### Delegated roles
@@ -140,6 +140,7 @@ is the authoritative copy and holds the rules; change both together.
 | DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated |
 | QA Lead and Cybersecurity, delegated | A different provider from the Organizer: Codex `gpt-6.1-sol` medium under Claude Code; Claude Sonnet 5.5 high under Codex or OpenCode | If that provider is rate-limited: OpenCode under Claude Code or Codex, Codex under OpenCode |
 | Lead backups | Technical Lead: Sol high, `mimo-v2.6-pro`, `deepseek-v4.1-flash` max, `deepseek-v4.1-flash-free`. Design Lead: Sol medium, `glm-5.3-flash` max, `glm-5.3` max, `glm-5.3-flash-free`. QA Lead: Astra medium, Sonnet 5.5 high, `glm-5.3` max, `minimax-m3.1-flash-free`. Cybersecurity: Sol medium, Sonnet 5.5 high, `glm-5.3` max, `minimax-m3.1-flash-free` | Free last backup never for client-work repos, nor for a draft release review |
+| PO and DevOps backups | The three OpenCode free models: `deepseek-v4.1-flash-free`, `glm-5.3-flash-free`, `minimax-m3.1-flash-free` | Never for client-work repos; DevOps never where it would read production configuration |
 | Every model at its limit | Stop and report | |
 
 ### Scores
@@ -187,5 +188,5 @@ literal path handling, and preservation of existing content. They do not run age
 contact GitHub, or prove model compliance. No Python packages are required.
 
 This is a standalone bundle with no installation or runtime dependency on any
-other skill. Roles are not bound to models, and there is no provider-specific
-gate.
+other skill. Each role is bound to a model in the roster, and the human can
+change any binding at any time.

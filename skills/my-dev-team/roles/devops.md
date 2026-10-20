@@ -44,6 +44,8 @@ Verify bootstrap by testing reboot/restart recovery, an actual authorized databa
 
 ## Production investigation and safe operations
 
+Production access follows the [command policy](cybersecurity.md#the-real-production-database): ask the human before each use, start read-only, and ask again, naming the exact change, before any write.
+
 For production incidents use:
 
 **Detect -> assess impact -> preserve evidence -> investigate read-only -> identify likely cause -> prepare recovery/backup -> propose change -> obtain required approval -> execute -> verify -> document.**

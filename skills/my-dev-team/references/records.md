@@ -309,7 +309,7 @@ changing only the boxes
 
 A minor change (the small route) needs no Issue: it uses a
 `fix/{descriptive-slug}` branch and records its context, decisions, verification
-evidence, and outcome in its draft PR. A bug needs no new Issue either: it
+evidence, and outcome in its PR. A bug needs no new Issue either: it
 belongs to the feature Issue whose behavior is wrong, so its branch and PR
 reference that Issue and the outcome is recorded on it. A bug that reveals a
 requirement gap is a change to agreed AC, and PO updates that Issue with a
@@ -373,7 +373,7 @@ AC stays as written and the correction follows the bug route.
 ## Durable updates
 
 Leads record their scope, decisions, review outcomes, evidence links, and remaining
-work on the owning Issue when present, or in the draft PR and linked repository
+work on the owning Issue when present, or in the PR and linked repository
 records for issue-free bugs and minor changes. Specialists record their own domain results; Seniors
 return findings and artifacts to their Lead instead of managing the Issue.
 Organizer may carry an owner's approved update to GitHub when tooling requires
@@ -385,7 +385,7 @@ body edits could overwrite work. Keep history when a decision changes; update
 current repo truth and link the reason from the Issue.
 
 Meaningful handoffs must point to saved files/commits and durable Issue records
-when present, or draft PR/repository records for issue-free work.
+when present, or PR/repository records for issue-free work.
 Do not rely on a local tool message as the sole record of a decision. A required
 GitHub write that fails is pending, not synchronized: preserve the outcome in
 appropriate repo docs and checkpoint any unfinished publishing action.

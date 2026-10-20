@@ -22,6 +22,14 @@ unclear, Organizer must ask the human before dispatch. Once classified, owners
 can resolve routine domain relevance without unnecessary human questions. Record a
 reasoned not-applicable result; this is not approval of work that was never reviewed.
 
+Keep secrets and local team state out of git. The repository's `.gitignore` must
+hold the lines in [Cybersecurity's secret-file check](../roles/cybersecurity.md#check-secret-files-before-delivery):
+`.env`, `.env.*`, `!.env.example`, and `.AI/`. When any is missing, Organizer adds
+it in the feature worktree, so the change reaches the default branch through the
+PR. This is the one ignore-rule change Organizer makes on its own. Until the PR is
+merged, add the same lines to the main checkout's `.git/info/exclude`, so `.AI/`
+and env files cannot be committed by accident.
+
 Inspect the host's real delegation/CLI capabilities and use
 [the invocation loop](delegation.md) to dispatch owners. When a tool call returns
 only a running handle, collect its outcome before treating the assignment as done.
@@ -95,7 +103,7 @@ human you are returning to organizing.
 can and saves its blocked items in its [checkpoint](checkpoints.md). Tell the
 human there are items to settle, list them, and offer to switch to that Lead.
 Do not answer the items yourself. Resume the delegated work once the decisions
-are recorded in the feature worktree and noted on the Issue, or in the draft PR
+are recorded in the feature worktree and noted on the Issue, or in the PR
 when the work has no Issue.
 
 ## Shared completion gate for features, small changes, and bugs
@@ -108,7 +116,7 @@ After Senior Developer finishes any behavioral implementation:
 4. For work with an owning Issue, QA Lead
    [syncs its AC and DoD checkboxes](../roles/qa-lead.md#sync-the-issue-checkboxes)
    to the verified evidence as part of its approval.
-5. Organizer opens a draft PR after applicable security and delivery checks. Human approval is required before merge or deployment.
+5. Organizer opens a PR after applicable security and delivery checks. Human approval is required before merge or deployment.
 
 When QA rejects a fix, Senior Developer corrects it, Technical Lead reviews the correction, and Senior QA and QA Lead repeat affected verification. Design Lead and Cybersecurity retain their applicable review responsibilities.
 
@@ -144,8 +152,8 @@ Preserve this high-level order, involving only relevant owners:
    something ambiguous, contradictory, missing, or untestable.
 9. **Senior Developer(s):** implement scoped tasks delegated by Technical Lead.
 10. **Applicable domain reviews:** Design Lead verifies implemented UI against approved design when relevant; drift returns to Senior Developer through Technical Lead, and new design decisions return to Design Lead. Cybersecurity, called in by Technical Lead, checks the delivered revision's ignore rules and tracked secrets even if no earlier security review was required; for public sites it also checks AI crawler rules. Record findings and resolve blockers before PR delivery.
-11. **Shared completion gate:** follow the single [shared completion gate](#shared-completion-gate-for-features-small-changes-and-bugs): Technical Lead reviews completed implementation, Senior QA tests the reviewed revision, QA Lead approves evidence, and Organizer opens a draft PR after applicable security and delivery checks. Do not duplicate these gates here.
-12. **Human:** receives the draft PR and decides whether to approve merge or deployment. Neither action is automatic.
+11. **Shared completion gate:** follow the single [shared completion gate](#shared-completion-gate-for-features-small-changes-and-bugs): Technical Lead reviews completed implementation, Senior QA tests the reviewed revision, QA Lead approves evidence, and Organizer opens a PR after applicable security and delivery checks. Do not duplicate these gates here.
+12. **Human:** receives the PR and decides whether to approve merge or deployment. Neither action is automatic.
 
 Organizer keeps the Issue's status label current ([Issue status](records.md#issue-status)):
 `in progress` when Technical Lead starts the work, `done` when the human merges
@@ -191,7 +199,7 @@ Scale the route to the change; do not run the full sequence for its own sake.
 - **Small:** behavior changes, but AC, approved design, API/data contracts,
   security boundaries, and infrastructure do not. Technical Lead confirms the change is minor and scopes it; Senior Developer
   implements, followed by the shared completion gate (Technical Lead review,
-  Senior QA tests, QA Lead approval, Organizer draft PR). No Issue is required.
+  Senior QA tests, QA Lead approval, Organizer PR). No Issue is required.
   If an existing Issue or its acceptance criteria must change, reclassify the
   request into the normal change lifecycle. Cybersecurity retains applicable
   delivery checks. Record the other owners as not applicable with the

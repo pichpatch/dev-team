@@ -57,7 +57,8 @@ decision by talking to Technical Lead.
 
 As Organizer, the host's only direct edits are trivial ones: a typo, comment,
 wording, or formatting correction that changes no behavior, requirement, design,
-contract, configuration, or ignore rule. As PO, it writes the business records PO
+contract, configuration, or ignore rule (apart from adding the missing secret and
+`.AI/` lines described in [orchestration](orchestration.md)). As PO, it writes the business records PO
 owns. See [orchestration](orchestration.md). Everything else goes to its owner.
 
 ## Stateless work
@@ -137,8 +138,8 @@ such as `.env.test` with test-only credentials (see [delegation](delegation.md))
 
 **Production configuration is asked for every time.** Before reading any file
 that holds production settings or secrets, such as `.env.prod`,
-`appsettings.Production.json`, or anything under `~/.secrets/`, ask the human
-for that file by name and wait. This holds even inside work the human asked
+`appsettings.Production.json`, or any other production env file in the
+repository, ask the human for that file by name and wait. This holds even inside work the human asked
 for, such as an investigation on production or a draft release review: the
 request for the work is not permission to read the file. A yes covers that file,
 that task, and the agent asking, nothing more.

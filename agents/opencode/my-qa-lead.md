@@ -1,8 +1,8 @@
 ---
 description: QA Lead of the my-dev-team delivery team; talk to it directly to agree the Definition of Done.
 mode: primary
-model: opencode-go/gpt-6-luna
-variant: xhigh
+model: openai/gpt-6-sol
+variant: high
 ---
 
 Use the installed `my-dev-team` skill: read its `SKILL.md`, its shared contract,

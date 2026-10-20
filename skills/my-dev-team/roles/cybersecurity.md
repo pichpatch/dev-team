@@ -68,7 +68,7 @@ when an agent asks whether a command is safe, answer from it.
   hard to undo (a reset, a drop, a bulk update or delete), take a dump it can
   restore from, then tell the human what it did. Seniors and testers use only
   their own `_wt_` database.
-- **Opening a draft PR.**
+- **Opening a PR.**
 
 ### Tier 2: ask Cybersecurity first
 
@@ -102,25 +102,28 @@ Never, even with approval: deleting the default branch or force-pushing to it.
 
 ### The real production database
 
-Treat production as a war zone: stay out of it. Touch it only when the human
-asks for help investigating a problem there, and then only a Lead, only to
-read, and only for that investigation:
+Production is where a mistake costs the most, so it is used only with the
+human's permission. Any Lead (PO excluded) and DevOps may use it, but each asks
+the human first, every time, and waits for a clear yes. The question says what
+will be done, why, and on which system. A yes covers that task and the agent
+asking, nothing more. Then:
 
-- through a connection that cannot write (a read-only database user where one
-  exists), run with `with-env`, as the human's rules require;
-- with a row limit and a time limit on every query, leaving out personal data
-  columns unless the investigation needs them;
-- only on a paid model that does not train on what it is sent, never a free one;
-- never copying results into an Issue, PR, document, or `.AI` record beyond the
+- Start read-only, through a connection that cannot write (a read-only database
+  user where one exists). A write (UPDATE, DELETE, schema change, migration, bulk
+  fix) needs its own yes naming the exact change, after the backup and the
+  verification and recovery steps in the DevOps guide are ready.
+- Put a row limit and a time limit on every query, and leave out personal data
+  columns unless the investigation needs them.
+- Use only a paid model that does not train on what it is sent, never a free one.
+- Never copy results into an Issue, PR, document, or `.AI` record beyond the
   minimum the finding needs.
 
 Prefer evidence that needs no production access first: logs, metrics, error
 reports, and a reproduction on the local database.
 
-The human's request to investigate is not permission to read production
-configuration: ask for each file by name, such as `.env.prod` or
-`appsettings.Production.json`, every time
-([shared contract](../references/contract.md)).
+A yes to production access is not permission to read production configuration:
+ask for each file by name, such as `.env.prod` or `appsettings.Production.json`,
+every time ([shared contract](../references/contract.md)).
 
 ### How to answer
 

@@ -103,6 +103,19 @@ def validate():
         for command in ("my-dev-team",) + role_names:
             if not (ROOT / "commands" / host / f"{command}.md").is_file():
                 errors.append(f"Missing command wrapper: commands/{host}/{command}.md")
+    # The organizer command must know every conversation role.
+    for host in ("claude", "opencode"):
+        wrapper = (ROOT / "commands" / host / "my-dev-team.md").read_text(encoding="utf-8")
+        for command in role_names:
+            if f"`/{command}`" not in wrapper:
+                errors.append(f"commands/{host}/my-dev-team.md does not name /{command}")
+    ignore = (ROOT / ".gitignore").read_text(encoding="utf-8").split() if (ROOT / ".gitignore").is_file() else []
+    for line in (".env", ".env.*", "!.env.example", ".AI/"):
+        if line not in ignore:
+            errors.append(f".gitignore is missing: {line}")
+    for source in visited:
+        if source.suffix == ".md" and "draft PR" in source.read_text(encoding="utf-8"):
+            errors.append(f"Use PR, not draft PR: {source.relative_to(ROOT)}")
     # Each host binds a conversation role to its model in its own file; the
     # roster reference lists the same bindings for people to read.
     roster_path = SKILL / "references" / "roster.md"

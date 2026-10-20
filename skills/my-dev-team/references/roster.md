@@ -1,8 +1,9 @@
 # Roster: which model runs each role
 
 The role guides never name a model. This page is the one place that does. The
-human chose these bindings; change one only when the human says so, and change
-it here and in the host file listed below in the same edit.
+human chose these bindings and can change any of them at any time. Change one
+only when the human says so, and change it here and in the host file listed below
+in the same edit.
 
 ## Roles the human talks to
 
@@ -13,7 +14,7 @@ Each host runs the five conversation roles on these models:
 | PO | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/deepseek-v4.1-flash`, variant `max` |
 | Design Lead | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
 | Technical Lead | `claude-opus-5-5`, effort `high` | `gpt-6.1-sol`, effort `high` | `opencode-go/mimo-v2.6-pro` |
-| QA Lead | `claude-sonnet-5-5`, effort `high` | `gpt-6-astra`, effort `medium` | `opencode-go/gpt-6-luna`, variant `xhigh` |
+| QA Lead | `claude-sonnet-5-5`, effort `high` | `gpt-6-astra`, effort `medium` | `openai/gpt-6-sol`, variant `high` |
 | Cybersecurity | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
 
 Antigravity has no binding: a role there runs on the model the session is using.
@@ -36,6 +37,12 @@ it moves down its chain, skipping its own primary and any limited subscription:
   first; this chain applies once that route is exhausted.
 - Cybersecurity never uses its free backup for a draft release review, where it
   may read production configuration: there it stops and reports instead.
+- PO and DevOps have no paid backup chain. When their own subscription is
+  limited, they move straight to the three OpenCode free models, in this order:
+  `opencode/deepseek-v4.1-flash-free`, `opencode/glm-5.3-flash-free`,
+  `opencode/minimax-m3.1-flash-free`. The free-model rules below apply: never in
+  a client-work repository, and DevOps never where it would read production
+  configuration.
 - Backup 4 is a free model and may train on what it is sent: never use it in a
   client-work repository. There, a Lead whose paid backups are all limited
   stops and reports.
