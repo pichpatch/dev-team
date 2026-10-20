@@ -36,6 +36,16 @@ Once all worker changes are integrated and the required feature-branch verificat
 
 Keep local `.AI` coordination and review records until final required review/PR delivery and durable outcomes are recorded in GitHub. Clean up only the completed feature's temporary records after no handover or correction needs them; a failed final review keeps the relevant records. Distinguish **worker/feature worktree cleanup after integration** from **feature branch cleanup after the human merges the PR**.
 
+## Explicit direct-checkout exception
+
+The human may explicitly authorize an interactive host such as OpenCode to work directly in the human's existing checkout, rather than through a delegated worker worktree. This is an exception **only for that authorized interactive task**, not permission for Organizer to silently place delegated workers there.
+
+- Before editing, identify the actual checkout path, current branch, and dirty/uncommitted state. A main checkout is a directory, not necessarily the `main` branch. Do not switch branches, discard local changes, or overwrite the human's work without authorization.
+- Use the same GitHub requirement authority and temporary `.AI` instructions/progress where applicable, but do not invent a worker worktree, worker-branch merge, or worktree cleanup stage.
+- If the human authorizes edits on `main`, preserve the existing explicit approval and repository rules for committing/pushing to the default branch. Do not treat local edits as automatically approved for commit, push, or PR merge.
+- Never run automatic worktree removal, local branch deletion, or `.AI` cleanup against the human's main checkout. Only delete worktrees the team created and owns, after verifying safe integration.
+- If direct-checkout work is to enter a feature branch or PR, use the normal review and integration path appropriate to the actual branch and changes; do not claim a merge occurred when none did.
+
 ## Acceptance scenarios
 
 1. Worker finishes milestones 1–5, is interrupted during milestone 6: replacement reads the original packet, verifies milestone 6 and relevant diff/external state, then resumes; it does not rerun steps 1–5 without cause.
