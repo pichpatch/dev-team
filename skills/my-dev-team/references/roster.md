@@ -28,10 +28,14 @@ it moves down its chain, skipping its own primary and any limited subscription:
 | Technical Lead | `gpt-6.1-sol`, `high` | `opencode-go/mimo-v2.6-pro` | `opencode-go/deepseek-v4.1-flash`, `max` | `opencode/deepseek-v4.1-flash-free` |
 | Design Lead | `gpt-6.1-sol`, `medium` | `opencode-go/glm-5.3-flash`, `max` | `opencode-go/glm-5.3`, `max` | `opencode/glm-5.3-flash-free` |
 | QA Lead | `gpt-6-astra`, `medium` | `claude-sonnet-5-5`, `high` | `opencode-go/glm-5.3`, `max` | `opencode/minimax-m3.1-flash-free` |
+| Cybersecurity | `gpt-6.1-sol`, `medium` | `claude-sonnet-5-5`, `high` | `opencode-go/glm-5.3`, `max` | `opencode/minimax-m3.1-flash-free` |
 
-- QA Lead also skips any model the Technical Lead is running at the time.
-- A delegated QA Lead takes the cross-provider route below first; this chain
-  applies once that route is exhausted.
+- QA Lead and Cybersecurity also skip any model the Technical Lead is running
+  at the time.
+- A delegated QA Lead or Cybersecurity takes the cross-provider route below
+  first; this chain applies once that route is exhausted.
+- Cybersecurity never uses its free backup for a draft release review, where it
+  reads the production env file: there it stops and reports instead.
 - Backup 4 is a free model and may train on what it is sent: never use it in a
   client-work repository. There, a Lead whose paid backups are all limited
   stops and reports.

@@ -139,7 +139,7 @@ is the authoritative copy and holds the rules; change both together.
 | Senior QA | OpenCode `mimo-v2.6-flash` | |
 | DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated |
 | QA Lead and Cybersecurity, delegated | A different provider from the Organizer: Codex `gpt-6.1-sol` medium under Claude Code; Claude Sonnet 5.5 high under Codex or OpenCode | If that provider is rate-limited: OpenCode under Claude Code or Codex, Codex under OpenCode |
-| Lead backups | Technical Lead: Sol high, `mimo-v2.6-pro`, `deepseek-v4.1-flash` max, `deepseek-v4.1-flash-free`. Design Lead: Sol medium, `glm-5.3-flash` max, `glm-5.3` max, `glm-5.3-flash-free`. QA Lead: Astra medium, Sonnet 5.5 high, `glm-5.3` max, `minimax-m3.1-flash-free` | Free last backup never for client-work repos |
+| Lead backups | Technical Lead: Sol high, `mimo-v2.6-pro`, `deepseek-v4.1-flash` max, `deepseek-v4.1-flash-free`. Design Lead: Sol medium, `glm-5.3-flash` max, `glm-5.3` max, `glm-5.3-flash-free`. QA Lead: Astra medium, Sonnet 5.5 high, `glm-5.3` max, `minimax-m3.1-flash-free`. Cybersecurity: Sol medium, Sonnet 5.5 high, `glm-5.3` max, `minimax-m3.1-flash-free` | Free last backup never for client-work repos, nor for a draft release review |
 | Every model at its limit | Stop and report | |
 
 ### Scores
