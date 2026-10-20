@@ -10,6 +10,10 @@ This extends [delegation](delegation.md) and [checkpoints](checkpoints.md). GitH
 - A worker may write only its assigned record, not another worker's or the feature coordination record. Organizer or the owning Lead updates shared coordination records, serializing concurrent changes. Do not put secrets, credentials, full conversation transcripts, or hidden reasoning in `.AI`.
 - Create records only for real assigned work; remove them when the feature is safely closed. Preserve GitHub Issue and repository decisions independently.
 
+## Feature authorization and branch creation
+
+The human initiates or approves a feature and its business scope; Organizer must not invent or expand product requirements. The PO records approved requirements and acceptance criteria in GitHub. Once the human authorizes execution, Organizer **creates the feature branch** using the established `feat/{issue-number}-{slug}` convention, and creates the feature coordination record. Technical Lead determines task breakdown and worktree needs; Organizer may perform the Git commands on the Technical Lead's instruction. Delegated workers never create a new feature or commit directly to the default branch.
+
 ## Assignment packet — actionable instructions, not a generic checklist
 
 Before dispatch, the assigning Lead writes a concise task packet identifying: (1) role and worker instance; (2) owning GitHub Issue URL and relevant approved revision; (3) objective and measurable definition of done; (4) worktree and branch, relevant docs and starting files; (5) permitted scope, forbidden changes, dependencies and prerequisite approvals; (6) milestones and deliverables, tests and evidence expected; (7) receiving Lead and escalation route; (8) progress-record path and current owner. The Lead provides enough detail to preserve intent across models, without dictating every implementation command.
@@ -35,6 +39,12 @@ After the responsible Lead approves a worker's deliverable, Technical Lead integ
 Once all worker changes are integrated and the required feature-branch verification/reviews finish, also remove the temporary **feature worktree** if no process or review needs it, while **retaining the feature branch and its commits** for the PR and any later fixes. Recreate a worktree from that branch if further changes are needed. Do not delete the feature branch before the human's PR merge or rewrite its history. Do not touch the human's main checkout, unrelated worktrees, or another feature's `.AI` files.
 
 Keep local `.AI` coordination and review records until final required review/PR delivery and durable outcomes are recorded in GitHub. Clean up only the completed feature's temporary records after no handover or correction needs them; a failed final review keeps the relevant records. Distinguish **worker/feature worktree cleanup after integration** from **feature branch cleanup after the human merges the PR**.
+
+## Final integrated verification and interrupted-cleanup recovery
+
+After all approved worker changes are integrated, Technical Lead verifies the **combined feature branch** (including relevant build, tests, integration behavior, and dependencies); QA independently verifies applicable acceptance criteria against that integrated revision. A worker's passing tests do not replace integrated verification. Failed verification routes targeted corrections back to the owning Lead and retains the needed `.AI` records and workspaces.
+
+Organizer reconciles managed worktrees on resume/startup for an active feature. If integration succeeded but cleanup was interrupted, inspect Git's worktree/branch state, the feature branch's reachable commits, dirty/untracked files, running processes, and pending review needs. Complete only safe pending cleanup; repeating reconciliation must be **idempotent**. If state is uncertain, leave the worktree untouched and report the blocker. Never delete the human's checkout, unrelated worktrees, or unmerged/uncommitted changes. A missing worktree is not evidence that its work was integrated.
 
 ## Explicit direct-checkout exception
 
