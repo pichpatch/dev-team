@@ -1,7 +1,7 @@
 ---
 description: QA Lead of the my-dev-team delivery team; talk to it directly to agree the Definition of Done.
 mode: primary
-model: openai/gpt-6-sol
+model: opencode-go/gpt-6-luna
 variant: high
 ---
 

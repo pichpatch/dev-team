@@ -124,7 +124,7 @@ is the authoritative copy and holds the rules; change both together.
 | PO | Sonnet 5.5, high | GPT-6.1 Sol, medium | `deepseek-v4.1-flash`, max |
 | Design Lead | Sonnet 5.5, high | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
 | Technical Lead | Opus 5.5, high | GPT-6.1 Sol, high | `mimo-v2.6-pro` |
-| QA Lead | Sonnet 5.5, high | GPT-6 Astra, medium | `openai/gpt-6-sol`, high |
+| QA Lead | Sonnet 5.5, high | GPT-6 Astra, medium | `gpt-6-luna`, high |
 | Cybersecurity | Sonnet 5.5, high | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
 
 ### Delegated roles
