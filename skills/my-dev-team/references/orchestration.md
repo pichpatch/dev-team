@@ -10,7 +10,7 @@ dispatch and [records](records.md) before changing project records.
 Inspect repository instructions, current changes, available authorized tooling,
 the owning Issue if one exists, relevant docs, and any checkpoint for this work. Preserve other
 work. For a new feature, act as PO to agree it with the human before the Issue
-is created. For feature work, dispatch the team only for an Issue labeled `ready to implement`;
+is created. For feature implementation, dispatch developers only for an Issue labeled `ready to implement`;
 for a `draft` feature Issue, continue the discussion with the human as the role whose
 questions are open. This feature-only readiness rule does not block issue-free
 bug or minor-change routes. For a bug, route directly to QA Lead. A bug creates no new Issue: it falls under the feature Issue whose behavior is wrong, so reference that Issue and record the fix there. When the bug turns out to be a requirement gap, PO updates that Issue with a change record. A minor change needs no Issue. For a gap or requested behavior change, classify the work and use its appropriate route. Reuse still-valid decisions; do not
@@ -87,18 +87,29 @@ only. The order is the human's to change.
   so it is known before the human says the feature is ready. DevOps's questions
   for the human come through Technical Lead.
 
-Before the Issue exists, each role commits its agreed documents on the default
-branch in the main checkout: PO the business requirements, Design Lead the
-design direction, Technical Lead decision documents, QA Lead the quality
-requirements. Documents only; code, mockup production, and module documents
-come later in the feature worktree.
+During new-feature planning, PO creates the GitHub Issue after agreeing business
+requirements and AC. All Leads record decisions, questions, approvals, and
+history in that **same Issue**. No feature branch or repository feature
+documents are created or pushed during planning. PO/business-ready means
+ready for the next Lead, **not** ready for implementation.
 
-Each role pushes its own documents to the default branch as soon as they are
-agreed. The discussion ends in one of two ways, and PO does the same in both:
-push any commits not yet pushed and create the Issue, with every role's section in it, labeled
-`ready to implement` when the human says the feature is ready or `draft` when
-the human pauses. A `draft` lists the open questions per role. Then tell the
-human you are returning to organizing.
+Organizer controls the sequential planning transitions: PO → Design Lead
+(when relevant) → Technical Lead → Cybersecurity and DevOps as called by
+Technical Lead → Technical Lead final technical decision → QA Lead. Explicitly
+announce each completed stage, the next role, and outstanding approvals.
+A human may request a different role; return to the pending gate afterward.
+A Lead may delegate scoped research or review **inside its stage**, but
+Organizer must not delegate the entire new-feature planning sequence away.
+Do not invent human questions; if an owner has no open questions, record its
+decision and proceed. When a later owner changes a requirement, loop back
+to affected owners and repeat only invalidated approvals.
+
+Only after every required owner has approved and the human authorizes
+proceeding may Organizer label the Issue `ready to implement`. Technical
+Lead owns creation of the feature branch; Organizer may execute it on
+Technical Lead's instruction. Publish approved requirements and domain
+specifications to files **on the feature branch** before delegating
+implementation. Preserve the Issue as decision/approval history.
 
 **When a delegated Lead is blocked on the human.** It keeps working on what it
 can and saves its blocked items in its [checkpoint](checkpoints.md). Tell the
@@ -125,52 +136,31 @@ The entry point differs by route: new features complete business, design, techni
 
 ## Feature sequence
 
-Preserve this high-level order, involving only relevant owners:
+1. PO and human agree scope, rules, and AC. PO creates the feature Issue
+   labeled `draft`; no repository document is written.
+2. Organizer explicitly switches to Design Lead when applicable, then
+   Technical Lead. Each Lead records its decisions in the same Issue.
+3. Technical Lead calls in DevOps and Cybersecurity when relevant.
+   Security/privacy-sensitive public forms require Cybersecurity review.
+   Technical Lead incorporates their findings and records its final decision.
+4. QA Lead agrees DoD and test strategy from the complete planning package.
+   Organizer tracks required approvals, pending questions, and reasoned
+   not-applicable determinations. Missing approval blocks readiness.
+5. Once all required approvals and human authorization are recorded,
+   set `ready to implement`. Technical Lead creates the feature branch,
+   or directs Organizer to do so. Publish approved specifications and
+   requirements to repository files on **that branch**, never main.
+6. Technical Lead delegates implementation to Senior Developer(s);
+   Leads review delegated results within their domain.
+7. Apply the [shared completion gate](#shared-completion-gate-for-features-small-changes-and-bugs):
+   Technical Lead code review, Senior QA execution, QA Lead evidence approval,
+   relevant design/security checks, then Organizer opens the PR.
+8. Human alone authorizes merge/deployment. Organizer updates Issue status
+   and retains all decisions and review history.
 
-1. **Human + PO (the host):** agree the purpose, business requirement, and AC;
-   PO commits and pushes them to the business documents on the default branch.
-2. **Human + the other relevant Leads (the host):** Design Lead, Technical Lead,
-   and QA Lead each settle with the human what their domain needs, in the same
-   session and in the order the human wants.
-3. **Human, then PO:** the human says the feature is ready, or pauses it. PO
-   pushes the documents and creates the feature Issue, labeled
-   `ready to implement` or `draft`. The steps below run only for
-   `ready to implement`; in them each delegated Lead starts from what its role
-   already agreed with the human.
-4. **Design Lead:** direct and approve relevant design work, using Senior
-   Designer(s) and Design Tester evidence as needed.
-5. **Technical Lead:** establish initial technical direction, and decide
-   whether the feature needs DevOps and Cybersecurity.
-6. **DevOps and Cybersecurity, when Technical Lead calls them in:** DevOps
-   writes what the infrastructure needs; Cybersecurity reviews and writes the
-   security and privacy requirements. Each records them in its own section of
-   the Issue, unless it already did during the conversation.
-7. **Technical Lead:** integrate the design, infrastructure, and security
-   requirements into the final technical package.
-8. **QA Lead:** from the complete business, design, technical, and security
-   package, finalize the Definition of Done and the test strategy, with cases
-   covering every AC before implementation. Loop back to an owner only for
-   something ambiguous, contradictory, missing, or untestable.
-9. **Senior Developer(s):** implement scoped tasks delegated by Technical Lead.
-10. **Applicable domain reviews:** Design Lead verifies implemented UI against approved design when relevant; drift returns to Senior Developer through Technical Lead, and new design decisions return to Design Lead. Cybersecurity, called in by Technical Lead, checks the delivered revision's ignore rules and tracked secrets even if no earlier security review was required; for public sites it also checks AI crawler rules. Record findings and resolve blockers before PR delivery.
-11. **Shared completion gate:** follow the single [shared completion gate](#shared-completion-gate-for-features-small-changes-and-bugs): Technical Lead reviews completed implementation, Senior QA tests the reviewed revision, QA Lead approves evidence, and Organizer opens a PR after applicable security and delivery checks. Do not duplicate these gates here.
-12. **Human:** receives the PR and decides whether to approve merge or deployment. Neither action is automatic.
-
-Organizer keeps the Issue's status label current ([Issue status](records.md#issue-status)):
-`in progress` when Technical Lead starts the work, `done` when the human merges
-the PR. Task-by-task progress stays on the local `.AI` board, never on the Issue.
-
-Parallelize independent tasks within these stages where useful. Do not start a
-dependent stage before its necessary owner decisions are available. Do not add a
-second completion ceremony after the shared completion gate. If a change invalidates a design,
-security, quality, or technical decision, route that change back to its owner and
-repeat affected verification before proceeding.
-
-QA failures return to the responsible owner for correction, then verification.
-PO returns only for a real business ambiguity or gap; PO is not a mandatory final
-reviewer. Never mark blocked/unrun verification as passed. When a necessary owner
-or tool cannot run, preserve pending work and the blocker; do not fabricate a
-substitute approval.
+Delegation supports a stage; it never replaces required Lead interaction
+or approval. Revisit only affected owners when scope or requirements change.
+Do not mark unperformed reviews as approved.
 
 For bugs, create no new Issue: reference the feature Issue the bug falls under, record the fix there, and reuse still-valid decisions. A bug that reveals a requirement gap goes to PO, who updates that Issue with a change record. Route through QA Lead investigation, Senior QA reproduction, Senior Developer correction, and the shared completion gate. For gaps or behavior changes, classify and use the appropriate lifecycle. QA is the first investigation point for a
 reported defect: it reproduces it, gathers evidence, narrows the likely layer,
