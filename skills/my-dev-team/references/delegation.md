@@ -108,8 +108,9 @@ Use [the handoff template](../assets/handoff.md) as needed. Each invocation gets
 
 Persist the meaningful assignment and decisions in the owning Issue (when one exists) or repository records before
 handoff. A transient packet may carry links and execution details, but must not be
-the only copy of important knowledge. Do not create `.AI` checkpoints for routine active
-assignments. The parent must not assume a child inherited conversation context,
+the only copy of important knowledge. For active assignments, maintain the local `.AI` work instruction and progress
+record described in [local AI task delegation](ai-task-delegation.md); separate
+interruption checkpoints are needed only when work stops unexpectedly. The parent must not assume a child inherited conversation context,
 even if a tool can technically fork it.
 
 ## Split and integrate
@@ -182,8 +183,10 @@ projects/
 - Other Leads ask Technical Lead for a worktree when their Seniors write to the
   repository. When a Lead cannot run git itself, Organizer creates the worktree
   on that Lead's instruction.
-- Remove a worktree once its work is integrated, never while it holds unfinished
-  work or a checkpoint.
+- After approved work is integrated into the feature branch, automatically remove
+  the worker's worktree and local worker branch once its changes are preserved,
+  its process is stopped, and no unfinished work/review needs it. Follow the
+  safeguards in [local AI task delegation](ai-task-delegation.md).
 
 Branches, commits, and pushing:
 
@@ -199,8 +202,11 @@ Branches, commits, and pushing:
   with the human, described above. PO pushes those commits when the human says
   the feature is ready or asks to pause; nothing else is ever pushed to the
   default branch. Nobody force-pushes or rewrites history that has been pushed.
-- After the human merges the PR, Technical Lead, or Organizer on its behalf,
-  removes the feature's worktrees and local branches.
+- Do not leave integrated worker worktrees waiting for the PR merge. Remove the
+  feature worktree after feature-branch verification when no review still needs it,
+  retaining the feature branch for PR delivery. After the human merges the PR,
+  Technical Lead or Organizer on its behalf removes the now-obsolete local feature
+  branch when safe. Follow [local AI task delegation](ai-task-delegation.md).
 
 A Lead can reach the main checkout and its real files. The human accepted that
 exposure; the contract's ask-before-reading rule still applies to Leads. A
