@@ -328,22 +328,26 @@ through two commands:
   worktree, for example `myapp_wt_fix_login_2`, runs the migrations and seed
   data, and drops it when its task is finished or abandoned. Redis gets its own
   key prefix or database number per worker.
-  - **All local work uses the same local server and user,** with the worker's
-    own database name, in the `.env.test` the Lead places in the worktree:
-
-    ```text
-    Host=localhost;Port=5432;Database={worker-database};Username=postgres;Password=postgres
-    postgresql://postgres:postgres@localhost:5432/{worker-database}
-    ```
-
-    These are fixed local development values, not secrets. Never put them in
-    `.env.example` or any deployed environment.
+  - **The human's local connection is the source.** Each human keeps their own
+    local database connection where the stack expects local configuration,
+    such as `.env`, `.env.local`, or `appsettings.Development.json`, git-ignored.
+    Never assume a host, user, or password. If that file does not exist, or
+    has no database connection, create it from the keys in `.env.example` (or
+    the stack's equivalent template) with the values left empty, and ask the
+    human to fill them in. Do not invent values.
+  - **Reading it needs the human's OK once per project,** as for any
+    credential ([shared contract](contract.md)). Record the answer in the
+    service's `README.md` so it is not asked again.
+  - **A worker gets only the connection, with its own database name.** The Lead
+    copies the host, port, user, and password into the `.env.test` it places in
+    the worktree, with the database name replaced by the worker's `_wt_` name.
+    Nothing else from the human's file goes into the worktree.
   - **Before dropping, check where the database is.** Drop only when the host is
     `localhost`, `127.0.0.1`, or `::1` and the name is the worker's own `_wt_`
     database. If the host is anything else, do not drop it: leave it, and alert
-    the human with the host and database name. The `postgres` user can drop any
-    database on the server, so these checks are what keep the human's own
-    databases safe; never drop a database by any other name.
+    the human with the host and database name. The local user may be able to
+    drop any database on the server, so these checks are what keep the human's
+    own databases safe; never drop a database by any other name.
   - **The drop exception covers only** that case. Anything shared or remote,
     and any other database, still needs the human's OK.
 

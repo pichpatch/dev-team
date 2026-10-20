@@ -131,15 +131,16 @@ is the authoritative copy and holds the rules; change both together.
 
 | Role | Model | Notes |
 | --- | --- | --- |
-| Senior pool 1 | OpenCode `space-bunny`, high | Senior Developer and Senior Designer; up to three at once |
-| Senior pool 2 | Codex `gpt-6-luna`, high | Simplest slices; used last when Codex organizes |
-| Senior pool 3 | Claude `claude-haiku-5-5`, high | Used last when Claude Code organizes |
-| Senior pool 4 | OpenCode `deepseek-v4.1-flash`, high | |
+| Senior pool 1 | Codex `gpt-6-luna`, high | Senior Developer and Senior Designer; up to three at once. Simplest slices; used last when Codex organizes |
+| Senior pool 2 | Claude `claude-haiku-5-5`, high | Used last when Claude Code organizes |
+| Senior pool 3 | OpenCode `deepseek-v4.1-flash`, high | |
+| Senior pool 4 to 6 (free) | OpenCode `deepseek-v4.1-flash-free`, `glm-5.3-flash-free`, `minimax-m3.1-flash-free` | Only when 1 to 3 are limited; never for client-work repos |
 | Design Tester | OpenCode `mimo-v2.6-flash` | Shared with Senior QA |
 | Senior QA | OpenCode `mimo-v2.6-flash` | |
 | DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated |
 | QA Lead and Cybersecurity, delegated | A different provider from the Organizer: Codex `gpt-6.1-sol` medium under Claude Code; Claude Sonnet 5.5 high under Codex or OpenCode | If that provider is rate-limited: OpenCode under Claude Code or Codex, Codex under OpenCode |
-| Every model at its limit | OpenCode `space-bunny-free` | Then stop and report |
+| Lead backups | Technical Lead: Sol high, `mimo-v2.6-pro`, `deepseek-v4.1-flash` max, `deepseek-v4.1-flash-free`. Design Lead: Sol medium, `glm-5.3-flash` max, `glm-5.3` max, `glm-5.3-flash-free`. QA Lead: Astra medium, Sonnet 5.5 high, `glm-5.3` max, `minimax-m3.1-flash-free` | Free last backup never for client-work repos |
+| Every model at its limit | Stop and report | |
 
 ### Scores
 
@@ -173,7 +174,7 @@ uses the limit. Wait is the time before the first words of an answer.
 | `deepseek-v4-pro` | OpenCode Go | max | 36 | $0.67 | 2 |
 | `minimax-m3` | OpenCode Go | none | 29 | $0.51 | 1 |
 
-`space-bunny` and `gpt-6-sol` are not on the leaderboard. An
+`gpt-6-sol` is not on the leaderboard. An
 effort of "none" means the leaderboard lists a single result for the model.
 
 ## Check

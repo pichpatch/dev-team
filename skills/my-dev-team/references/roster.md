@@ -18,6 +18,24 @@ Each host runs the five conversation roles on these models:
 
 Antigravity has no binding: a role there runs on the model the session is using.
 
+### Backups for the Leads
+
+When a Lead's own subscription is limited ([checking for limits](#checking-for-limits)),
+it moves down its chain, skipping its own primary and any limited subscription:
+
+| Lead | Backup 1 | Backup 2 | Backup 3 | Backup 4 (free) |
+| --- | --- | --- | --- | --- |
+| Technical Lead | `gpt-6.1-sol`, `high` | `opencode-go/mimo-v2.6-pro` | `opencode-go/deepseek-v4.1-flash`, `max` | `opencode/deepseek-v4.1-flash-free` |
+| Design Lead | `gpt-6.1-sol`, `medium` | `opencode-go/glm-5.3-flash`, `max` | `opencode-go/glm-5.3`, `max` | `opencode/glm-5.3-flash-free` |
+| QA Lead | `gpt-6-astra`, `medium` | `claude-sonnet-5-5`, `high` | `opencode-go/glm-5.3`, `max` | `opencode/minimax-m3.1-flash-free` |
+
+- QA Lead also skips any model the Technical Lead is running at the time.
+- A delegated QA Lead takes the cross-provider route below first; this chain
+  applies once that route is exhausted.
+- Backup 4 is a free model and may train on what it is sent: never use it in a
+  client-work repository. There, a Lead whose paid backups are all limited
+  stops and reports.
+
 ## How each host applies it
 
 | Host | Where the binding lives | How the human gets it |
@@ -55,10 +73,16 @@ Seniors at once:
 
 | Order | Runs through | Subscription | Model | Effort |
 | --- | --- | --- | --- | --- |
-| 1 | OpenCode | OpenCode Go | `opencode-go/space-bunny` | `high` |
-| 2 | Codex | ChatGPT | `gpt-6-luna` | `high` |
-| 3 | Claude | Claude | `claude-haiku-5-5` | `high` |
-| 4 | OpenCode | OpenCode Go | `opencode-go/deepseek-v4.1-flash` | `high` |
+| 1 | Codex | ChatGPT | `gpt-6-luna` | `high` |
+| 2 | Claude | Claude | `claude-haiku-5-5` | `high` |
+| 3 | OpenCode | OpenCode Go | `opencode-go/deepseek-v4.1-flash` | `high` |
+| 4 (free) | OpenCode | OpenCode free | `opencode/deepseek-v4.1-flash-free` | `high` |
+| 5 (free) | OpenCode | OpenCode free | `opencode/glm-5.3-flash-free` | `max` |
+| 6 (free) | OpenCode | OpenCode free | `opencode/minimax-m3.1-flash-free` | `high` |
+
+Rows 4 to 6 are free models, used only when 1 to 3 are limited, and never in a
+client-work repository. `opencode/glm-5.3-flash-free` does no Senior Designer
+work, since it is the same model as the OpenCode Design Lead.
 
 - **Spare the host's own subscription.** Seniors use the most tokens, and a
   worker on the subscription the Organizer is running on competes with the
@@ -68,7 +92,8 @@ Seniors at once:
 - **Match the slice to the model.** `gpt-6-luna` is the cheapest and the
   weakest coder in the pool; give it the simplest, most self-contained slices.
 - **When a model reaches its limit,** continue that Senior's task on the next
-  model in the table that is not already running a task.
+  model in the table that is not already running a task
+  ([checking for limits](#checking-for-limits)).
 
 ### Testers
 
@@ -81,12 +106,32 @@ because they check different things and neither reviews the other:
 | Design Tester | OpenCode | `opencode-go/mimo-v2.6-flash` | (none to set) |
 | Senior QA | OpenCode | `opencode-go/mimo-v2.6-flash` | (none to set) |
 
+### Checking for limits
+
+Limits apply per subscription (Claude, ChatGPT, OpenCode Go, OpenCode free), so
+Organizer checks a subscription, not each model:
+
+- **Before using it,** send `hi` through that CLI at its lowest effort. An
+  explicit limit or quota error means it is limited. No answer within 45
+  seconds means it is unavailable. Either way, use the next choice for the role.
+  A successful answer counts for 10 minutes; check again after that.
+- **While a delegated run is working,** check its subscription the same way
+  every 10 minutes. If it answers, the run is only slow: keep waiting. If it is
+  limited, stop that worker and continue the same task on the next model, from
+  what is already in its worktree plus a checkpoint, not from the start.
+- Record each switch in the worker's result, with the model that actually ran.
+
 ### When every model has reached its limit
 
-Use `opencode/space-bunny-free`, for a Senior or a tester. When that is also
-exhausted, stop: save a checkpoint, tell the human which limits were reached,
-and wait. Do not use any other free model; the others train on what they are
-sent.
+A tester whose model is limited uses the Senior pool's free rows 4 to 6, in
+order, skipping the model that produced the work it is testing. When every
+model a role may use is exhausted, stop: save a checkpoint, tell the human
+which limits were reached, and wait.
+
+Free models may train on what they are sent. They are allowed only as this last
+resort, and never for a client-work repository (one whose remote is
+`git.lab.tcctech.app`): there, use only models that do not train on what they
+are sent, and stop when those are exhausted.
 
 ### Starting a run
 
@@ -94,7 +139,7 @@ Run each from the worktree the task packet names, so it works on its own
 files and its [own database](stack.md):
 
 ```bash
-opencode run -m opencode-go/space-bunny --variant high "<task packet>"
+opencode run -m opencode-go/deepseek-v4.1-flash --variant high "<task packet>"
 codex exec -m gpt-6-luna -c model_reasoning_effort="high" \
   --sandbox workspace-write -c sandbox_workspace_write.network_access=true \
   -c 'sandbox_workspace_write.writable_roots=["<main checkout>/.AI"]' "<task packet>"
