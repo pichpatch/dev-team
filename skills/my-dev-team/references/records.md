@@ -208,11 +208,12 @@ requirements under `docs/qa/support/`.
 ## One feature, one Issue
 
 A GitHub Issue is the ticket and the durable lifetime history for one feature:
-what was agreed, whether it is ready to implement, and what happened. Decisions
-themselves live in the docs, which the Issue links to, so an agent learns how
-something works from the docs and never needs the Issue for that. PO creates the
-Issue when the human says the feature is ready or asks to pause, and labels it
-with its status. The team
+what was agreed, whether it is ready to implement, and what happened. During planning, the Issue itself holds all domain decisions and approval history;
+there are no feature documents in the repository yet. PO creates the Issue
+as soon as business requirements and AC are agreed, labeled `draft`.
+After all required planning approvals and human authorization, Technical Lead
+creates the feature branch and approved documents become implementation truth
+on that branch, with the Issue linking to them and retaining history. The team
 works on GitHub only: when the repository's remote is another host, stop and ask
 the human instead of recording the feature elsewhere or inventing a substitute.
 Include:
@@ -259,8 +260,10 @@ Each section belongs to one role, and only that role writes it:
 | Security | Cybersecurity, when Technical Lead calls it in |
 | Definition of Done | QA Lead |
 
-A section says what was agreed and links the document that holds the detail; it
-is not a task checklist. The Definition of Done is the exception: QA Lead agrees
+During planning each section records the actual decisions, pending questions,
+and approval or not-applicable reason; there is no document link until the
+approved baseline is published to the feature branch. After readiness link the
+corresponding authoritative document section. A section is not a task checklist. The Definition of Done is the exception: QA Lead agrees
 each item with the human, gives it a stable identifier (`DOD-1`, `DOD-2`, ...),
 and checks it only with evidence, as for an AC. An AC says what the product does
 for the user; a Definition of Done item says what else must be true, such as
@@ -282,14 +285,14 @@ not exist:
 
 | Label | Means | Set by |
 | --- | --- | --- |
-| `draft` | The human paused before confirming. The requirement so far is recorded and pushed. | PO |
-| `ready to implement` | Pending: the human confirmed the feature; work has not started. | PO |
+| `draft` | Planning in progress or paused; the Issue holds decisions, pending questions, and approvals. No feature branch or feature docs yet. | PO / Organizer |
+| `ready to implement` | All required planning owners approved (or recorded not-applicable) and the human authorized proceeding; branch/docs may now be created. | Organizer |
 | `in progress` | Technical Lead has started the work. | Organizer |
 | `done` | The human merged the feature's PR. | Organizer |
 
 A `bug` label is added beside the status while a bug recorded on the Issue is
 open, by QA Lead when it confirms the bug, and removed when QA Lead verifies the
-fix. The team starts work only from `ready to implement`.
+fix. Implementation starts only from `ready to implement`; Lead planning happens while `draft`.
 
 A `draft` Issue adds an `## Open questions` section listing what is still to be
 settled, under the role that owns each, with its options and what it blocks, so the discussion can
@@ -364,7 +367,7 @@ Then PO updates the Issue body to the current truth:
 ```
 
 QA Lead checks a modified or new AC again only with new verification evidence.
-PO also updates the business requirements document to match. The affected owners
+PO updates the Issue during planning; after readiness, the approved business requirements document is updated on the feature branch as part of change control. The affected owners
 then decide which of their earlier decisions and approvals the change invalidates.
 
 A bug needs no change record. When the product does not do what an AC says, the
