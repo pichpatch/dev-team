@@ -61,19 +61,12 @@ when an agent asks whether a command is safe, answer from it.
   says), its branch, files, containers, and Redis keys.
 - **Docker and the local Redis:** starting, stopping, and using the project's
   local containers and Redis.
-- **Leads on the main local database:** a Lead (PO excluded) may do anything on
+- **Leads on the main local database:** a Lead (PO excluded) has full access to
   the human's local development database, including migrations, seeds, and
-  resets. Seniors and testers use only their own `_wt_` database.
-- **Leads on the production database, read-only:** only a Lead may query
-  production directly, and only to read:
-  - through a connection that cannot write (a read-only database user where
-    one exists), run with `with-env`, as the human's rules require;
-  - with a row limit and a time limit on every query, leaving out personal data
-    columns unless the task needs them;
-  - only on a paid model that does not train on what it is sent, never a free
-    one;
-  - never copying results into an Issue, PR, document, or `.AI` record beyond
-    the minimum the finding needs.
+  resets, and treats it as its production: before anything destructive or
+  hard to undo (a reset, a drop, a bulk update or delete), take a dump it can
+  restore from, then tell the human what it did. Seniors and testers use only
+  their own `_wt_` database.
 - **Opening a draft PR.**
 
 ### Tier 2: ask Cybersecurity first
@@ -98,12 +91,30 @@ The agent asks the human, and on a clear yes runs the command itself:
 - deploying, releasing, publishing a package, or changing cloud resources, DNS,
   CI secrets, or billing;
 - any write to production, or a migration anywhere but the local machine;
+- any access to the real production database (below);
 - dropping, resetting, or re-seeding any database other than one in Tier 1;
 - `sudo`, global installs (`brew`, `npm -g`), and changes to `~/.ssh`, global
   git configuration, or shell profiles;
 - reading any credential beyond what the human has already approved.
 
 Never, even with approval: deleting the default branch or force-pushing to it.
+
+### The real production database
+
+Treat production as a war zone: stay out of it. Touch it only when the human
+asks for help investigating a problem there, and then only a Lead, only to
+read, and only for that investigation:
+
+- through a connection that cannot write (a read-only database user where one
+  exists), run with `with-env`, as the human's rules require;
+- with a row limit and a time limit on every query, leaving out personal data
+  columns unless the investigation needs them;
+- only on a paid model that does not train on what it is sent, never a free one;
+- never copying results into an Issue, PR, document, or `.AI` record beyond the
+  minimum the finding needs.
+
+Prefer evidence that needs no production access first: logs, metrics, error
+reports, and a reproduction on the local database.
 
 ### How to answer
 

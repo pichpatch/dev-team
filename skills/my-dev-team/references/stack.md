@@ -323,9 +323,10 @@ through two commands:
   and amd64), and add a small helper script for start, stop, shell, and clean.
 - **Never drop, reset, or re-seed a database without the human's explicit OK**,
   every time, with two exceptions in the
-  [command policy](../roles/cybersecurity.md#command-policy): a Lead may do
-  anything on the human's local development database, and a worker may drop
-  its own database, below.
+  [command policy](../roles/cybersecurity.md#command-policy): a Lead has full
+  access to the human's local development database and treats it as its
+  production, dumping it before anything destructive; and a worker may drop its
+  own database, below.
 - **Each worker gets its own database.** Parallel Seniors and testers must not
   share data, so each creates one on the local database server, named after its
   worktree, for example `myapp_wt_fix_login_2`, runs the migrations and seed
