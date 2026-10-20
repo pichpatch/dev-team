@@ -120,10 +120,12 @@ the [roster](roster.md), which never receive client work; ask before using any
 other. No launcher or OS sandbox enforces these rules: the human relies on
 worktrees instead, so every agent is responsible for following them.
 
-When an agent is not sure a command is safe to run, it asks Cybersecurity before
-running it: what the command does, why it is needed, and what it could affect.
-Cybersecurity answers from what it can verify. When Cybersecurity cannot answer
-with confidence, the question goes to the human, and the command waits.
+Every agent follows the [command policy](../roles/cybersecurity.md#command-policy):
+what it may run on its own, what needs Cybersecurity's answer first, and what
+needs the human. When an agent is not sure a command is safe, it asks
+Cybersecurity: what the command does, why it is needed, and what it could
+affect. When Cybersecurity cannot answer with confidence, the question goes to
+the human, and the command waits.
 
 Ask the human before reading any credential, in any environment, and wait for
 the answer: SSH keys, `.env` and `.env.*` files such as `.env.prod`, cloud and

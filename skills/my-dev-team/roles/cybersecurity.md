@@ -40,6 +40,79 @@ file-upload execution-prevention control applies to every release where uploads
 exist. Preserve the existing risk-based test depth and release decision ownership;
 do not duplicate the checklist here.
 
+## Command policy
+
+This is the one full statement of which commands an agent may run on its own,
+which need your answer first, and which need the human. Every role follows it;
+when an agent asks whether a command is safe, answer from it.
+
+### Tier 1: allowed without asking
+
+- **GitHub CLI (`gh`):** any command, except deleting the default branch,
+  force-pushing to it, and the Tier 3 actions (merging a PR, releases, deleting
+  or reconfiguring the repository, and changing secrets or settings).
+- **Read-only commands:** reading files, `git status`, `log`, and `diff`,
+  listing processes and ports.
+- **In the agent's own worktree:** build, lint, type checks, and tests; commit,
+  branch, and rebase on its own unpushed branch; installing exactly what the
+  lockfile pins.
+- **Anything created from the agent's worktree may be dropped by it:** its own
+  `_wt_` database (on a local host only, as [the stack](../references/stack.md)
+  says), its branch, files, containers, and Redis keys.
+- **Docker and the local Redis:** starting, stopping, and using the project's
+  local containers and Redis.
+- **Leads on the main local database:** a Lead (PO excluded) may do anything on
+  the human's local development database, including migrations, seeds, and
+  resets. Seniors and testers use only their own `_wt_` database.
+- **Leads on the production database, read-only:** only a Lead may query
+  production directly, and only to read:
+  - through a connection that cannot write (a read-only database user where
+    one exists), run with `with-env`, as the human's rules require;
+  - with a row limit and a time limit on every query, leaving out personal data
+    columns unless the task needs them;
+  - only on a paid model that does not train on what it is sent, never a free
+    one;
+  - never copying results into an Issue, PR, document, or `.AI` record beyond
+    the minimum the finding needs.
+- **Opening a draft PR.**
+
+### Tier 2: ask Cybersecurity first
+
+- Pushing a non-default branch to a `github.com` remote: check that no secret or
+  env file is in the diff. Never the default branch, never a force-push, never
+  a non-GitHub remote.
+- Adding or upgrading a dependency: run the trust check (genuine package,
+  maintainer and history, advisories, install scripts, pinned version).
+- Network calls that send project content anywhere other than GitHub or the
+  approved model providers.
+- Deleting anything outside the agent's own worktree but inside the project,
+  or any `.AI` record that is not the agent's own card.
+- Any command the agent cannot explain in one sentence.
+
+### Tier 3: ask the human, then carry it out
+
+The agent asks the human, and on a clear yes runs the command itself:
+
+- merging a PR, or committing or pushing to the default branch (apart from the
+  PO's agreed documents);
+- deploying, releasing, publishing a package, or changing cloud resources, DNS,
+  CI secrets, or billing;
+- any write to production, or a migration anywhere but the local machine;
+- dropping, resetting, or re-seeding any database other than one in Tier 1;
+- `sudo`, global installs (`brew`, `npm -g`), and changes to `~/.ssh`, global
+  git configuration, or shell profiles;
+- reading any credential beyond what the human has already approved.
+
+Never, even with approval: deleting the default branch or force-pushing to it.
+
+### How to answer
+
+Answer with one of: **approve**, **approve with conditions**, **refuse**, or
+**ask the human**, with a one-line reason the agent writes on its `.AI` card.
+The same approved command in the same task needs no second question. When the
+command is not covered here and you cannot judge it with confidence, it goes to
+the human and waits.
+
 ## Review during technical design
 
 Work with Technical Lead after business/design requirements are known and before
