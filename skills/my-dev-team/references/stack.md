@@ -109,6 +109,22 @@ through two commands:
 - Document what the schema cannot say: authorization, side effects, idempotency,
   and what each error means. Identify external consumers before a breaking change.
 
+## Dependencies
+
+- **Pin every version exactly** in `package.json`: `"axios": "1.2.3"`, never
+  `^1.2.3` or `~1.2.3`. Commit the lockfile. A range lets a new release in,
+  a malicious one included, without anyone choosing it.
+- **Install from the lockfile:** `yarn install --immutable` (Yarn 1:
+  `--frozen-lockfile`), `npm ci`, or `poetry sync`. CI fails when the lockfile
+  would change.
+- **Upgrade on purpose:** one dependency per change, through Cybersecurity's
+  trust check ([command policy](../roles/cybersecurity.md#command-policy)).
+- **Axios:** in March 2026 a maintainer account takeover published two
+  malicious axios releases. Wherever axios is used, in an app or in the
+  generated SDK, pin the same exact version across the repository. Before
+  adding or upgrading it, confirm that version is a genuine release on the
+  axios GitHub releases page and is named in no advisory.
+
 ## Shared frontend
 
 - Tokens, i18n, hooks, presentation logic, and the SDK are shared in full.
@@ -150,8 +166,28 @@ through two commands:
   Register each `subscribe` once, in the root component or a dedicated
   initialization file, never inside a screen. A component then reads as
   `const { submit, isPending } = useCheckout()` and `onClick={submit}`. Record
-  every global store, what changes when it changes, and every `subscribe` in the
+  every store slice, what changes when it changes, and every `subscribe` in the
   module's `flows.html#global-state` ([module documents](engineering.md)).
+- **Zustand follows its own best-practice guides:**
+  - One store per app, split into slices (`createCartSlice`,
+    `createFilterSlice`) kept in their modules and combined into one bound
+    store. Middleware such as `persist` and `devtools` goes on the combined
+    store only, never inside a slice.
+  - A slice keeps its state and its setters together. Update only through `set`
+    or `setState`; never mutate state.
+  - Read one value per selector: `useBoundStore((s) => s.count)`. To take
+    several values in one call, wrap the selector in `useShallow`. Never read
+    the whole store with `useBoundStore()`: it re-renders on every change.
+  - Outside React, in an action hook's callback, a service, or a `subscribe`,
+    use `useBoundStore.getState()` and `setState`. React 18 batches these
+    updates, so the old `unstable_batchedUpdates` workaround is not needed.
+  - In Next.js, a module-level store is shared by every request on the server.
+    A store holding per-user state that the server renders is created per
+    request with `createStore` inside a Context provider, as Zustand's Next.js
+    guide shows.
+  - In tests, reset every store to its initial state after each test with the
+    `__mocks__/zustand.ts` from Zustand's testing guide. Test components with
+    Testing Library and mock the network with MSW, not the store.
 - **One overlay manager.** A single overlay host is rendered once at the app
   root, with a dispatch API (`openModal`, `openPopup`, `confirm`). Screens never
   render their own modal or popup markup. The manager owns the focus trap,

@@ -276,8 +276,9 @@ the backend so it needs only credentials, and list its keys in `.env.example`.
 Give every third-party integration a mock behind the same interface, switched by
 `INTEGRATION_<NAME>_MODE=mock|real`. Default local/test runs to `mock`; distinguish mock coverage
 from real integration coverage. Check exact package identity, source, versions,
-advisories and install behavior proportionately before adding dependencies; keep
-lockfiles/pins and raise substantive supply-chain concerns to Cybersecurity.
+advisories and install behavior proportionately before adding dependencies; pin
+exact versions and install from the lockfile ([dependencies](stack.md)), and
+raise substantive supply-chain concerns to Cybersecurity.
 Use established cryptographic libraries/protocols, not bespoke cryptography. The
 supplied `ref_id` module in the [standard stack](stack.md) is the one approved
 exception; use it as supplied.

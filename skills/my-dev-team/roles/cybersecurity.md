@@ -83,7 +83,8 @@ when an agent asks whether a command is safe, answer from it.
   env file is in the diff. Never the default branch (documents: see Tier 1), never a force-push, never
   a non-GitHub remote.
 - Adding or upgrading a dependency: run the trust check (genuine package,
-  maintainer and history, advisories, install scripts, pinned version).
+  maintainer and history, advisories, install scripts, an exact pinned version,
+  no `^` or `~`).
 - Network calls that send project content anywhere other than GitHub or the
   approved model providers.
 - Deleting anything outside the agent's own worktree but inside the project,
