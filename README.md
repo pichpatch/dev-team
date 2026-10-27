@@ -139,7 +139,7 @@ is the authoritative copy and holds the rules; change both together.
 | Senior QA | OpenCode `mimo-v2.6-flash` | |
 | DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated |
 | QA Lead and Cybersecurity, delegated | Preferably a different provider from the Organizer: Codex `gpt-6.1-sol` medium under Claude Code; Claude Sonnet 5.5 high under Codex or OpenCode | If that provider is rate-limited: OpenCode under Claude Code or Codex, Codex under OpenCode |
-| Lead backups | Technical Lead: Sol high, `mimo-v2.6-pro`, `deepseek-v4.1-flash` max, `deepseek-v4.1-flash-free`. Design Lead: Sol medium, `glm-5.3-flash` max, `glm-5.3` max, `glm-5.3-flash-free`. QA Lead: Astra medium, Sonnet 5.5 high, `glm-5.3` max, `minimax-m3.1-flash-free`. Cybersecurity: Sol medium, Sonnet 5.5 high, `glm-5.3` max, `minimax-m3.1-flash-free` | Free last backup never for client-work repos, nor for a draft release review |
+| Lead backups | Technical Lead: Sol high, `mimo-v2.6-pro`, `deepseek-v4.1-flash` max, `deepseek-v4.1-flash-free`. Design Lead: Sol medium, `glm-5.3-flash` max, `claude-haiku-5-5` xhigh (OpenCode Go), `glm-5.3-flash-free`. QA Lead: Astra medium, Sonnet 5.5 high, `claude-haiku-5-5` xhigh (OpenCode Go), `minimax-m3.1-flash-free`. Cybersecurity: Sol medium, Sonnet 5.5 high, `claude-haiku-5-5` xhigh (OpenCode Go), `minimax-m3.1-flash-free` | Free last backup never for client-work repos, nor for a draft release review |
 | PO and DevOps backups | The three OpenCode free models: `deepseek-v4.1-flash-free`, `glm-5.3-flash-free`, `minimax-m3.1-flash-free` | Never for client-work repos; DevOps never where it would read production configuration |
 | Every model at its limit | Stop and report | |
 
@@ -169,13 +169,17 @@ uses the limit. Wait is the time before the first words of an answer.
 | `qwen3.8-max` | OpenCode Go | none | 45 | $5.41 | 3 |
 | `kimi-k3` | OpenCode Go | max | 44 | $2.00 | 3 |
 | `claude-haiku-5-5` | OpenCode Go | max | 43 | $0.21 | 310 |
+| `claude-haiku-5-5` | OpenCode Go | xhigh | 41 | $0.12 | 73 |
 | `glm-5.3-flash` | OpenCode Go | none | 42 | $0.28 | 3 |
 | `deepseek-v4.1-flash` | OpenCode Go | max | 39 | $0.27 | 1 |
 | `mimo-v2.6-flash` | OpenCode Go | none | 38 | $0.06 | 3 |
 | `deepseek-v4-pro` | OpenCode Go | max | 36 | $0.67 | 2 |
 | `minimax-m3` | OpenCode Go | none | 29 | $0.51 | 1 |
+| `hy3` | OpenCode Go | none | 25 | $0.07 | 3 |
+| `longcat-2.0` | OpenCode Go | none | 19 | $0.15 | 3 |
 
-`gpt-6-sol` is not on the leaderboard. An
+The Haiku xhigh, `hy3` and `longcat-2.0` rows were read on 2026-10-27.
+`gpt-6-sol` and `qwen3.8-flash` are not on the leaderboard. An
 effort of "none" means the leaderboard lists a single result for the model.
 
 ## Check

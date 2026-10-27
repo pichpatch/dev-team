@@ -27,9 +27,9 @@ it moves down its chain, skipping its own primary and any limited subscription:
 | Lead | Backup 1 | Backup 2 | Backup 3 | Backup 4 (free) |
 | --- | --- | --- | --- | --- |
 | Technical Lead | `gpt-6.1-sol`, `high` | `opencode-go/mimo-v2.6-pro` | `opencode-go/deepseek-v4.1-flash`, `max` | `opencode/deepseek-v4.1-flash-free` |
-| Design Lead | `gpt-6.1-sol`, `medium` | `opencode-go/glm-5.3-flash`, `max` | `opencode-go/glm-5.3`, `max` | `opencode/glm-5.3-flash-free` |
-| QA Lead | `gpt-6-astra`, `medium` | `claude-sonnet-5-5`, `high` | `opencode-go/glm-5.3`, `max` | `opencode/minimax-m3.1-flash-free` |
-| Cybersecurity | `gpt-6.1-sol`, `medium` | `claude-sonnet-5-5`, `high` | `opencode-go/glm-5.3`, `max` | `opencode/minimax-m3.1-flash-free` |
+| Design Lead | `gpt-6.1-sol`, `medium` | `opencode-go/glm-5.3-flash`, `max` | `opencode-go/claude-haiku-5-5`, `xhigh` | `opencode/glm-5.3-flash-free` |
+| QA Lead | `gpt-6-astra`, `medium` | `claude-sonnet-5-5`, `high` | `opencode-go/claude-haiku-5-5`, `xhigh` | `opencode/minimax-m3.1-flash-free` |
+| Cybersecurity | `gpt-6.1-sol`, `medium` | `claude-sonnet-5-5`, `high` | `opencode-go/claude-haiku-5-5`, `xhigh` | `opencode/minimax-m3.1-flash-free` |
 
 - QA Lead and Cybersecurity also skip any model the Technical Lead is running
   at the time.
