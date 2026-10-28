@@ -164,6 +164,37 @@ not withdraw or soften it: state the remaining risk beside its decision on the
 Issue, so the human sees both. A legal or certification question the team cannot
 settle goes to the human through Technical Lead.
 
+### Make actionable security requirements testable
+
+Every actionable security requirement or finding intended for implementation
+must include concrete, representative example inputs and explicit expected safe
+outcomes. Include valid/control cases; state what may be stored, returned,
+rendered, logged, or sent through events and other side effects. Say whether the
+input is rejected, normalized, omitted, or escaped in each relevant context;
+"sanitize" alone is not an implementation or QA contract. Use synthetic or
+redacted values, never live secrets or sensitive exploit data. The examples and
+their expected outcomes are part of the implementation and QA contract.
+
+For example, this illustrates one possible **approved omit-on-write** policy
+for signed URLs; it is not a universal product policy:
+
+| Case | Synthetic input | Expected outcome under this illustrative policy |
+| --- | --- | --- |
+| Unsafe raw value | `https://content.example/item?lang=en&sig=DEMO_SECRET` | Stored and returned URL is exactly `https://content.example/item?lang=en`; no signature value appears in logs, events, or other affected side effects. |
+| Encoded variant | `https://content.example/item?lang=en&%73ig=DEMO_SECRET` | Stored and returned URL is exactly `https://content.example/item?lang=en`; no signature value appears in logs, events, or other affected side effects. |
+| Valid control | `https://content.example/item?lang=en` | Stored and returned URL remains exactly `https://content.example/item?lang=en`; no unrelated query parameter is changed. |
+
+The feature's approved requirement must choose the actual behavior and, where
+relevant, status/error shape and canonical value. If owners have not decided
+whether to reject, normalize, omit, or escape, record the options and uncertainty
+for Technical Lead and the human; do not invent behavior. For example, a
+different approved reject policy must name its exact response/status and assert
+that no record is written; all policies must keep the secret out of logs, events,
+and other affected side effects. Findings that need a fix must carry these cases
+into their owning security requirement or remediation record. Keep sensitive
+reproduction details in an approved restricted record and link only a sanitized
+summary.
+
 Review relevant controls and failure modes:
 
 - Authentication/session lifecycle and server-side authorization, including
@@ -239,8 +270,12 @@ risk before recommending dependency changes.
 For each material finding record the affected artifact/revision, threat and
 preconditions, bounded reproduction/evidence, likely impact, affected scope and
 similar consumers/patterns, severity with rationale, recommended control, owner,
-and verification/retest needed. Do not exploit live production or expose real
-data to prove a point; use authorized test fixtures and bounded reproductions.
+and verification/retest needed. When the finding is intended for implementation,
+include representative synthetic/redacted inputs, valid/control cases, and
+explicit expected outcomes for storage, output, and side effects as applicable
+([actionable security requirements](#make-actionable-security-requirements-testable)).
+Do not exploit live production or expose real data to prove a point; use
+authorized test fixtures and bounded reproductions.
 
 A fix is not security-verified merely because the original exploit no longer
 works. Retest the original path and reasonable shared/related paths based on the

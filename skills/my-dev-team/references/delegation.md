@@ -29,6 +29,22 @@ transport adaptation, not transfer of domain authority.
 
 ## Routing and invocation loop
 
+Before substantial work, verify the runtime and worktree named in the task
+packet: confirm the repository root, branch, current worktree status, allowed
+write locations, and that the required Git operations are available. Confirm
+the actual launch mode uses the documented no-sandbox invocation/profile for
+that CLI or host, consistent with this guide and the [roster](roster.md). If the
+runtime blocks an allowed worktree or Git operation, stop before implementation
+and correct the invocation/configuration instead of repeatedly restarting
+workers.
+
+If a worker fails after starting, confirm the process has stopped, preserve its
+last verified progress and diagnostic evidence in the assigned record, and
+reconcile the same worktree's Git state. After correcting the cause, resume from
+that record in the same worktree; do not restart from the full repository or
+re-read unrelated context. Follow the detailed interruption and handover rules
+in [local AI task delegation](ai-task-delegation.md).
+
 PO is not in this table: the host carries it out itself in conversation with the
 human. The three Leads are delegated as shown, and the human can also talk to
 each of them directly ([orchestration](orchestration.md)). When a Lead or
@@ -103,6 +119,11 @@ Use [the handoff template](../assets/handoff.md) as needed. Each invocation gets
 - The documents to start from: the application `README.md` and the module
   documents for the task, plus the requirements, designs, and verification
   evidence it needs. Name them, so the agent does not search for them.
+- For security-scoped Senior Developer or Senior QA assignments, include the
+  applicable Cybersecurity `SEC-` requirement and its concrete input/expected-
+  outcome examples intact. Do not replace them with a lossy summary; preserve
+  valid/control cases and the specified storage, output, and side-effect
+  expectations.
 - The objective and a measurable definition of done.
 - Concrete task, constraints, scope/files owned, forbidden changes,
   dependencies, prerequisite approvals, and expected outputs.
@@ -173,8 +194,9 @@ projects/
   uncommitted, and says so to the human.
 - Never copy a real env file into a worktree. When the work needs runnable
   configuration, provide values derived from `.env.example`, or a `.env.test`
-  holding test-only credentials the human supplied for that purpose, including
-  the local connection for the worker's [own database](stack.md).
+  holding test-only credentials the human supplied for that purpose. Include a
+  local connection for the worker's [own database](stack.md) only when the task
+  needs database-backed implementation or verification.
 - **No OS sandbox.** No CLI runs in an OS sandbox, Codex included: each worker
   is kept to its worktree by the worktree and its task packet, the same way for
   Codex, Claude, OpenCode, and Antigravity. This lets every worker reach the

@@ -292,6 +292,13 @@ Before editing code that no test covers, first add a test that locks today's
 behavior. Report pre-existing failures separately and preserve exit codes and
 diagnostic evidence. A test that matches implementation wording is not behavior evidence.
 
+For security hardening, first state the security invariant, the untrusted inputs
+and transformations, the affected storage/output boundaries, and the regression
+cases that must remain blocked. If multiple representations bypass the same
+guard, stop adding one-off patches and revisit canonicalization and enforcement
+at the owning boundary with Technical Lead and Cybersecurity. Add the discovered
+variants to one focused regression suite.
+
 ### Read only results and errors
 
 Test runs, builds, linters, and installs print mostly lines about things that
@@ -300,7 +307,12 @@ went fine. Reading them costs tokens and hides the one line that matters.
 - **Find the related tests first.** Before editing, run the tests connected to
   the files you will change, and the type checker, which lists every caller of
   a changed signature. They must pass before you start; report any that already
-  fail. Run the full suite once before returning the work.
+  fail. Run focused regression and related tests as changes iterate. An
+  expensive full suite is not a per-edit or per-review-cycle gate: run it once
+  at the final integrated verification gate after the candidate stabilizes.
+  Additional full-suite runs may be required by project or QA policy, broad
+  impact, unresolved risk, later changes that invalidate prior evidence, or a
+  failure investigation; state the reason for each additional run.
 
   | Stack | Related tests | Types |
   | --- | --- | --- |
@@ -314,8 +326,15 @@ went fine. Reading them costs tokens and hides the one line that matters.
   code, then read the end of the log:
 
   ```bash
-  log=$(mktemp); npx vitest related src/orders/order.repository.ts --run --reporter=dot > "$log" 2>&1
-  echo "exit=$?"; tail -n 25 "$log"
+  log=$(mktemp .test-log.XXXXXX)
+  trap 'rm -f "$log"' EXIT
+  if npx vitest related src/orders/order.repository.ts --run --reporter=dot > "$log" 2>&1; then
+    status=0
+  else
+    status=$?
+  fi
+  echo "exit=$status"; tail -n 25 "$log"
+  exit "$status"
   ```
 
 - **Failures in full, passes as a count.** To fix a failure you need the test
@@ -335,5 +354,7 @@ updates, compatibility/recovery implications, limitations, and review questions.
 Say what the tests prove and why the change resolves the task, and list the
 documents updated. Label a change that includes refactoring `refactor` and ask
 QA Lead to regression-test the affected parts.
-Technical Lead inspects the diff and integrated behavior. Changes after approval
-must be assessed for invalidated review/test evidence and routed accordingly.
+Technical Lead inspects the diff and integrated behavior. After a correction,
+re-review the changed scope and any evidence it may invalidate; do not repeat
+review of unchanged work. Changes after approval must be assessed for invalidated
+review/test evidence and routed accordingly.

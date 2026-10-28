@@ -362,12 +362,23 @@ through two commands:
   [command policy](../roles/cybersecurity.md#command-policy): a Lead has full
   access to the human's local development database and treats it as its
   production, dumping it before anything destructive; and a worker may drop its
-  own database, below.
-- **Each worker gets its own database.** Parallel Seniors and testers must not
-  share data, so each creates one on the local database server, named after its
-  worktree, for example `myapp_wt_fix_login_2`, runs the migrations and seed
-  data, and drops it when its task is finished or abandoned. Redis gets its own
-  key prefix or database number per worker.
+  own database, below. The initial seed of a newly created, empty worker
+  database is not a destructive reset or re-seed.
+- **Give each worker isolated data only when its task needs database-backed
+  implementation or verification.** A worker without either need gets no
+  database. A separate worker database provides isolation; it does not mean
+  copying the full human or shared database. By default, create a fresh local
+  worker database named for its worktree with the `_wt_` marker, run migrations,
+  and load a small deterministic synthetic seed. Parallel workers must not
+  share mutable database state. Drop the worker's own database when its task is
+  finished or abandoned, following the safeguards below. Redis gets its own key
+  prefix or database number per worker.
+  - **Clone or restore a large snapshot only for a stated test need,** such as
+    realistic data volume or skew, migration from an existing state, performance
+    or query-plan verification, or another requirement that synthetic seed data
+    cannot represent. Use a sanitized immutable fixture or copy-on-write clone
+    when supported. Never use unsanitized production data or clone merely to
+    isolate parallel workers.
   - **The human's local connection is the source.** Each human keeps their own
     local database connection where the stack expects local configuration,
     such as `.env`, `.env.local`, or `appsettings.Development.json`, git-ignored.
