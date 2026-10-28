@@ -88,26 +88,40 @@ work, whatever models run. No model or provider holds a gate.
 
 ### Every review loop is bounded
 
-This covers every review: a Lead and its Seniors, Design Lead and Design
-Tester, QA on fixes, Cybersecurity's feature check, and the release review.
+This covers every review: Technical Lead on code, Design Lead and Design
+Tester on design and drift, QA on fixes, Cybersecurity's feature check and
+release review. It is the one rule; other documents link here.
+
+Count the rounds **per finding**:
+
+| Round | What happens |
+| --- | --- |
+| **1. Build** | The work is done against the AC. Not counted. |
+| **2. First review** | The reviewer gives the **complete list** of findings at once. Then the first fix. |
+| **3. Same finding fails again** | The reviewer adds **more evidence and a clearer expected result**: exact steps, input, expected vs actual, and for security the example inputs with the safe outcome for each ([testable requirements](../roles/cybersecurity.md#make-actionable-security-requirements-testable)). The owning Lead may change the model or the task split. Then one more fix. |
+| **4. Still fails** | **Discuss with the human.** Stop work on this finding and bring the human a short brief: what was tried, the evidence, why each fix failed, and two or three solutions with a recommendation. The human approves a solution; it is recorded on the Issue (or PR), and the team carries it out. |
 
 - **Review against what was agreed:** AC, DoD, `SEC-` requirements, approved
   design, task packet. A finding blocks only when it fails one of these, or is
   a Blocker defect or a Critical security finding. Everything else is a
   suggestion or follow-up: recorded and owned, never another round.
-- **Give every finding in the first review.** A re-review checks only the named
-  corrections and what they touched. A new problem there blocks only if it is
-  inside that scope or is Blocker/Critical.
-- **At most two correction rounds per finding.** After the second failure, stop
-  patching. The reviewing Lead and the owning Lead decide whether the approach,
-  the task split, or the model is wrong. If they cannot agree, the human decides.
+- **No new items after the first list.** A re-review checks only the named
+  fixes and what they touched. A new problem there blocks only if it is inside
+  that scope or is Blocker/Critical; otherwise it is follow-up.
+- **Stuck work counts the same way.** A worker hitting the same error or making
+  no progress: the second time, the Lead adds evidence and a clearer
+  expectation (or changes the model or split); if it still fails, discuss with
+  the human.
 - **A report is returned once,** naming what is missing. Disagreeing with a
   verdict is not "missing": it goes to the owning Lead, then the human.
-- **The round count survives** on the worker's `.AI` card and the Issue. A
-  resumed session or new model continues the count and does not reopen approved
-  work.
+- **The count follows the finding** on the worker's `.AI` card and the Issue. A
+  resumed session, a new model, or a changed approach continues the count and
+  does not reopen approved work.
+- **Other work continues** while one finding waits for the human, unless it
+  depends on that finding.
 
-Organizer never starts a third round itself; it routes the finding and reports.
+Organizer never starts a round past round 3; it brings the finding to the human
+and reports.
 
 ### Who records what
 

@@ -84,9 +84,11 @@ Keep handoffs lean: relevant diffs, files, findings, decisions, requirements,
 and evidence, not the conversation. Keep unaffected approvals; recheck changed
 scope and risky dependencies. A live agent may be reused, but never assume it
 remembers; rebuild the packet from records when the context or model changes.
-Respect concurrency limits and queue extra work. If attempts stop making
-progress, the owner diagnoses the blocker. Ask the human only for a decision or
-authorization.
+Respect concurrency limits and queue extra work. Work that keeps failing or
+stops making progress follows the
+[review rounds](contract.md#every-review-loop-is-bounded): more evidence the
+second time, then a discussion with the human. Otherwise ask the human only for
+a decision or authorization.
 
 ## Task packet
 

@@ -261,8 +261,9 @@ feature flow leads into it.
 3. **If Cybersecurity finds a problem,** Technical Lead owns the fix and
    delegates it to Senior Developer or DevOps, then reviews it. Cybersecurity
    retests the bounded scope ([security report rules](owasp-security.md)).
-   Senior QA tests affected regressions; QA Lead approves the evidence. At most
-   two fix-and-retest rounds per finding, then the human decides. Unaffected
+   Senior QA tests affected regressions; QA Lead approves the evidence. A
+   finding that keeps failing goes to the human for discussion
+   ([review rounds](contract.md#every-review-loop-is-bounded)). Unaffected
    approvals stay valid; nothing unverified is called passed.
 4. **DevOps** creates a draft on the repository host with the version and tag
    the project's pattern gives, notes listing the Issues, a Deployment Plan, and

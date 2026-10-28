@@ -171,16 +171,16 @@ raised. It is not a new review; untouched `PASS` rows stay `PASS`. A problem
 found in a retest becomes a new row. It blocks only if it is inside that scope or
 is Critical; otherwise it is follow-up, or a decision for the human when High.
 
-**At most two fix-and-retest rounds per finding.** If it still fails, or a
-retest shows another input form passing the same guard, stop patching: Technical
-Lead and Cybersecurity revisit the enforcement boundary together
-([security hardening](engineering.md#verification-and-review-package)). If that
-does not close it, the human decides: accept the risk, hold the release, or
-change scope.
-
-**The whole release review is bounded too:** the first review plus at most two
-retest passes. Whatever still blocks goes to the human in Decisions for the
-human; Cybersecurity never starts a third pass on its own.
+**Rounds follow [every review loop is bounded](contract.md#every-review-loop-is-bounded).**
+When a finding fails its first retest, Cybersecurity adds more evidence and the
+expected safe outcome for each input. If the retest shows another input form
+passing the same guard, stop patching the inputs: Technical Lead and
+Cybersecurity revisit the enforcement boundary
+([security hardening](engineering.md#verification-and-review-package)). If the
+second retest still fails, discuss with the human: the brief goes in Decisions
+for the human, with the solutions to choose from (fix another way, accept the
+risk, hold the release, or change scope). Cybersecurity never starts another
+retest on its own.
 
 ### When the report is complete
 
