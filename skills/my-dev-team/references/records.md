@@ -2,39 +2,35 @@
 
 ## Repository truth
 
-Root `docs/` holds project-wide truth; each application/service's `docs/` holds
-implementation-specific truth. Update the existing authoritative document when
-facts change.
+Root `docs/` holds project-wide truth; each application's `docs/` holds what is
+specific to it. When a fact changes, update the document that owns it.
 
-A document states the current truth only, so it is always up to date. Do not keep
-dated copies, archived versions, superseded text, or a change log inside it. An
-earlier version comes from git history by its commit; the reason for a change is
-on the owning Issue.
+A document states only the current truth. No dated copies, archived versions,
+superseded text, or change logs inside it: older versions come from git history,
+and the reason for a change is on the owning Issue.
 
 ### HTML documents, README indexes
 
-Write every project document as HTML (`.html`): requirements, decisions, module
-and architecture documents, QA cases, support and security records, runbooks, and
-evaluations. Start from [the document template](../assets/document.html). Keep
-the HTML plain: semantic tags only, no inline styles or scripts. All documents
-share one stylesheet, [docs.css](../assets/docs.css), copied once to
-`docs/assets/docs.css`, so no document carries its own styling.
+- **Every project document is HTML:** requirements, decisions, module and
+  architecture docs, QA cases, support and security records, runbooks,
+  evaluations. Start from [the document template](../assets/document.html).
+  Plain semantic HTML only: no inline styles or scripts.
+- **One stylesheet,** [docs.css](../assets/docs.css), copied once to
+  `docs/assets/docs.css`.
+- **Every section heading has a short, stable kebab-case `id`,** even when named
+  after code: table `order_items` is `#order-items`, operation `refundOrder` is
+  `#refund-order`.
+- **Point at the section, not just the file,** everywhere (replies, packets,
+  Issues, PRs, other documents): `api/docs/modules/orders/rules.html#admin`.
+  Renaming an `id` breaks links, so rename only together with every link to it.
+- **`README.md` files are the index and the map.** Every document and module is
+  reachable from the root `README.md` by links. Whoever adds, renames, or
+  removes a document or module updates the `README.md` that lists it in the same
+  change; anything no `README.md` reaches is unpublished. Use relative links.
+- Besides these READMEs, the only Markdown the team writes is under `.AI/`
+  ([pause and resume](checkpoints.md)).
 
-Give every section heading a short, stable `id` in kebab-case, for example
-`<h2 id="admin">`. Every `id` is kebab-case, including one named after
-something in the code: the table `order_items` is `#order-items` and the
-operation `refundOrder` is `#refund-order`. Whenever you point anyone at a
-document, in a reply to the human, a task packet, an Issue, a PR, or another
-document, give the file and the section:
-`api/docs/modules/orders/rules.html#admin`. The human opens the exact place, and
-an agent reads that section instead of the whole file. Renaming an `id` breaks
-links, so change one only together with every link to it.
-
-`README.md` files are the index and the map, because GitHub renders them and they
-are the first thing an agent reads. Every document and every module is reachable
-from the root `README.md` by following links.
-
-The root `README.md` maps the applications and lists the root documents:
+The root `README.md` maps the applications and lists root documents:
 
 ```markdown
 # Alpha Food
@@ -57,7 +53,7 @@ One line on what the product is.
 | [Business requirements](docs/requirements/business-requirements.html) | Agreed scope, rules, and AC sources | PO |
 ```
 
-Each application's `README.md` gives the commands, its modules with where their
+Each application's `README.md` gives its commands, its modules with where their
 documents and code are, and its other documents:
 
 ```markdown
@@ -88,59 +84,47 @@ Environment keys are listed in `.env.example`; never write values here.
 | [Architecture](docs/architecture.html) | Module map and rules that cross modules | Technical Lead |
 ```
 
-Whoever adds, renames, or removes a document or a module updates the `README.md`
-that lists it in the same change. A document or module no `README.md` reaches is
-not published. Use relative links. Besides these READMEs, the only Markdown the
-team writes is under `.AI/` (see [pause and resume](checkpoints.md)).
-
 ### Navigate by documents, not by code
 
-An agent has no memory of the code base, and reading code to find its way is the
-most expensive thing it does. Reach the right files in a few reads:
+Agents have no memory of the code, and searching it is the most expensive thing
+they do. Reach the right files in a few reads:
 
-1. **The task packet** names the Issue, the worktree, and the documents to start
-   from.
-2. **The Issue** gives the purpose, the AC, readiness, and history. It does not
-   explain how anything works.
-3. **The root `README.md`** maps the applications. Follow one link.
-4. **The application's `README.md`** gives the commands and, for each module,
-   where its documents and its code are.
-5. **The module's `README.md`** says in one line what the module is for and
-   lists its documents: rules, flows, data, permissions, API, code map, debt.
-6. **Only the module documents the task needs**, and in them only the sections
-   it needs. `code-map.html` names the files and tests.
-7. **Then open only the files the code map names.**
-8. **The `.AI/` checkpoint**, only when resuming unfinished work.
+1. **Task packet:** the Issue, the worktree, the documents to start from.
+2. **Issue:** purpose, AC, status, history. Not how anything works.
+3. **Root `README.md`:** follow one application link.
+4. **Application `README.md`:** commands, and where each module's docs and code
+   are.
+5. **Module `README.md`:** what the module is for, and its documents.
+6. **Only the module documents and sections the task needs.** `code-map.html`
+   names the files and tests.
+7. **Only the files the code map names.**
+8. **The `.AI/` checkpoint,** only when resuming.
 
-- Read only your path. Skip sibling modules and other applications unless the
-  change crosses into them.
-- Do not open generated files (`openapi.json`, the SDK), lockfiles, or build
-  output to learn the system; the module's `api-spec.html` says what they mean. Search
-  them for one specific name when you need it.
-- Search or read through code only when the documents do not answer. Then fix
-  the document in the same change, so the next agent does not pay the same cost.
-  When a document contradicts the code, trust the code, fix the document, and
-  say so.
-- Write for the next reader's budget. Start each document with one line saying
-  what it covers, state each fact once at the lowest level where it is true, and
-  link instead of repeating. A higher level gives one sentence and the link.
+- Read only your path; skip other modules and applications unless the change
+  crosses into them.
+- Never read generated files (`openapi.json`, the SDK), lockfiles, or build
+  output to learn the system. Search them for one name when needed.
+- Search code only when the documents do not answer, then fix the document in
+  the same change. When a document contradicts the code, trust the code, fix the
+  document, and say so.
+- Write for the next reader: one opening line on what the document covers, each
+  fact once at the lowest level where it is true, links instead of repeats.
 
-One folder per module holds everything about that module, one document per
-subject: rules, flows, data, permissions, what its API operations mean, the code
-map, and known debt ([engineering practices](engineering.md)). Documents outside
-the modules cover only what spans them: the architecture overview and decisions.
+Each module has one folder with one document per subject: rules, flows, data,
+permissions, API meaning, code map, debt ([engineering](engineering.md)).
+Documents outside modules cover only what spans them: architecture and
+decisions.
 
-These are not project documents and keep their own formats: GitHub Issue and PR
-text, task packets, generated files such as `openapi.json`, and diagram or mockup
-assets linked from a document.
+Not project documents, and they keep their own formats: Issue and PR text, task
+packets, generated files such as `openapi.json`, diagram and mockup assets.
 
-In a project that already keeps non-HTML docs, write new documents as HTML and
-list the existing ones in the `README.md` index as they are. Converting them is a
-migration the human agrees first. Never keep two formats of the same truth.
+A project with existing non-HTML docs keeps them and lists them in the index as
+they are; new documents are HTML. Converting is a migration the human agrees
+first. Never keep the same truth in two formats.
 
-The following are example document locations in the
-[standard repository layout](stack.md), not a scaffold to create in every project.
-`frontend_domain_N` stands for a frontend domain named after the business:
+Example locations in the [standard layout](stack.md); create a folder only when
+a real deliverable needs it. `frontend_domain_N` is a frontend named after the
+business:
 
 ```text
 README.md               map of applications and root documents
@@ -191,31 +175,21 @@ infra/
     decisions/
 ```
 
-An application's docs describe only what is specific to it. For anything it
-takes from `frontend-core`, link to the `frontend-core` document, so it is clear
-that one change there applies to every application that links to it.
+An application's docs describe only what is specific to it. For anything from
+`frontend-core`, link the `frontend-core` document, so it is clear one change
+there affects every application linking it.
 
-Create a directory only when a real deliverable needs it. Keep requirements,
-decisions, and implementation docs current as part of the work that changes them.
-Link between records instead of maintaining conflicting copies of the same truth.
-
-QA Lead owns authoritative support-system requirements in `docs/qa/support/`:
-supportability, troubleshooting standards, incident classifications, and
-recovery/support actions. If support becomes an actual application, `/support/`
-holds its implementation docs, mockups, and code. It does not replace the
-requirements under `docs/qa/support/`.
+QA Lead owns the support requirements in `docs/qa/support/`. If support becomes
+a real application, `/support/` holds its own docs and code; it does not replace
+those requirements.
 
 ## One feature, one Issue
 
-A GitHub Issue is the ticket and the durable lifetime history for one feature:
-what was agreed, whether it is ready, and what happened. Decisions
-themselves live in the docs, which the Issue links to, so an agent learns how
-something works from the docs and never needs the Issue for that. PO creates the
-Issue when the human says the feature is ready or asks to pause, and labels it
-with its status. The team
-works on GitHub only: when the repository's remote is another host, stop and ask
-the human instead of recording the feature elsewhere or inventing a substitute.
-Include:
+The Issue (on the repository's host) is the ticket and lifetime history of one
+feature: what was agreed, its status, and what happened. Decisions live in the
+docs, which the Issue links; an agent never needs the Issue to learn how
+something works. PO creates it when the human says the feature is ready or asks
+to pause.
 
 ```markdown
 # Feature name
@@ -248,7 +222,7 @@ What DevOps needs for this feature: environments, services, configuration names,
 Links to relevant authoritative documents, as `file#section`.
 ```
 
-Each section belongs to one role, and only that role writes it:
+Only the owner writes its section:
 
 | Section | Owner |
 | --- | --- |
@@ -259,72 +233,61 @@ Each section belongs to one role, and only that role writes it:
 | Security | Cybersecurity, when Technical Lead calls it in |
 | Definition of Done | QA Lead |
 
-A section says what was agreed and links the document that holds the detail; it
-is not a task checklist. The Definition of Done is the exception: QA Lead agrees
-each item with the human, gives it a stable identifier (`DOD-1`, `DOD-2`, ...),
-and checks it only with evidence, as for an AC. An AC says what the product does
-for the user; a Definition of Done item says what else must be true, such as
-test coverage, a performance limit, or a support runbook. Each security
-requirement also carries a stable identifier (`SEC-1`, `SEC-2`, ...), so the
-technical documents and QA cases can cite it; it may forbid something, for
-example: "Do not store a customer's card number in our systems until the
-certification is passed." When Technical Lead decides not to follow one, the
-requirement stays in the section as Cybersecurity wrote it, and Technical Lead
-adds its decision and reason beneath it. Omit the section of a role the feature
-does not need.
+- A section states what was agreed and links the detail. It is not a task list;
+  nobody adds Design/Technical/QA/Security task checklists.
+- **AC** say what the product does for the user. Each has a stable ID (`AC-1`),
+  never renumbered or reused.
+- **Definition of Done** items say what else must be true (coverage, a
+  performance limit, a runbook). QA Lead agrees them with the human, gives
+  stable IDs (`DOD-1`), and ticks them only with evidence.
+- **Security requirements** have stable IDs (`SEC-1`) so docs and QA cases can
+  cite them. One may forbid something: "Do not store a customer's card number
+  until the certification is passed." When Technical Lead does not follow one,
+  the requirement stays as written and Technical Lead adds its decision and
+  reason beneath it.
+- Keep Purpose short. Omit sections the feature does not need.
+- QA Lead keeps the AC and DoD boxes matched to verified evidence, changing only
+  the boxes ([sync the Issue checkboxes](../roles/qa-lead.md#sync-the-issue-checkboxes)).
 
 ### Issue status
 
-The Issue shows where the feature stands, never the progress of each task;
-that lives in the local [`.AI` board](ai-task-delegation.md). Every feature
-Issue carries exactly one status label, created in the repository when it does
-not exist:
+The Issue shows where the feature stands, never task progress; that lives on
+the [`.AI` board](ai-task-delegation.md). Each feature Issue has exactly one
+status label; create the label in the repository if it is missing.
 
 | Label | Means | Set by |
 | --- | --- | --- |
-| `draft` | The Issue was just created, or the human paused before confirming. The requirement so far is recorded and pushed. Every Issue starts here. | PO |
-| `ready to implement` | The human confirmed the feature; work has not started. | PO |
-| `in progress` | Implementation is about to start. Set before the first task is dispatched. | Organizer |
-| `in review` | Implementation and its reviews are done; the PR is about to be opened. Set before opening it. | Organizer |
+| `draft` | Just created, or paused before the human confirmed. What is agreed so far is recorded and pushed. Every Issue starts here. | PO |
+| `ready to implement` | The human confirmed; work has not started. | PO |
+| `in progress` | Set just before the first task is dispatched. | Organizer |
+| `in review` | Implementation and reviews are done; set just before the PR opens. | Organizer |
 | `done` | The human merged the feature's PR. | Organizer |
 
-A `bug` label is added beside the status while a bug recorded on the Issue is
-open, by QA Lead when it confirms the bug, and removed when QA Lead verifies the
-fix. The team starts work only from `ready to implement`.
+- The team starts a feature only from `ready to implement`.
+- A `draft` Issue has an `## Open questions` section: what is still open, under
+  the owning role, with options and what each blocks. Remove it at
+  `ready to implement`.
+- A `bug` label sits beside the status while a bug recorded on the Issue is
+  open. QA Lead adds it on confirming the bug and removes it on verifying the
+  fix.
 
-A `draft` Issue adds an `## Open questions` section listing what is still to be
-settled, under the role that owns each, with its options and what it blocks, so the discussion can
-continue from the Issue alone. Remove the section when the Issue becomes
-`ready to implement`.
+### Work without a new Issue
 
-Purpose gives every stateless agent the context behind the requirement; keep it
-short. Every AC carries a stable identifier that is never renumbered or reused.
-Omit empty optional sections. Nobody creates Design/Technical/QA/Security task
-checklists on the Issue. Each responsible Lead owns the later work coordination
-for its domain. PO defines AC and QA Lead defines the Definition of Done; QA
-Lead updates the completion of both only after verification.
-
-QA Lead keeps the Issue's AC and DoD checkboxes matched to verified evidence,
-changing only the boxes
-([sync the Issue checkboxes](../roles/qa-lead.md#sync-the-issue-checkboxes)).
-
-A minor change (the small route) needs no Issue: it uses a
-`fix/{descriptive-slug}` branch and records its context, decisions, verification
-evidence, and outcome in its PR. A bug needs no new Issue either: it
-belongs to the feature Issue whose behavior is wrong, so its branch and PR
-reference that Issue and the outcome is recorded on it. A bug that reveals a
-requirement gap is a change to agreed AC, and PO updates that Issue with a
-[change record](#changing-agreed-ac). Other business, technical, design, QA/supportability, or security gaps
-are classified by impact and routed to the appropriate owner. Do not attach work
-to an unrelated Issue just to avoid creating one. If ownership
-is unclear, route to the appropriate owner; PO resolves genuine new feature scope
-with the human before creating its Issue. Record later fixes on the same feature
-even when its original implementation already shipped.
+- **Small change:** no Issue. It uses a `fix/{descriptive-slug}` branch and
+  records context, decisions, evidence, and outcome in its PR.
+- **Bug:** no new Issue. It belongs to the feature Issue whose behavior is
+  wrong; its branch and PR reference that Issue, and the outcome is recorded
+  there, even if the feature already shipped.
+- **Requirement gap found by a bug:** a change to agreed AC; PO records a
+  [change record](#changing-agreed-ac).
+- Other gaps are classified by impact and routed to their owner. Never attach
+  work to an unrelated Issue to avoid creating one; new feature scope goes to
+  PO and the human first.
 
 ## Changing agreed AC
 
-When the agreed behavior itself changes, or an AC was missing, PO agrees the
-change with the human and then records it as a comment on the owning Issue:
+When agreed behavior changes, or an AC was missing, PO agrees the change with
+the human and posts it as a comment on the owning Issue:
 
 ```markdown
 ## Change 1: manager approval for large refunds (2026-10-11)
@@ -343,20 +306,19 @@ Must not change: refund goes to the original payment method; customer email is s
 Agreed by the human on 2026-10-11.
 ```
 
-Number changes per Issue (`Change 1`, `Change 2`, ...). State the original
-intent, so nobody undoes a decision without knowing why it was made, and the
-current behavior as verified in the product or by Technical Lead, not as
-remembered. List every AC as
-Modified, New, Removed, or Unchanged. "Must not change" is mandatory: QA Lead
-derives the regression checks from it.
+- Number changes per Issue (`Change 1`, `Change 2`, ...).
+- State the original intent, so nobody undoes a decision without knowing why.
+- State current behavior as checked in the product or by Technical Lead, not
+  from memory.
+- List every AC as Modified, New, Removed, or Unchanged.
+- "Must not change" is mandatory: QA Lead takes the regression checks from it.
 
-Then PO updates the Issue body to the current truth:
+Then PO updates the Issue body and the business requirements document:
 
-- A modified AC gets its new wording, the change tag, and an unchecked box.
-- A new AC takes the next unused identifier, tagged and unchecked.
-- A removed AC is struck through with its change tag, not deleted; its identifier
-  is never reused.
-- Unchanged AC keep their text and checkbox.
+- Modified AC: new wording, the change tag, an unchecked box.
+- New AC: the next unused ID, tagged, unchecked.
+- Removed AC: struck through with its tag, not deleted; the ID is never reused.
+- Unchanged AC keep their text and box.
 
 ```markdown
 - [x] **AC-1** Staff can refund a paid order.
@@ -364,35 +326,26 @@ Then PO updates the Issue body to the current truth:
 - [ ] **AC-5** A manager can approve or reject a pending refund. *(Change 1)*
 ```
 
-QA Lead checks a modified or new AC again only with new verification evidence.
-PO also updates the business requirements document to match. The affected owners
-then decide which of their earlier decisions and approvals the change invalidates.
+QA Lead re-ticks a modified or new AC only with new evidence. Affected owners
+decide which of their earlier approvals the change invalidates.
 
-A bug needs no change record. When the product does not do what an AC says, the
-AC stays as written and the correction follows the bug route.
+A bug needs no change record: when the product does not do what an AC says, the
+AC stays and the fix follows the bug route.
 
 ## Durable updates
 
-Leads record their scope, decisions, review outcomes, evidence links, and remaining
-work on the owning Issue when present, or in the PR and linked repository
-records for issue-free bugs and minor changes. Specialists record their own domain results; Seniors
-return findings and artifacts to their Lead instead of managing the Issue.
-Organizer may carry an owner's approved update to GitHub when tooling requires
-it, clearly attributing the owner, without authoring its verdict.
-
-Before editing an Issue body, fetch its latest version and preserve other owners'
-sections. Prefer attributable comments for independent updates when simultaneous
-body edits could overwrite work. Keep history when a decision changes; update
-current repo truth and link the reason from the Issue.
-
-Meaningful handoffs must point to saved files/commits and durable Issue records
-when present, or PR/repository records for issue-free work.
-Do not rely on a local tool message as the sole record of a decision. A required
-GitHub write that fails is pending, not synchronized: preserve the outcome in
-appropriate repo docs and checkpoint any unfinished publishing action.
-
-Feature PRs link to their owning Issue and relevant verification evidence. Bug and
-minor-change PRs without Issues record the request, fix, reviews, and QA evidence
-directly. Existing
-Issue lifecycle conventions may be followed; do not require auto-closing an Issue
-to prove completion or create a second Issue for a follow-up in the same feature.
+- Leads record scope, decisions, review outcomes, evidence links, and remaining
+  work on the owning Issue, or in the PR and linked records when there is no
+  Issue. Specialists record their own results; Seniors report to their Lead.
+- Organizer may post an owner's approved update when tooling needs it, credited
+  to the owner, without writing its verdict.
+- Before editing an Issue body, fetch the latest version and keep other owners'
+  sections. Prefer comments for independent updates when body edits could
+  collide. When a decision changes, keep the history, update the docs, and link
+  the reason from the Issue.
+- Handoffs point to saved files, commits, and the Issue (or PR). A local tool
+  message is never the only record. A failed write to the host is pending, not
+  synced: keep the outcome in repo docs and checkpoint the unfinished step.
+- Feature PRs link their Issue and evidence. Issue-free PRs record the request,
+  fix, reviews, and QA evidence themselves. Never require auto-closing an Issue
+  as proof, and never open a second Issue for follow-up in the same feature.

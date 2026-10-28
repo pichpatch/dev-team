@@ -114,7 +114,8 @@ def validate():
         if line not in ignore:
             errors.append(f".gitignore is missing: {line}")
     for source in visited:
-        if source.suffix == ".md" and "draft PR" in source.read_text(encoding="utf-8"):
+        # \s+ also catches the phrase when it wraps across a line break.
+        if source.suffix == ".md" and re.search(r"\bdraft\s+PR\b", source.read_text(encoding="utf-8")):
             errors.append(f"Use PR, not draft PR: {source.relative_to(ROOT)}")
     # Each host binds a conversation role to its model in its own file; the
     # roster reference lists the same bindings for people to read.

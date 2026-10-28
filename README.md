@@ -92,12 +92,12 @@ delegation tool is available, it reports the limitation instead of claiming that
 review occurred.
 
 The intended flow is: you agree the feature with PO and whichever of Design
-Lead, Technical Lead, and QA Lead it needs, in one conversation → each role pushes its
-agreed documents and PO creates the feature Issue, `draft`, then `ready to implement` once you confirm
-→ relevant Design, Technical, QA, and Cybersecurity preparation → final technical
-package → Senior implementation → Lead approval → QA execution and final AC
-verification → Cybersecurity delivery checks (secret files, AI crawler rules) →
-finished PR for you. Trivial corrections are made by Organizer directly, and
+Lead, Technical Lead, QA Lead, and Cybersecurity it needs, in one conversation →
+each role pushes its agreed documents and PO creates the feature Issue, `draft`,
+then `ready to implement` once you confirm → relevant Design, Technical, QA, and
+Cybersecurity preparation → final technical package → Senior implementation →
+Lead approval → QA execution and final AC verification → Cybersecurity feature
+check (only what the diff touches) → finished PR for you. Trivial corrections are made by Organizer directly, and
 small changes take a shorter owner route. Lead approval completes its scope;
 downstream QA remains.
 
@@ -110,7 +110,8 @@ handoff.
 There is no launcher or OS sandbox. Every repository is treated as private and
 sent only to models the human approved as safe. Every agent asks before reading
 any credential. Technical Lead gives each Senior a git worktree that holds no real
-env file. The team works on GitHub only.
+env file. The team works on whatever source control the repository uses (GitHub,
+GitLab, or another host) when you call it.
 
 ## Models
 
