@@ -66,7 +66,17 @@ Prefer read-only review, unit/integration tests, configuration evidence, and non
 
 ## Evidence and release decision
 
-The security report is a checklist, written from [the security report template](../assets/security-report.html). It is one HTML document per release, kept in `docs/security/`, updated in place on every retest, and linked from the draft release notes. Its rows are fixed when the review starts: the `SECRET-FILES`, `AI-CRAWLERS` (public site), `DEPENDENCIES`, and `PROD-CONFIG` checks, every `SEC-` requirement in the release, and each applicable `OW-` area. A reader can then see in one table what was checked, how, what should have happened, and what did.
+The security report is a checklist, written from [the security report template](../assets/security-report.html). Its rows are fixed when the review starts, and they differ by kind:
+
+| | Feature check | Release review |
+| --- | --- | --- |
+| Scope | Only what the diff touches | Everything since the last release, and how the features work together |
+| Rows | `SECRET-FILES`; the feature's `SEC-` requirements; the `OW-` areas the diff touches; `DEPENDENCIES` for packages the diff adds or upgrades; `AI-CRAWLERS` only when the diff touches crawler rules or routing on a public site | `SECRET-FILES`; `AI-CRAWLERS` (public site); `DEPENDENCIES` since the last release; `PROD-CONFIG`; every `SEC-` requirement in the release; each applicable `OW-` area; open follow-up from the feature checks |
+| Attack testing | None; a bounded check of the touched paths | By version: patch none, minor targeted, major full ([Cybersecurity guide](../roles/cybersecurity.md)) |
+| Production configuration | Never | Yes, after asking the human for the file by name |
+| Where it lives | A checklist in the PR, noted on the Issue | One HTML document per release in `docs/security/`, linked from the draft release notes |
+
+Either kind is updated in place on every retest. A reader can then see in one table what was checked, how, what should have happened, and what did.
 
 Each row has: **ID**; **check**, what must be true, with the OWASP edition and the exact ASVS/WSTG/API reference; **how tested**, the steps, tool and version, test data (synthetic or redacted), and the authorized environment, enough for someone else to repeat it; **expected result**; **actual result**; **status** `PASS` / `FAIL` / `NOT APPLICABLE` / `NOT TESTED`; **evidence**, a sanitized link with the revision and round; and, for a `FAIL`, the severity, whether it blocks, the owner, and the related paths (see below). `PASS` requires positive verification evidence, not just absence of scanner alerts. Evidence may cite a QA case and its revision instead of repeating the test. `NOT APPLICABLE` needs an inspected-scope rationale; `NOT TESTED` states the blocker and residual risk.
 
