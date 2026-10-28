@@ -119,6 +119,11 @@ Use [the handoff template](../assets/handoff.md) as needed. Each invocation gets
 - The documents to start from: the application `README.md` and the module
   documents for the task, plus the requirements, designs, and verification
   evidence it needs. Name them, so the agent does not search for them.
+- For security-scoped Senior Developer or Senior QA assignments, include the
+  applicable Cybersecurity `SEC-` requirement and its concrete input/expected-
+  outcome examples intact. Do not replace them with a lossy summary; preserve
+  valid/control cases and the specified storage, output, and side-effect
+  expectations.
 - The objective and a measurable definition of done.
 - Concrete task, constraints, scope/files owned, forbidden changes,
   dependencies, prerequisite approvals, and expected outputs.
