@@ -84,6 +84,36 @@ continued work or approve. Approval is completion of that scope: no additional
 "mark implementation complete" ceremony. This does not waive downstream QA,
 domain review, or human authority over the resulting PR.
 
+### Every review loop is bounded
+
+This applies to every review in a feature: a Lead reviewing its Seniors, Design
+Lead and Design Tester on design and drift, QA on fixes, Cybersecurity on
+delivery checks, and the release review
+([security report rules](owasp-security.md)).
+
+- **Review against what was agreed.** The criteria are the AC, the DoD, the
+  `SEC-` requirements, the approved design, and the task packet. A finding
+  blocks only when it fails one of them, or is a Blocker defect or a Critical
+  security finding. Everything else is a suggestion or follow-up: recorded,
+  owned, and tracked, never a reason for another round.
+- **Give every finding in the first review.** A re-review checks only the named
+  corrections and the code or screens they touched. A new problem found there
+  blocks only when it lies inside that scope or is a Blocker or Critical;
+  otherwise it is follow-up.
+- **At most two correction rounds per finding.** If it still fails after the
+  second, stop patching: the reviewing Lead and the Lead who owns the work
+  decide together whether the approach, the task split, or the model is wrong,
+  and change that. If they cannot settle it, the human decides.
+- **A report or evidence package is returned once,** naming the items that are
+  missing. Disagreeing with a verdict is not a missing item: it goes to the
+  owning Lead, and then to the human.
+- **The count survives.** The round number for each finding is written on the
+  worker's `.AI` card and on the Issue. A resumed session or a replacement
+  model continues the count and does not reopen approved work.
+
+Organizer never starts a third round on its own. When a finding reaches the
+limit, it routes it as above and reports it.
+
 Review belongs to the role, not to a model. Each Lead reviews its own team's
 work, whichever models run the Lead and its Seniors. No model or provider holds
 an approval gate.

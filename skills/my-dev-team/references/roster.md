@@ -178,7 +178,7 @@ delegated, it follows the cross-provider routes below.
 | DevOps | `claude-sonnet-5-5`, effort `medium` | `gpt-6-sol`, effort `medium` | `opencode-go/mimo-v2.6-flash` |
 | Cybersecurity | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
 
-Technical Lead reviews these roles' outputs. Verify model identifiers with each installed host before dispatch; never silently substitute a different model.
+Technical Lead reviews these roles' outputs; a security report is checked only against [when the report is complete](owasp-security.md). Verify model identifiers with each installed host before dispatch; never silently substitute a different model.
 
 ### Cross-provider independent reviewers
 

@@ -202,7 +202,7 @@ not depend on them.
 
 Inspect the rendered design in available browser/device tools. Exercise interactions
 and relevant states, not only a static hero screenshot. Retest a correction at
-the affected viewport/state. Record observed findings separately from suggestions
+the affected viewport/state, within the [review loop limits](contract.md). Record observed findings separately from suggestions
 and untested concerns; screenshots should identify the artifact/revision/context.
 
 A handoff includes flow/state coverage, component/token changes, interaction and

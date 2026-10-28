@@ -74,9 +74,28 @@ Each row has: **ID**; **check**, what must be true, with the OWASP edition and t
 
 A `FAIL` **blocks** the release when it is a `SEC-` requirement that is not met, a Critical or High finding, a tracked secret or a failed secret-file check, a production key holding a placeholder or test value, a missing block on an AI training bot, or confirmed execution of uploaded code. Every other finding is **follow-up**: it goes in the report with severity, owner, and where it is tracked, it triggers no retest round, and the human sees it. A `NOT TESTED` row of a blocking kind needs the human's decision.
 
-A fix is retested once, in a bounded scope: the failing blocking rows, the rows whose code the fix touched (read from the diff), and the related paths Cybersecurity wrote in the row when it raised the finding. It is not a new full review, and `PASS` rows the fix did not touch stay `PASS`. A new problem found during a retest becomes a new row and is judged the same way.
+Rate each `FAIL` with this scale, unless the project has its own, and write one line on why:
+
+| Severity | Meaning |
+| --- | --- |
+| Critical | Exploitable without special access, and it exposes or changes other users' data, gives admin rights or code execution, or leaks a secret |
+| High | Exploitable by a signed-in user or under a likely precondition, and it crosses a permission boundary or exposes personal data |
+| Medium | Needs an unlikely precondition or a chain with another weakness, or removes one layer of defense while another still holds |
+| Low | Hardening, or information that is neither sensitive nor useful to an attacker on its own |
+
+Technical Lead may challenge a rating once, with evidence. If they still disagree, the row keeps Cybersecurity's rating and the disagreement goes in Decisions for the human.
+
+A fix is retested once, in a bounded scope: the failing blocking rows, the rows whose code the fix touched (read from the diff), and the related paths Cybersecurity wrote in the row when it raised the finding. It is not a new full review, and `PASS` rows the fix did not touch stay `PASS`. A problem found during a retest becomes a new row. It blocks only when it lies inside that retest's scope or is Critical; anything else is follow-up, or a decision for the human when it is High.
 
 A finding gets at most **two** fix-and-retest rounds. If it still fails after the second, or a retest shows another input form passing the same guard, stop patching: Technical Lead and Cybersecurity revisit the enforcement boundary together ([security hardening](engineering.md)). If that does not close it, the human decides: accept the remaining risk, hold the release, or change the scope.
+
+The whole release review is also bounded: the first review and at most **two** retest passes. Whatever still blocks after the second pass goes to the human in Decisions for the human; Cybersecurity does not start a third pass on its own.
+
+### When the report is complete
+
+The report is complete when every row has a status, a "how tested" someone else could repeat, an expected and an actual result, and evidence; every `FAIL` has its severity with a reason, whether it blocks, its owner, and its related paths; and the Result section counts the rows and names the blocking ones. Technical Lead, or whoever reviews the report, checks it against this list only. It may return the report **once**, naming the rows that are missing something. Disagreeing with a verdict or a rating is not a reason to return it: record the disagreement in Decisions for the human. Organizer never grades the report.
+
+When Cybersecurity's model changes mid-review ([roster](roster.md)), the replacement continues from the report as it stands: it finishes the open rows and does not reopen `PASS` rows or start the review again.
 
 Failures follow the existing Technical Lead fix -> Cybersecurity retest -> QA regression -> DevOps draft-release path; this document creates no new approval role or parallel release lifecycle. The report's Result section names the blocking rows, so the human sees the state in one place.
 

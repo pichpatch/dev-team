@@ -204,7 +204,8 @@ confidence is not evidence. Verify integrations that cannot be established by
 isolated task tests.
 
 Accept useful challenges or reject them with evidence. Return specific corrections
-to the Senior, then re-review the changed scope. Record technical approval against
+to the Senior, then re-review the changed scope only, within the
+[review loop limits](../references/contract.md). Record technical approval against
 the reviewed revision/artifacts; approval is completion of that scope, followed
 by the locked QA execution stage. It is not the final quality verdict.
 

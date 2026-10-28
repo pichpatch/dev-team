@@ -119,7 +119,9 @@ After Senior Developer finishes any behavioral implementation:
    to the verified evidence as part of its approval.
 5. Organizer opens a PR after applicable security and delivery checks. Human approval is required before merge or deployment.
 
-When QA rejects a fix, Senior Developer corrects it, Technical Lead reviews the correction, and Senior QA and QA Lead repeat affected verification. Design Lead and Cybersecurity retain their applicable review responsibilities.
+When QA rejects a fix, Senior Developer corrects it, Technical Lead reviews the correction, and Senior QA and QA Lead repeat affected verification. Design Lead and Cybersecurity retain their applicable review responsibilities, and Cybersecurity's delivery checks follow the same [report and retest rules](owasp-security.md) as a release.
+
+Every one of these reviews follows [every review loop is bounded](contract.md): blocking findings only against what was agreed, a re-review limited to the corrections and what they touched, and at most two correction rounds per finding before the Leads, and then the human, decide.
 
 The entry point differs by route: new features complete business, design, technical, and quality planning first; small behavioral changes receive a scoped technical check; bugs start with QA Lead investigation, followed by Senior QA reproduction under QA Lead's instructions, then Senior Developer fixing. Senior QA escalates unclear findings to QA Lead only when needed. Technical Lead joins a bug fix early when Senior Developer encounters significant risk or complexity, but reviews every completed fix regardless. Escalate urgent security, data-loss, or production risks immediately; undefined expected behavior returns to PO for clarification. Purely trivial non-behavior edits retain the separate trivial route.
 

@@ -95,7 +95,8 @@ For each actual dispatch:
    for review. A Senior returns delivered work, not an approval. Record tool errors,
    timeouts, and missing outputs as incomplete rather than inventing a verdict.
 5. On rejection, return actionable corrections to the same Senior or an explicitly
-   reassigned instance, with updated artifact context. On approval, the owner records
+   reassigned instance, with updated artifact context, within the limits of
+   [every review loop is bounded](contract.md). On approval, the owner records
    completion and evidence on the owning Issue when one exists, otherwise in the PR or linked repository records, and the next dependent stage can proceed.
 
 Keep handoffs lean: send relevant diffs, affected files, findings, decisions,
@@ -104,7 +105,8 @@ approvals and recheck changed scope plus dependencies justified by risk.
 Reuse a live agent when useful, but do not assume it remembers decisions. Rebuild
 the packet from persistent records when changing context/model or resuming. Respect
 tool/runtime limits; queue excess work. If repeated attempts make no progress,
-have the owner diagnose the blocker rather than launching an endless review loop.
+have the owner diagnose the blocker rather than launching an endless review loop;
+the [review loop limits](contract.md) say when to stop.
 Ask the human only when resolving it requires a human decision or authorization.
 
 ## Task packet

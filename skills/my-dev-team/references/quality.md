@@ -74,7 +74,7 @@ default. Use existing project severity definitions; otherwise:
 | Trivial | Cosmetic/copy issue with little functional impact |
 
 Technical Lead investigates and reviews a correction; QA retests the original
-failure and affected regression. Root-cause assertions need evidence. Retain
+failure and affected regression, within the [review loop limits](contract.md). Root-cause assertions need evidence. Retain
 failed attempts and disposition in feature history; do not close on "fixed" alone.
 Separate flaky/environment failures from product defects without hiding either.
 
