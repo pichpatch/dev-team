@@ -23,7 +23,7 @@
   <p>Counts of PASS, FAIL, NOT APPLICABLE and NOT TESTED. Then one line: <strong>blocked</strong> (list the blocking rows) or <strong>not blocked</strong>. The human decides the release.</p>
 
   <h2 id="checklist">Checklist</h2>
-  <p>One row per check, fixed when the review starts. For a release: the fixed checks (<code>SECRET-FILES</code>, <code>AI-CRAWLERS</code> for a public site, <code>DEPENDENCIES</code>, <code>PROD-CONFIG</code>), every <code>SEC-</code> requirement in the release, and each applicable <code>OW-</code> area with its ASVS/WSTG reference, and open follow-up from the feature checks. Status is PASS, FAIL, NOT APPLICABLE, or NOT TESTED.</p>
+  <p>One row per check, fixed when the review starts. For a release: the fixed checks (<code>SECRET-FILES</code>, <code>AI-CRAWLERS</code> for a public site, <code>DEPENDENCIES</code>, <code>PROD-CONFIG</code>), every <code>SEC-</code> requirement in the release, each applicable <code>OW-</code> area with its ASVS/WSTG reference, and any open follow-up from the feature checks. For a feature check: only the rows its diff touches (see the Cybersecurity guide's "Check a feature before delivery"). Status is PASS, FAIL, NOT APPLICABLE, or NOT TESTED.</p>
   <table>
     <thead>
       <tr>

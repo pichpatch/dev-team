@@ -370,18 +370,23 @@ release review: no attack testing, and never the production configuration.
 | `DEPENDENCIES` | Only the packages the diff adds or upgrades, through the trust check |
 | `AI-CRAWLERS` | Only on a public site, and only when the diff touches `robots.txt`, the blocked-list module, or routing |
 
-Read the diff to decide which `OW-` areas it touches, and record the others as
-not touched rather than not applicable. When the diff turns out to touch a
+Read the diff to decide which `OW-` areas it touches. The others are not rows:
+list them in one line under the checklist as not touched, so a reader can see
+they were considered. When the diff turns out to touch a
 risky boundary the technical design did not expect (sign-in, permissions,
 payments, personal data, uploads, a public API, or shared security code), tell
 Technical Lead: it decides whether the feature needs a deeper review before the
 PR.
 
-Write the result as a checklist in the PR, with the same columns as
-[the security report template](../assets/security-report.html), and note it on
-the Issue. Findings that do not block become follow-up on the Issue and are
-carried into the next release report. The [review loop limits](../references/contract.md)
-apply.
+Write the result as a checklist with the same columns as
+[the security report template](../assets/security-report.html) and record it
+on the Issue; Organizer includes it in the PR. When there is no Issue (a small
+change or a bug fix without one), give it to Organizer for the PR, and the
+follow-up stays in the PR. The
+[release blocking rules](../references/owasp-security.md#what-blocks-and-how-a-retest-stays-small)
+apply, blocking the PR instead of the release. Findings that do not block become
+follow-up and are carried into the next release report. The
+[review loop limits](../references/contract.md) apply.
 
 ## Check secret files before delivery
 
@@ -405,7 +410,7 @@ was not applicable.
 
 Use the tracked-file listing and the diff. This needs no secret values, so do not
 open real env files to check them. A failure blocks delivery until Technical Lead
-corrects it; record the result as the `SECRET-FILES` row of the security report and on the Issue.
+corrects it; record the result as the `SECRET-FILES` row of the feature checklist or the release report, and on the Issue.
 
 ## Check AI crawler rules before a public release
 

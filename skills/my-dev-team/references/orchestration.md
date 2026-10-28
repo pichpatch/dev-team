@@ -154,7 +154,7 @@ Preserve this high-level order, involving only relevant owners:
    covering every AC before implementation. Loop back to an owner only for
    something ambiguous, contradictory, missing, or untestable.
 9. **Senior Developer(s):** implement scoped tasks delegated by Technical Lead.
-10. **Applicable domain reviews:** Design Lead verifies implemented UI against approved design when relevant; drift returns to Senior Developer through Technical Lead, and new design decisions return to Design Lead. Cybersecurity, called in by Technical Lead, checks the delivered revision's ignore rules and tracked secrets even if no earlier security review was required; for public sites it also checks AI crawler rules. Record findings and resolve blockers before PR delivery.
+10. **Applicable domain reviews:** Design Lead verifies implemented UI against approved design when relevant; drift returns to Senior Developer through Technical Lead, and new design decisions return to Design Lead. Cybersecurity, called in by Technical Lead, runs its [feature check](../roles/cybersecurity.md#check-a-feature-before-delivery) on the delivered revision even if no earlier security review was required. Record findings and resolve blockers before PR delivery.
 11. **Shared completion gate:** follow the single [shared completion gate](#shared-completion-gate-for-features-small-changes-and-bugs): Technical Lead reviews completed implementation, Senior QA tests the reviewed revision, QA Lead approves evidence, and Organizer opens a PR after applicable security and delivery checks. Do not duplicate these gates here.
 12. **Human:** receives the PR and decides whether to approve merge or deployment. Neither action is automatic.
 
