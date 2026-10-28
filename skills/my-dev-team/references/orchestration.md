@@ -10,7 +10,7 @@ dispatch and [records](records.md) before changing project records.
 Inspect repository instructions, current changes, available authorized tooling,
 the owning Issue if one exists, relevant docs, and any checkpoint for this work. Preserve other
 work. For a new feature, act as PO to agree it with the human before the Issue
-is created. For feature work, dispatch the team only for an Issue labeled `ready to implement`;
+is created. For feature work, dispatch the team only for an Issue labeled `ready`;
 for a `draft` feature Issue, continue the discussion with the human as the role whose
 questions are open. This feature-only readiness rule does not block issue-free
 bug or minor-change routes. For a bug, route directly to QA Lead. A bug creates no new Issue: it falls under the feature Issue whose behavior is wrong, so reference that Issue and record the fix there. When the bug turns out to be a requirement gap, PO updates that Issue with a change record. A minor change needs no Issue. For a gap or requested behavior change, classify the work and use its appropriate route. Reuse still-valid decisions; do not
@@ -96,8 +96,8 @@ come later in the feature worktree.
 Each role pushes its own documents to the default branch as soon as they are
 agreed. The discussion ends in one of two ways, and PO does the same in both:
 push any commits not yet pushed and create the Issue, with every role's section in it, labeled
-`ready to implement` when the human says the feature is ready or `draft` when
-the human pauses. A `draft` lists the open questions per role. Then tell the
+`draft`, and change the label to `ready` (ready to implement) when the human
+says the feature is ready; the Issue stays `draft` when the human pauses. A `draft` lists the open questions per role. Then tell the
 human you are returning to organizing.
 
 **When a delegated Lead is blocked on the human.** It keeps working on what it
@@ -135,9 +135,9 @@ Preserve this high-level order, involving only relevant owners:
    and QA Lead each settle with the human what their domain needs, in the same
    session and in the order the human wants.
 3. **Human, then PO:** the human says the feature is ready, or pauses it. PO
-   pushes the documents and creates the feature Issue, labeled
-   `ready to implement` or `draft`. The steps below run only for
-   `ready to implement`; in them each delegated Lead starts from what its role
+   pushes the documents and creates the feature Issue as `draft`, then sets
+   `ready` (ready to implement) if the human says the feature is ready. The steps
+   below run only for `ready`; in them each delegated Lead starts from what its role
    already agreed with the human.
 4. **Design Lead:** direct and approve relevant design work, using Senior
    Designer(s) and Design Tester evidence as needed.
@@ -158,9 +158,11 @@ Preserve this high-level order, involving only relevant owners:
 11. **Shared completion gate:** follow the single [shared completion gate](#shared-completion-gate-for-features-small-changes-and-bugs): Technical Lead reviews completed implementation, Senior QA tests the reviewed revision, QA Lead approves evidence, and Organizer opens a PR after applicable security and delivery checks. Do not duplicate these gates here.
 12. **Human:** receives the PR and decides whether to approve merge or deployment. Neither action is automatic.
 
-Organizer keeps the Issue's status label current ([Issue status](records.md#issue-status)):
-`in progress` when Technical Lead starts the work, `done` when the human merges
-the PR. Task-by-task progress stays on the local `.AI` board, never on the Issue.
+Organizer keeps the Issue's status label current ([Issue status](records.md#issue-status)),
+and changes it before the step it names, not after: `in progress` just before the
+first implementation task is dispatched, `in review` just before it opens the PR
+(after the completion gate and the delivery checks), and `done` when the human
+merges the PR. Task-by-task progress stays on the local `.AI` board, never on the Issue.
 
 Parallelize independent tasks within these stages where useful. Do not start a
 dependent stage before its necessary owner decisions are available. Do not add a

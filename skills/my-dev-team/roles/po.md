@@ -139,17 +139,18 @@ requirement live with the human. Do these in order:
    pushed to the default branch, then create the feature Issue with a short purpose, the
    requirement, the identified AC checklist, and references as `file#section`.
    Design, Technical, and Definition of Done are written by their Leads; do not
-   write them as PO, and do not create task checklists. Give it one status label
+   write them as PO, and do not create task checklists. Create it labeled
+   `draft`, then set the label the human's answer gives
    ([Issue status](../references/records.md)):
 
    | The human said | Label | What happens next |
    | --- | --- | --- |
-   | The feature is ready | `ready to implement` | The team starts |
-   | Pause, continue later | `draft` | Nothing is dispatched; the Issue lists what is still open |
+   | The feature is ready | `ready` (ready to implement) | The team starts |
+   | Pause, continue later | stays `draft` | Nothing is dispatched; the Issue lists what is still open |
 
 To continue a `draft`, read the Issue and the documents, settle the open items
 with the human, update the documents and the Issue body, push, and change the
-label to `ready to implement` when the human says the feature is ready. Do not
+label to `ready` when the human says the feature is ready. Do not
 create a second Issue.
 
 Include useful onboarding/help concepts in existing requirements when the

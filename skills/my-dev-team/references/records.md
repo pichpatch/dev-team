@@ -208,7 +208,7 @@ requirements under `docs/qa/support/`.
 ## One feature, one Issue
 
 A GitHub Issue is the ticket and the durable lifetime history for one feature:
-what was agreed, whether it is ready to implement, and what happened. Decisions
+what was agreed, whether it is ready, and what happened. Decisions
 themselves live in the docs, which the Issue links to, so an agent learns how
 something works from the docs and never needs the Issue for that. PO creates the
 Issue when the human says the feature is ready or asks to pause, and labels it
@@ -282,19 +282,20 @@ not exist:
 
 | Label | Means | Set by |
 | --- | --- | --- |
-| `draft` | The human paused before confirming. The requirement so far is recorded and pushed. | PO |
-| `ready to implement` | Pending: the human confirmed the feature; work has not started. | PO |
-| `in progress` | Technical Lead has started the work. | Organizer |
+| `draft` | The Issue was just created, or the human paused before confirming. The requirement so far is recorded and pushed. Every Issue starts here. | PO |
+| `ready` | Ready to implement: the human confirmed the feature; work has not started. | PO |
+| `in progress` | Implementation is about to start. Set before the first task is dispatched. | Organizer |
+| `in review` | Implementation and its reviews are done; the PR is about to be opened. Set before opening it. | Organizer |
 | `done` | The human merged the feature's PR. | Organizer |
 
 A `bug` label is added beside the status while a bug recorded on the Issue is
 open, by QA Lead when it confirms the bug, and removed when QA Lead verifies the
-fix. The team starts work only from `ready to implement`.
+fix. The team starts work only from `ready`.
 
 A `draft` Issue adds an `## Open questions` section listing what is still to be
 settled, under the role that owns each, with its options and what it blocks, so the discussion can
 continue from the Issue alone. Remove the section when the Issue becomes
-`ready to implement`.
+`ready`.
 
 Purpose gives every stateless agent the context behind the requirement; keep it
 short. Every AC carries a stable identifier that is never renumbered or reused.
