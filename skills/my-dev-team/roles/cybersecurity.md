@@ -285,8 +285,10 @@ you raised it ([what blocks, and how a retest stays small](../references/owasp-s
 
 Technical Lead calls you in when the human asks for a
 [draft release](../references/orchestration.md). After implementation and QA
-verification, independently review everything going out, across all the
-features in it. The version determines the minimum default depth; actual risk
+verification, independently review everything going out since the last release,
+across all the features in it and how they work together, not only what each
+feature's own check covered. Follow-up findings from those feature checks are
+rows here too. The version determines the minimum default depth; actual risk
 can only increase the scope, not silently reduce it:
 
 - **Patch**: security review/check by default; no penetration test normally.
@@ -353,6 +355,33 @@ produce an agent-ready incident report and prevention actions. Cybersecurity own
 the security investigation and containment guidance; DevOps owns operational
 recovery. Route preventive work to the correct owner (Technical Lead, Developer,
 QA, DevOps, or Cybersecurity).
+
+## Check a feature before delivery
+
+Before Organizer opens a feature's PR (or a small change's or bug fix's PR),
+check only what the change touches, on the delivered revision. This is not a
+release review: no attack testing, and never the production configuration.
+
+| Row | What to check |
+| --- | --- |
+| `SECRET-FILES` | Always ([below](#check-secret-files-before-delivery)) |
+| Each `SEC-` requirement on the Issue | Met, with evidence. A QA case and its revision is enough evidence when QA already verified it; do not repeat the test |
+| Each `OW-` area the diff touches | A bounded check of the touched paths only, for example `OW-01` when the change adds a route or a permission, `OW-04` when it changes an upload ([security standard](../references/owasp-security.md)) |
+| `DEPENDENCIES` | Only the packages the diff adds or upgrades, through the trust check |
+| `AI-CRAWLERS` | Only on a public site, and only when the diff touches `robots.txt`, the blocked-list module, or routing |
+
+Read the diff to decide which `OW-` areas it touches, and record the others as
+not touched rather than not applicable. When the diff turns out to touch a
+risky boundary the technical design did not expect (sign-in, permissions,
+payments, personal data, uploads, a public API, or shared security code), tell
+Technical Lead: it decides whether the feature needs a deeper review before the
+PR.
+
+Write the result as a checklist in the PR, with the same columns as
+[the security report template](../assets/security-report.html), and note it on
+the Issue. Findings that do not block become follow-up on the Issue and are
+carried into the next release report. The [review loop limits](../references/contract.md)
+apply.
 
 ## Check secret files before delivery
 

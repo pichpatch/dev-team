@@ -215,9 +215,9 @@ what was not reviewed.
 ## PR delivery
 
 Before delivery, check that domain approvals cover the current work, QA Lead's
-final review and AC evidence are recorded, Cybersecurity's delivery checks
-(secret files, and AI crawler rules for a public site) cover the delivered
-revision and their report is in the PR, every security requirement Technical
+final review and AC evidence are recorded, Cybersecurity's
+[feature check](../roles/cybersecurity.md#check-a-feature-before-delivery)
+covers the delivered revision and its checklist is in the PR, every security requirement Technical
 Lead decided not to follow is listed in the PR with its reason and the remaining
 risk, relevant docs match the implementation
 and are reachable through the [`README.md` indexes](records.md), and the PR

@@ -122,7 +122,7 @@ the human, call them in as sub-agents and bring their requirements into the
 discussion before the human confirms the feature. When the Issue does not exist
 yet, they return their section text and it goes into the Issue as theirs.
 
-You also call in Cybersecurity for its delivery check before the PR.
+You also call in Cybersecurity for its [feature check](cybersecurity.md#check-a-feature-before-delivery) before the PR.
 
 ## Final technical package
 
