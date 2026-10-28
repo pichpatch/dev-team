@@ -93,7 +93,7 @@ review occurred.
 
 The intended flow is: you agree the feature with PO and whichever of Design
 Lead, Technical Lead, and QA Lead it needs, in one conversation → each role pushes its
-agreed documents and PO creates the feature Issue, `draft`, then `ready` once you confirm
+agreed documents and PO creates the feature Issue, `draft`, then `ready to implement` once you confirm
 → relevant Design, Technical, QA, and Cybersecurity preparation → final technical
 package → Senior implementation → Lead approval → QA execution and final AC
 verification → Cybersecurity delivery checks (secret files, AI crawler rules) →

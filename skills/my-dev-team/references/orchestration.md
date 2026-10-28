@@ -10,7 +10,7 @@ dispatch and [records](records.md) before changing project records.
 Inspect repository instructions, current changes, available authorized tooling,
 the owning Issue if one exists, relevant docs, and any checkpoint for this work. Preserve other
 work. For a new feature, act as PO to agree it with the human before the Issue
-is created. For feature work, dispatch the team only for an Issue labeled `ready`;
+is created. For feature work, dispatch the team only for an Issue labeled `ready to implement`;
 for a `draft` feature Issue, continue the discussion with the human as the role whose
 questions are open. This feature-only readiness rule does not block issue-free
 bug or minor-change routes. For a bug, route directly to QA Lead. A bug creates no new Issue: it falls under the feature Issue whose behavior is wrong, so reference that Issue and record the fix there. When the bug turns out to be a requirement gap, PO updates that Issue with a change record. A minor change needs no Issue. For a gap or requested behavior change, classify the work and use its appropriate route. Reuse still-valid decisions; do not
@@ -96,7 +96,7 @@ come later in the feature worktree.
 Each role pushes its own documents to the default branch as soon as they are
 agreed. The discussion ends in one of two ways, and PO does the same in both:
 push any commits not yet pushed and create the Issue, with every role's section in it, labeled
-`draft`, and change the label to `ready` (ready to implement) when the human
+`draft`, and change the label to `ready to implement` when the human
 says the feature is ready; the Issue stays `draft` when the human pauses. A `draft` lists the open questions per role. Then tell the
 human you are returning to organizing.
 
@@ -136,8 +136,8 @@ Preserve this high-level order, involving only relevant owners:
    session and in the order the human wants.
 3. **Human, then PO:** the human says the feature is ready, or pauses it. PO
    pushes the documents and creates the feature Issue as `draft`, then sets
-   `ready` (ready to implement) if the human says the feature is ready. The steps
-   below run only for `ready`; in them each delegated Lead starts from what its role
+   `ready to implement` if the human says the feature is ready. The steps
+   below run only for `ready to implement`; in them each delegated Lead starts from what its role
    already agreed with the human.
 4. **Design Lead:** direct and approve relevant design work, using Senior
    Designer(s) and Design Tester evidence as needed.

@@ -145,12 +145,12 @@ requirement live with the human. Do these in order:
 
    | The human said | Label | What happens next |
    | --- | --- | --- |
-   | The feature is ready | `ready` (ready to implement) | The team starts |
+   | The feature is ready | `ready to implement` | The team starts |
    | Pause, continue later | stays `draft` | Nothing is dispatched; the Issue lists what is still open |
 
 To continue a `draft`, read the Issue and the documents, settle the open items
 with the human, update the documents and the Issue body, push, and change the
-label to `ready` when the human says the feature is ready. Do not
+label to `ready to implement` when the human says the feature is ready. Do not
 create a second Issue.
 
 Include useful onboarding/help concepts in existing requirements when the
