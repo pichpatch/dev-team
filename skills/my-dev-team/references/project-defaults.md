@@ -1,51 +1,50 @@
 # Project defaults
 
-These are the human's standard choices. An existing project keeps what it already
-decided; do not migrate it to match. For a new project, follow them. A different
-choice needs a reason recorded by the owning role in the project docs. Scope,
-budget, service purchases, authentication, and production actions still need the
-human's decision or authorization.
+These are the human's standard choices for a **new** project. An existing project
+keeps what it decided; never migrate it to match. A different choice needs a
+reason recorded by the owning role. Scope, budget, buying services,
+authentication, and production actions still need the human.
 
 ## Product and design
 
-- Prefer responsive web and mobile-first design for applicable web products.
-  Do not add mobile applications merely because the stack can support them.
-- Prefer editable HTML/CSS UI-system examples and clickable HTML mockups when no
-  design format is established. Existing design tools/assets remain valid; record
-  one authoritative source and its relationship to code.
-- For a new user-facing product, propose Thai/English support and light/dark themes.
-  PO settles product scope; Design Lead specifies behavior. Do not silently add
-  languages or themes to an agreed single-language/theme feature.
-- When social login is in scope, consider Google/Apple-first entry points against
-  audience/platform needs. Existing enterprise SSO or other agreed authentication
-  takes precedence. These preferences do not authorize new account/provider setup.
-- A data table is sortable by every column by default. PO names any column that
-  should not be sortable, with the reason, in the AC.
-- A public entity page (product, category, article, profile) uses the URL
-  `/{title-slug}-{ref_id}`, for example `/pick-hand-fan-0l78Xd`, with the
-  `ref_id` generated as the [standard stack](stack.md) describes. The slug comes
-  from the entity's title in the language it is written in, so a Thai title
-  gives a Thai slug; do not transliterate unless that is agreed. An entity with
-  one language has one URL. An entity with several languages has one URL per
-  language, each from that language's title and all sharing the same `ref_id`,
-  linked to each other as language alternates for search engines. An outdated or
-  wrong slug redirects to a current URL; an unknown `ref_id` returns 404. PO
-  states this behavior in the AC; Technical Lead settles how the language of a
-  request is determined.
-- A public site is found by AI answers and not used for AI training; follow
-  [AI crawlers](#ai-crawlers-found-by-ai-answers-not-used-for-training) below.
-- Preserve helpful empty/first-use states and document onboarding concepts as
-  features emerge. A separate product tour is later scope only when agreed; it
-  must not delay essential setup needed to use the feature.
+- **Responsive, mobile-first web** for web products. Do not add mobile apps just
+  because the stack supports them.
+- **Editable HTML/CSS UI-system examples and clickable HTML mockups** when no
+  design format exists. Existing design tools stay valid; record one
+  authoritative source and how it maps to code.
+- **Thai/English and light/dark themes:** propose them for a new user-facing
+  product. PO settles scope; Design Lead specifies behavior. Never silently add
+  languages or themes to a feature agreed with one.
+- **Social login:** when in scope, consider Google and Apple first against the
+  audience and platforms. Existing SSO or agreed authentication wins. This never
+  authorizes creating accounts or providers.
+- **Tables** are sortable by every column by default. PO names any column that
+  should not be, with the reason, in the AC.
+- **Public entity pages** (product, category, article, profile) use
+  `/{title-slug}-{ref_id}`, for example `/pick-hand-fan-0l78Xd`, with `ref_id`
+  from the [standard stack](stack.md#identifiers-and-public-urls).
+  - The slug comes from the title in its own language: a Thai title gives a Thai
+    slug. Do not transliterate unless agreed.
+  - One URL per language: each from that language's title, all sharing the
+    `ref_id`, linked as language alternates.
+  - An outdated or wrong slug redirects to the current URL; an unknown `ref_id`
+    returns 404.
+  - PO states this behavior in the AC; Technical Lead decides how a request's
+    language is determined.
+- **AI crawlers:** a public site is found by AI answers but not used for
+  training ([below](#ai-crawlers-found-by-ai-answers-not-used-for-training)).
+- **Onboarding:** keep helpful empty and first-use states, and document new
+  concepts as features add them. A separate product tour is later scope, only
+  when agreed, and never delays essential setup.
 
 ## AI crawlers: found by AI answers, not used for training
 
 The default for every public site (the human's decision; PO records any
-exception): **AI answer engines may read the site, so people can find the business
-through ChatGPT, Claude, Perplexity, Gemini, and others. AI training bots are
-blocked.**
+exception): **AI answer engines may read the site, so people can find the
+business through ChatGPT, Claude, Perplexity, Gemini, and others. AI training
+bots are blocked.**
 
-**Allowed, search and answer bots (never block these):**
+**Allowed search and answer bots (never block):**
 `Googlebot` (Google Search, including AI Overviews and AI Mode) · `Bingbot` (Bing
 and Copilot; other AI search tools use Bing's index too) · `OAI-SearchBot`,
 `ChatGPT-User` (ChatGPT) · `Claude-SearchBot`, `Claude-User` (Claude) ·
@@ -53,14 +52,14 @@ and Copilot; other AI search tools use Bing's index too) · `OAI-SearchBot`,
 `DuckAssistBot` (DuckDuckGo) · `MistralAI-User` (Le Chat) ·
 `Meta-ExternalFetcher` (Meta AI, user-requested)
 
-**Blocked, training and dataset bots:**
+**Blocked training and dataset bots:**
 `GPTBot` (OpenAI) · `ClaudeBot` (Anthropic) · `Google-Extended` (Gemini) ·
 `Applebot-Extended` (Apple) · `Meta-ExternalAgent` (Meta) · `CCBot` (Common Crawl) ·
 `Bytespider` (ByteDance) · `cohere-training-data-crawler` (Cohere)
 
 Keep the blocked list in **one module** per project (for example
 `src/seo/ai-crawlers.ts`) that the robots file reads. Every bot not on it falls
-under the `*` rule and stays allowed. For Next.js:
+under `*` and stays allowed. For Next.js:
 
 ```ts
 // app/robots.ts
@@ -80,46 +79,42 @@ export default function robots(): MetadataRoute.Robots {
 }
 ```
 
-- **`Google-Extended` is the one judgment call.** Blocking it keeps content out of
-  Gemini training, and it may also keep the site out of answers in the Gemini
-  app. Google Search, including AI Overviews and AI Mode, is unaffected because
-  that runs on `Googlebot`.
-- robots.txt is a request, not a lock: well-behaved bots follow it, and blocking
-  bots that ignore it is Cloudflare's job (DevOps). DevOps also makes sure
-  Cloudflare never blocks the answer bots, and that a managed robots.txt does not
-  contradict the site's rules.
-- **Cybersecurity checks the lists at every release of a public site** and
-  reports the result, because bot names change and new bots appear. **Lists last
-  checked: 2026-09-26.** When they change, the project's module is updated and
-  the human is told, so these default lists and the date are updated too.
-- To help AI answers use the site well: concrete facts in the HTML (what it is,
+- **`Google-Extended` is the one judgment call.** Blocking it keeps content out
+  of Gemini training and may keep the site out of Gemini app answers. Google
+  Search, AI Overviews, and AI Mode are unaffected; they use `Googlebot`.
+- **robots.txt is a request, not a lock.** Blocking bots that ignore it is
+  Cloudflare's job (DevOps). DevOps also makes sure Cloudflare never blocks the
+  answer bots and a managed robots.txt never contradicts the site's rules.
+- **Cybersecurity checks the lists at every release** of a public site, because
+  bot names change. **Lists last checked: 2026-09-26.** When they change, the
+  project's module is updated, the human is told, and these lists and the date
+  are updated too.
+- **Help AI answers use the site well:** concrete facts in the HTML (what it is,
   price, location, contact, policies), consistent entity names, FAQ content with
-  `FAQPage` JSON-LD, public help content that explains what the product does,
-  trust signals such as reviews, policies, and update dates, and optionally an
-  `llms.txt` summary at the site root (the major crawlers do not reliably use it
-  yet). Avoid vague marketing copy that hides the facts search engines, AI
-  assistants, and users need.
+  `FAQPage` JSON-LD, public help content, trust signals (reviews, policies,
+  update dates), and optionally an `llms.txt` summary at the root (major crawlers
+  do not reliably use it yet). Avoid vague marketing copy that hides the facts.
 
-Launch checks for a public site:
+**Launch checks for a public site:**
 
-- On the production domain, `/robots.txt` and `/sitemap.xml` load and point to
-  each other; every non-production environment returns `Disallow: /` and
-  `noindex`. An indexed test site is a blocker.
-- `robots.txt` blocks the AI training bots by name and blocks no answer bot;
-  Cloudflare is not blocking the answer bots either.
+- On production, `/robots.txt` and `/sitemap.xml` load and point to each other.
+  Every non-production environment returns `Disallow: /` and `noindex`. An
+  indexed test site is a blocker.
+- `robots.txt` blocks the training bots by name and no answer bot; Cloudflare
+  does not block the answer bots either.
 - DevOps has verified the domain in Google Search Console and Bing Webmaster
-  Tools, the production credentials are set, and one real submission from the
-  backend has succeeded (see below).
+  Tools, production credentials are set, and one real submission from the
+  backend has succeeded ([below](#search-engine-submission)).
 
 ## Search engine submission
 
-A public site tells Google and Bing about itself from the backend, not by hand.
-ChatGPT search, Copilot, and other AI answer tools lean on Bing's index, so Bing
+A public site tells Google and Bing about itself from the backend, never by
+hand. ChatGPT search, Copilot, and other AI tools lean on Bing's index, so Bing
 matters as much as Google.
 
-**Backend (Technical Lead, Senior Developer):** build the submission into the
-backend from the start. Once the keys exist, a new, changed, or removed public
-page reaches the search engines with no manual step:
+**Backend (Technical Lead, Senior Developer):** build submission in from the
+start. Once the keys exist, every new, changed, or removed public page reaches
+the search engines with no manual step:
 
 | Event | Site | Bing and other IndexNow engines | Google |
 | --- | --- | --- | --- |
@@ -127,18 +122,15 @@ page reaches the search engines with no manual step:
 | Page changed | `lastmod` updated; old slug redirects | IndexNow call with the new URL, and the old one if the slug changed | Sitemap resubmitted |
 | Page removed | Leaves the sitemap; URL returns 404 or 410 | IndexNow call with the removed URL | Sitemap resubmitted |
 
-- **Bing: IndexNow.** One call covers add, change, and removal, for one URL or a
-  batch, and is shared with the other IndexNow engines. It needs a key, and a
-  key file the site serves. Microsoft recommends it over the older Bing URL
-  Submission API.
-- **Google: the sitemap, resubmitted through the Search Console API.** Google has
-  no general per-URL add/remove call. Its Indexing API does take update and
-  delete notices, but only for job-posting and livestream pages, so use it only
-  for those. Keep the sitemap exact and group resubmissions instead of sending
-  one per change.
-- A page with several language URLs submits each of them.
-- Read every credential from the environment. Add each key to `.env.example`
-  with an empty value and a comment, so the needed keys are visible:
+- **Bing: IndexNow.** One call covers add, change, and remove, for one URL or a
+  batch, shared with other IndexNow engines. It needs a key and a key file the
+  site serves. Microsoft recommends it over the older URL Submission API.
+- **Google: resubmit the sitemap through the Search Console API.** Google has no
+  general per-URL call; its Indexing API is only for job-posting and livestream
+  pages. Keep the sitemap exact and batch resubmissions.
+- A page with several language URLs submits each.
+- Read every credential from the environment, and list each key in
+  `.env.example` with an empty value and a comment:
 
   ```dotenv
   # Search engine submission. Production only; leave empty elsewhere.
@@ -148,53 +140,50 @@ page reaches the search engines with no manual step:
   INDEXNOW_KEY=
   ```
 
-- Submit only in production. With a credential missing, or outside production,
-  the call does nothing and logs that it was skipped. A failed submission is
-  logged and retried; it never fails the user's action.
+- Submit only in production. With a missing credential or outside production,
+  the call does nothing and logs the skip. A failed submission is logged and
+  retried; it never fails the user's action.
 - Put the calls behind one interface with a mock for tests.
-- Check each vendor's current API documentation before implementing; these APIs
-  were last checked on 2026-10-11. Keep the project's own key names when it
-  already has them.
+- Check each vendor's current API docs before building (last checked
+  2026-10-11). Keep the project's existing key names.
 
-**DevOps (technical task):** verify the domain in Google Search Console and Bing
-Webmaster Tools, create the API credentials the backend reads, and document
-their names, consumers, and environments. The human signs in to the accounts and
-enters the real values in the production secret store. If Cloudflare Crawler
-Hints already sends IndexNow for the site, say so, so the backend does not send
-it twice.
+**DevOps:** verify the domain in Google Search Console and Bing Webmaster Tools,
+create the API credentials the backend reads, and document their names,
+consumers, and environments. The human signs in and enters the real values in
+the production secret store. If Cloudflare Crawler Hints already sends IndexNow,
+say so, so the backend does not send it twice.
 
 ## Engineering
 
-Follow the [standard stack](stack.md): NestJS by default for the API, Next.js or a React
-single-page app for web, React Native for mobile, a shared `frontend-core`
-library, one typed contract generated from the API, the repository layout, the
-`id` and `ref_id` rules, and the Next.js SEO checklist.
+Follow the [standard stack](stack.md): NestJS for the API by default, Next.js or
+a React single-page app for web, React Native for mobile, a shared
+`frontend-core`, one typed contract generated from the API, the repository
+layout, the `id` and `ref_id` rules, and the Next.js SEO checklist.
 
 ## Quality
 
-The coverage target is at least 80% overall automated coverage
-for a new project, or at least 80% for changed/new code in an existing project with
-no drop in overall coverage. QA Lead establishes the actual metric (line, branch,
-etc.), scope, exclusions, and measurement command before implementation. Honor an
-existing project policy first, and record justified adaptations when this target
-does not fit the work/tooling. Do not hide exclusions or confuse coverage with AC
-verification. An unmet agreed gate remains a visible quality gap.
+Coverage target: at least 80% overall for a new project; for an existing project
+with no policy, at least 80% on new or changed code with no drop overall. QA Lead
+sets the metric (line, branch, ...), scope, exclusions, and command before
+implementation. An existing project policy comes first; record justified
+adaptations. Never hide exclusions or confuse coverage with AC verification. An
+unmet agreed gate stays a visible gap.
 
 ## Infrastructure and release
 
-- Consider PostgreSQL, Portainer, Redis, and Cloudflare where available and useful;
-  verify the real environment rather than claiming this user's stack exists in
-  every project. New services need the appropriate cost/access decision.
-- External service application names prefer `{project}-{env}` where supported.
-- When tag-driven GitHub releases fit the project, use an explicit documented
-  pattern such as `v1.2.0-web-prod` (`v{version}-{platform}-{env}`). DevOps owns
-  the exact trigger and safeguards. A sample is never permission to publish it.
-- Daily backups with 30-day retention are a planning baseline for durable stores,
-  adjusted to data value, change rate, recovery objectives, cost, and privacy.
-  Include actual restore validation; do not back up disposable caches by habit.
-- Choose local/test/staging/production needs from risk and infrastructure context.
-  Nothing here authorizes testing on production or secret access.
+- Consider PostgreSQL, Portainer, Redis, and Cloudflare where available and
+  useful. Check the real environment instead of assuming this stack. New
+  services need a cost and access decision.
+- External service names prefer `{project}-{env}`.
+- When tag-driven releases fit, use a documented pattern such as
+  `v1.2.0-web-prod` (`v{version}-{platform}-{env}`). DevOps owns the trigger and
+  safeguards. A sample is never permission to publish.
+- Daily backups with 30-day retention are a planning baseline for durable
+  stores, adjusted to data value, change rate, recovery goals, cost, and privacy.
+  Include real restore tests; do not back up disposable caches by habit.
+- Choose local, test, staging, and production needs from risk and context.
+  Nothing here authorizes testing on production or reading secrets.
 
-Do not impose arbitrary research quotas, fixed agent time boxes, mandatory
-repeat critique counts, or provider-specific approvals. Scale evidence and effort
-to the decision while preserving the user's locked workflow.
+No arbitrary research quotas, fixed agent time limits, mandatory critique
+counts, or provider-specific approvals. Scale evidence and effort to the
+decision, within the human's workflow.
