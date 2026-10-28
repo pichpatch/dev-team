@@ -247,9 +247,11 @@ Nothing in the feature flow leads into it by itself.
    production configuration, naming the file, as it does every time.
 3. **If Cybersecurity finds a problem**, Technical Lead owns remediation and
    delegates fixes to Senior Developer or DevOps. Technical Lead reviews fixes;
-   Cybersecurity independently retests affected security scope; Senior QA tests
-   affected regressions and QA Lead independently approves the evidence. Repeat
-   as needed, reusing unaffected approvals. No unverified finding is called passed.
+   Cybersecurity independently retests the bounded scope in the
+   [security report rules](owasp-security.md); Senior QA tests affected
+   regressions and QA Lead independently approves the evidence. A finding gets
+   at most two fix-and-retest rounds, then the human decides. Unaffected
+   approvals are reused. No unverified finding is called passed.
 4. **DevOps** prepares the release as a GitHub draft, with the version and tag
    the project's release pattern gives, notes listing the Issues, and its
    Deployment Plan and Rollback/Recovery Plan. A draft publishes nothing,

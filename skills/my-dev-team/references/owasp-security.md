@@ -66,9 +66,19 @@ Prefer read-only review, unit/integration tests, configuration evidence, and non
 
 ## Evidence and release decision
 
-For each check record: check ID; OWASP edition and specific reference; release revision; affected endpoint/component; applicability and rationale; procedure/tool and authorized environment; expected result; observed result; evidence link (sanitized); status **PASS / FAIL / NOT APPLICABLE / NOT TESTED**; severity and owner if unresolved; remediation and retest revision. `PASS` requires positive verification evidence, not just absence of scanner alerts. `NOT APPLICABLE` needs an inspected-scope rationale; `NOT TESTED` states the blocker and residual risk.
+The security report is a checklist, written from [the security report template](../assets/security-report.html). It is one HTML document per release, kept in `docs/security/`, updated in place on every retest, and linked from the draft release notes. Its rows are fixed when the review starts: the `SECRET-FILES`, `AI-CRAWLERS` (public site), `DEPENDENCIES`, and `PROD-CONFIG` checks, every `SEC-` requirement in the release, and each applicable `OW-` area. A reader can then see in one table what was checked, how, what should have happened, and what did.
 
-Summarize the coverage matrix, blocking findings, untested controls, deviations, monitoring gaps, and human decisions in the existing Cybersecurity release report. Failures follow the existing Technical Lead fix -> Cybersecurity retest -> QA regression -> DevOps draft-release path; this document creates no new approval role or parallel release lifecycle.
+Each row has: **ID**; **check**, what must be true, with the OWASP edition and the exact ASVS/WSTG/API reference; **how tested**, the steps, tool and version, test data (synthetic or redacted), and the authorized environment, enough for someone else to repeat it; **expected result**; **actual result**; **status** `PASS` / `FAIL` / `NOT APPLICABLE` / `NOT TESTED`; **evidence**, a sanitized link with the revision and round; and, for a `FAIL`, the severity, whether it blocks, the owner, and the related paths (see below). `PASS` requires positive verification evidence, not just absence of scanner alerts. Evidence may cite a QA case and its revision instead of repeating the test. `NOT APPLICABLE` needs an inspected-scope rationale; `NOT TESTED` states the blocker and residual risk.
+
+### What blocks, and how a retest stays small
+
+A `FAIL` **blocks** the release when it is a `SEC-` requirement that is not met, a Critical or High finding, a tracked secret or a failed secret-file check, a production key holding a placeholder or test value, a missing block on an AI training bot, or confirmed execution of uploaded code. Every other finding is **follow-up**: it goes in the report with severity, owner, and where it is tracked, it triggers no retest round, and the human sees it. A `NOT TESTED` row of a blocking kind needs the human's decision.
+
+A fix is retested once, in a bounded scope: the failing blocking rows, the rows whose code the fix touched (read from the diff), and the related paths Cybersecurity wrote in the row when it raised the finding. It is not a new full review, and `PASS` rows the fix did not touch stay `PASS`. A new problem found during a retest becomes a new row and is judged the same way.
+
+A finding gets at most **two** fix-and-retest rounds. If it still fails after the second, or a retest shows another input form passing the same guard, stop patching: Technical Lead and Cybersecurity revisit the enforcement boundary together ([security hardening](engineering.md)). If that does not close it, the human decides: accept the remaining risk, hold the release, or change the scope.
+
+Failures follow the existing Technical Lead fix -> Cybersecurity retest -> QA regression -> DevOps draft-release path; this document creates no new approval role or parallel release lifecycle. The report's Result section names the blocking rows, so the human sees the state in one place.
 
 ## Authorization and roles (OW-01)
 

@@ -81,6 +81,8 @@ separate required installation.
 
 Use [the handoff template](assets/handoff.md) for a resumable assignment,
 [the checkpoint template](assets/checkpoint.md) when unfinished work must stop,
-[the document template](assets/document.html) for project documents, and
+[the document template](assets/document.html) for project documents,
 [the evaluation template](assets/evaluation.html) for evidenced Senior/model
-evaluations. Templates are starting points, not mandatory extra project artifacts.
+evaluations, and [the security report template](assets/security-report.html) for
+Cybersecurity's checklist report. Templates are starting points, not mandatory
+extra project artifacts.

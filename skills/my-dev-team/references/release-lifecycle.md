@@ -24,7 +24,7 @@ A Draft Release is prepared only when the human asks for one ([draft release](or
 
 - QA verifies every AC and the complete DoD. Failed mandatory criteria remain failed; known issues/risks are reported, not silently waived.
 - Draft Release includes QA status/known issues plus DevOps Deployment and Rollback/Recovery plans.
-- Cybersecurity independently reviews the release before the draft is created. Technical Lead owns remediation, Cybersecurity retests affected security scope, Senior QA reruns affected tests, and QA Lead approves updated evidence; unaffected approvals remain valid.
+- Cybersecurity independently reviews the release before the draft is created. Technical Lead owns remediation, Cybersecurity retests the bounded scope in the [security report rules](owasp-security.md), Senior QA reruns affected tests, and QA Lead approves updated evidence; unaffected approvals remain valid.
 - The human alone accepts residual release risk and authorizes production deployment.
 - DevOps executes only after explicit human authorization and performs post-deploy verification.
 

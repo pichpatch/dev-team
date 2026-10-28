@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Security report</title>
+  <!-- Path to docs/assets/docs.css, relative to this file. No inline styles. -->
+  <link rel="stylesheet" href="../assets/docs.css">
+</head>
+<body>
+  <nav><a href="../README.md">Back to the README index</a></nav>
+  <h1>Security report</h1>
+  <p class="note">One report per release (or per feature for the delivery checks). Update it in place on every retest; do not copy it. State what was tested and what happened, with synthetic or redacted values only: never a secret, a token, or personal data.</p>
+  <dl>
+    <dt>Release or feature, and Issue(s)</dt><dd>To be supplied.</dd>
+    <dt>Revision tested</dt><dd>Commit or tag. Rows retested later name their own revision in the Evidence cell.</dd>
+    <dt>Environment and test accounts</dt><dd>Authorized environment, fixtures, and roles used. Never production credentials.</dd>
+    <dt>Depth</dt><dd>Patch, minor, or major, and any risk override with the reason.</dd>
+    <dt>Reviewer and model that ran</dt><dd>Role and the model that actually ran. State if the review was not cross-provider.</dd>
+  </dl>
+
+  <h2 id="result">Result</h2>
+  <p>Counts of PASS, FAIL, NOT APPLICABLE and NOT TESTED. Then one line: <strong>blocked</strong> (list the blocking rows) or <strong>not blocked</strong>. The human decides the release.</p>
+
+  <h2 id="checklist">Checklist</h2>
+  <p>One row per check, fixed when the review starts: the fixed checks (<code>SECRET-FILES</code>, <code>AI-CRAWLERS</code> for a public site, <code>DEPENDENCIES</code>, <code>PROD-CONFIG</code>), every <code>SEC-</code> requirement in the release, and each applicable <code>OW-</code> area with its ASVS/WSTG reference. Status is PASS, FAIL, NOT APPLICABLE, or NOT TESTED.</p>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Check: what must be true</th>
+        <th>How tested: steps, tool, test data, environment</th>
+        <th>Expected result</th>
+        <th>Actual result</th>
+        <th>Status</th>
+        <th>Evidence: link, revision, round</th>
+        <th>If FAIL: severity, blocking, owner, related paths</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>SEC-1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>OW-01</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td>SECRET-FILES</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="not-tested">Not applicable and not tested</h2>
+  <p>For each NOT APPLICABLE row, the scope inspected. For each NOT TESTED row, the blocker and the residual risk.</p>
+
+  <h2 id="follow-up">Follow-up, not blocking</h2>
+  <p>Medium and Low findings, with severity, owner, and where they are tracked. They trigger no retest round.</p>
+
+  <h2 id="decisions">Decisions for the human</h2>
+  <p>Requirements Technical Lead did not follow with the remaining risk, findings still failing after the round limit, and anything that cannot be checked.</p>
+</body>
+</html>

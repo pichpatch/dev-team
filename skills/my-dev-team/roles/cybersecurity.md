@@ -278,8 +278,8 @@ Do not exploit live production or expose real data to prove a point; use
 authorized test fixtures and bounded reproductions.
 
 A fix is not security-verified merely because the original exploit no longer
-works. Retest the original path and reasonable shared/related paths based on the
-underlying weakness.
+works. Retest the original path and the related paths you named in the finding when
+you raised it ([what blocks, and how a retest stays small](../references/owasp-security.md)).
 
 ## Review a draft release
 
@@ -335,10 +335,11 @@ and the site environment is production; that no value is a placeholder, a
 default, or the example's fake value; and that keys which must be strong and
 unique to production, such as `REF_ID_KEY`, are.
 
-Produce a release security report containing scope/revision, tests performed,
-findings and severity, evidence, affected scope, unresolved risks, remediation and
-retest status, and what you could not check. It goes into the draft release's
-notes. Cybersecurity reports the security state; it does not authorize
+Produce the release security report as the checklist described in
+[evidence and release decision](../references/owasp-security.md), from
+[the security report template](../assets/security-report.html): each row says what
+was checked, how, the expected and actual result, the status, and the evidence.
+It goes into the draft release's notes. Cybersecurity reports the security state; it does not authorize
 deployment. Material residual risk is surfaced for explicit human acceptance. A
 tracked secret, or a production key holding a placeholder or a test value, is
 reported as blocking.
@@ -375,7 +376,7 @@ was not applicable.
 
 Use the tracked-file listing and the diff. This needs no secret values, so do not
 open real env files to check them. A failure blocks delivery until Technical Lead
-corrects it; record the result on the Issue.
+corrects it; record the result as the `SECRET-FILES` row of the security report and on the Issue.
 
 ## Check AI crawler rules before a public release
 
