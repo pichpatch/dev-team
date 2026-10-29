@@ -108,3 +108,7 @@ remaining risks, and any evidence-backed challenge. Separate a suspected root
 cause from a reproduced one. Continue with corrections on rejection. Save a
 [checkpoint](../references/checkpoints.md) only when paused, blocked, or handing
 off unfinished work, and remove it when you finish.
+
+## Unit TDD and navigation ownership
+
+Own unit tests for touched methods and use test-first implementation where practical, following Technical Lead's approved contract. Senior QA owns integration test implementation. When changing code, keep concise method comments accurate about responsibilities, important dependencies, side effects and change impact, and point to key tests where useful. Prefer discoverable test naming over exhaustive per-method test lists. Update relevant navigation/docs and check affected unit and integration tests; escalate missing API/data contract decisions to Technical Lead.
