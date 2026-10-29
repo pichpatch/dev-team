@@ -215,3 +215,7 @@ challenges, deliverable quality, and observable cost.
   environment failures. Never invent cost, timings, scores, or model identity.
 - Use filesystem-safe slugs, keep the full model identity inside the report,
   and update the existing report for repeated work instead of adding files.
+
+## Feature planning delegation boundary
+
+For new features, Organizer does not delegate the PO → Design Lead → Technical Lead → QA Lead conversation sequence. Announce each role switch and give the human a chance to resolve that stage. Leads may delegate bounded research or specialist reviews within their stage and return findings to the human-facing owner. During implementation, delegate bounded development, testing, review and security tasks normally. Delegation never implies approval or permission to skip the next gate.
