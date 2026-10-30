@@ -67,8 +67,16 @@ documents do not cover it and the change would:
 
 ## Build evidence with the implementation
 
-- For behavior changes, prefer test-first unit and integration work against QA's
-  cases and the rule IDs.
+- **Unit test first, always.** Write each unit test before the code it tests,
+  watch it fail for the right reason, then write the code. Senior QA writes the
+  integration tests ([test-first](../references/quality.md#test-first-and-who-writes-which-test)).
+- **You finish when your unit tests and QA Lead's approved integration tests
+  pass.** Never edit an approved integration test. When one looks wrong, or the
+  documents leave a question open, go to Technical Lead.
+- **Comment every function and method** with what it does, its side effects, and
+  its unit test file ([commenting](../references/engineering.md#implementation-and-data)).
+- **Say when you add or edit a migration,** in your result, so Senior QA updates
+  the seed data.
 - For bugs, reproduce the failure and add a regression test before fixing when
   feasible. A failing test must fail for the right reason and pass after the
   fix.
@@ -86,7 +94,7 @@ Regenerate affected contracts and clients with their tools. Keep the module
 documents describing the code as it now is:
 
 - `code-map.html`, the module `README.md`, and the application `README.md` when
-  you add, move, or remove a file, document, or module;
+  you add, move, or remove a file, function, document, or module;
 - `rules.html`, `flows.html`, `data-dict.html`, `permissions.html`, and
   `api-spec.html` when the behavior, schema, or API meaning they describe
   changed;
@@ -108,7 +116,3 @@ remaining risks, and any evidence-backed challenge. Separate a suspected root
 cause from a reproduced one. Continue with corrections on rejection. Save a
 [checkpoint](../references/checkpoints.md) only when paused, blocked, or handing
 off unfinished work, and remove it when you finish.
-
-## Unit TDD and navigation ownership
-
-Own unit tests for touched methods and use test-first implementation where practical, following Technical Lead's approved contract. Senior QA owns integration test implementation. When changing code, keep concise method comments accurate about responsibilities, important dependencies, side effects and change impact, and point to key tests where useful. Prefer discoverable test naming over exhaustive per-method test lists. Update relevant navigation/docs and check affected unit and integration tests; escalate missing API/data contract decisions to Technical Lead.

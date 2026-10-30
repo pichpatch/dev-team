@@ -356,7 +356,8 @@ Record the same-record rule in `data-dict.html` and every side effect in
 - **A worker gets its own database only when its task needs database-backed
   work or verification.** Otherwise none. By default: a fresh local database
   named for its worktree with the `_wt_` marker, migrations run, a small
-  deterministic synthetic seed. Parallel workers never share mutable state.
+  deterministic synthetic seed that Senior QA keeps current with every
+  migration ([test-first](quality.md#test-first-and-who-writes-which-test)). Parallel workers never share mutable state.
   Redis gets its own key prefix or database number per worker. Drop the worker's
   database when its task finishes or is abandoned.
 - **Large snapshots only for a stated test need:** realistic volume or skew,

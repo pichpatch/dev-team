@@ -140,9 +140,9 @@ approval, and QA's result are different things.
 
 The main checkout is the human's and may hold real secrets in ignored files. A
 git worktree holds tracked files only, so it starts without them. All repository
-writes for a feature happen in worktrees, except the documents agreed live with
-the human before the Issue exists, which PO and the Leads commit on the default
-branch ([talking to the Leads](orchestration.md#talking-to-the-leads)).
+writes for a feature happen in worktrees. What is agreed with the human before
+implementation stays on the Issue
+([talking to the Leads](orchestration.md#talking-to-the-leads)).
 
 ```text
 projects/
@@ -188,9 +188,9 @@ Branches, commits, and pushing:
 - The responsible Lead reviews; Technical Lead merges approved branches into the
   feature branch and verifies the result.
 - Organizer pushes only the feature branch and opens the PR.
-- Only PO, Cybersecurity, and the Leads commit to the default branch, and only
-  documents with no effect on code. Each pushes its own commits. Nobody
-  force-pushes or rewrites pushed history.
+- Nobody commits to the default branch. Documents and code reach it only
+  through a PR the human merges. Nobody force-pushes or rewrites pushed
+  history.
 - Remove the feature worktree after feature-branch verification when no review
   needs it; keep the feature branch for the PR. After the human merges, Technical
   Lead (or Organizer for it) removes the local feature branch when safe.
@@ -215,7 +215,3 @@ challenges, deliverable quality, and observable cost.
   environment failures. Never invent cost, timings, scores, or model identity.
 - Use filesystem-safe slugs, keep the full model identity inside the report,
   and update the existing report for repeated work instead of adding files.
-
-## Feature planning delegation boundary
-
-For new features, Organizer does not delegate the PO → Design Lead → Technical Lead → QA Lead conversation sequence. Announce each role switch and give the human a chance to resolve that stage. Leads may delegate bounded research or specialist reviews within their stage and return findings to the human-facing owner. During implementation, delegate bounded development, testing, review and security tasks normally. Delegation never implies approval or permission to skip the next gate.

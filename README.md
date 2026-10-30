@@ -132,12 +132,12 @@ is the authoritative copy and holds the rules; change both together.
 
 | Role | Model | Notes |
 | --- | --- | --- |
-| Senior pool 1 | Codex `gpt-6-luna`, high | Senior Developer and Senior Designer; up to three at once. Simplest slices; used last when Codex organizes |
+| Senior pool 1 | Codex `gpt-6-luna`, high | Senior Developer, Senior Designer, and Senior QA; up to three at once. Simplest slices; used last when Codex organizes |
 | Senior pool 2 | Claude `claude-haiku-5-5`, high | Used last when Claude Code organizes |
 | Senior pool 3 | OpenCode `deepseek-v4.1-flash`, high | |
 | Senior pool 4 to 6 (free) | OpenCode `deepseek-v4.1-flash-free`, `glm-5.3-flash-free`, `minimax-m3.1-flash-free` | Only when 1 to 3 are limited; never for client-work repos |
-| Design Tester | OpenCode `mimo-v2.6-flash` | Shared with Senior QA |
-| Senior QA | OpenCode `mimo-v2.6-flash` | |
+| Design Tester | OpenCode `mimo-v2.6-flash` | |
+| Senior QA | A Senior pool model | Never the model a Senior Developer on the same feature uses; skips `gpt-6-luna` while another is free |
 | DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated |
 | QA Lead and Cybersecurity, delegated | Preferably a different provider from the Organizer: Codex `gpt-6.1-sol` medium under Claude Code; Claude Sonnet 5.5 high under Codex or OpenCode | If that provider is rate-limited: OpenCode under Claude Code or Codex, Codex under OpenCode |
 | Lead backups | Technical Lead: Sol high, `mimo-v2.6-pro`, `deepseek-v4.1-flash` max, `deepseek-v4.1-flash-free`. Design Lead: Sol medium, `glm-5.3-flash` max, `claude-haiku-5-5` xhigh (OpenCode Go), `glm-5.3-flash-free`. QA Lead: Astra medium, Sonnet 5.5 high, `claude-haiku-5-5` xhigh (OpenCode Go), `minimax-m3.1-flash-free`. Cybersecurity: Sol medium, Sonnet 5.5 high, `claude-haiku-5-5` xhigh (OpenCode Go), `minimax-m3.1-flash-free` | Free last backup never for client-work repos, nor for a draft release review |

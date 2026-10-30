@@ -69,7 +69,7 @@ Organizer starts these as separate CLI runs, each in its own worktree.
 
 ### Senior pool
 
-Senior Developer and Senior Designer work. Up to three Seniors at once.
+Senior Developer, Senior Designer, and Senior QA work. Up to three at once.
 
 | Order | Runs through | Subscription | Model | Effort |
 | --- | --- | --- | --- | --- |
@@ -88,21 +88,23 @@ Senior Developer and Senior Designer work. Up to three Seniors at once.
   Code, `gpt-6-luna` under Codex.
 - **Match the slice to the model.** `gpt-6-luna` is the cheapest and weakest
   coder; give it the simplest, most self-contained slices.
+- **Senior QA writes test code,** so it runs on a pool model, never the one any
+  Senior Developer on the same feature is using, so tests and code never come
+  from the same model. Skip `gpt-6-luna` for it while another model is free.
 - **At a limit,** continue that Senior's task on the next model not already
   running a task.
 
-### Testers
+### Design Tester
 
-Both run on one model outside the Senior pool, so a tester never runs on the
-model that made the work. They may share it because neither reviews the other.
+Design Tester runs outside the Senior pool, so it never runs on the model that
+made the design it checks.
 
 | Role | Runs through | Model | Effort |
 | --- | --- | --- | --- |
 | Design Tester | OpenCode | `opencode-go/mimo-v2.6-flash` | (none to set) |
-| Senior QA | OpenCode | `opencode-go/mimo-v2.6-flash` | (none to set) |
 
-A limited tester uses Senior pool rows 4–6 in order, skipping the model that
-produced the work it tests.
+A limited Design Tester uses Senior pool rows 4–6 in order, skipping the model
+that produced the work it tests.
 
 ### DevOps and Cybersecurity
 

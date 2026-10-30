@@ -103,34 +103,34 @@ Record the choice and any agreed exception to the AI crawler default.
 
 ## Publish and hand off
 
-You work in the main checkout, on the default branch, because you agree the
-requirement live. In order:
+You agree the requirement live, and the Issue holds it until implementation
+starts. You commit nothing. In order:
 
-1. **Record the requirement.** Update
-   `docs/requirements/business-requirements.html` (or the existing root
-   equivalent) to the current requirement only, and commit it on the default
-   branch. This covers business documents under root `docs/` only: never code,
-   configuration, or another owner's documents.
+1. **Create the Issue first,** labeled `draft`, as soon as the human has
+   described the feature: a short purpose, the requirement, and the AC
+   checklist. Update it as the discussion changes them. Other roles write their
+   own sections; you add no task checklists.
 2. **Suggest the next role:** which of Design Lead, Technical Lead, QA Lead, and
    Cybersecurity this feature needs, and why; offer to switch. The human may ask
    for one at any time. If their discussion changes the requirement or an AC,
    agree it with the human as PO and update the document.
 3. **Ask the human plainly:** is the feature ready, or should we pause here?
    Do not guess from the discussion.
-4. **In both cases, push and create the Issue.** Push unpushed document
-   commits, then create the Issue with a short purpose, the requirement, the AC
-   checklist, and references as `file#section`. Other roles write their own
-   sections; you add no task checklists. Create it as `draft`, then:
+4. **Set the label:**
 
    | The human said | Label | Next |
    | --- | --- | --- |
    | Ready | `ready to implement` | The team starts |
    | Pause | stays `draft` | Nothing is dispatched; the Issue lists what is open |
 
-To continue a `draft`: read the Issue and documents, settle the open items with
-the human, update the documents and Issue body, push, and set
-`ready to implement` when the human says it is ready. Never create a second
-Issue.
+To continue a `draft`: read the Issue, settle the open items with the human,
+update the Issue body, and set `ready to implement` when the human says it is
+ready. Never create a second Issue.
+
+When implementation starts, Organizer, as PO, writes the agreed requirement
+into `docs/requirements/business-requirements.html` (or the existing root
+equivalent) in the feature worktree, so it reaches the default branch through
+the PR.
 
 Add onboarding or help concepts to the requirements when the feature introduces
 them; do not add an onboarding project to every request.

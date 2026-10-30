@@ -1,8 +1,9 @@
 # Quality, evidence, and supportability
 
 QA Lead owns the strategy, supportability, coverage policy, and final AC review.
-Senior QA runs the assigned verification. Senior Developer writes unit and
-integration tests. Design Tester gives design evidence to Design Lead.
+Senior QA writes the integration tests, keeps the seed data current, and runs
+the assigned verification. Senior Developer writes the unit tests. Design Tester
+gives design evidence to Design Lead.
 
 ## Before implementation
 
@@ -21,6 +22,51 @@ Use the [coverage default](project-defaults.md#quality) only when the project
 has no policy. State the command, metric, scope, baseline, and exclusions.
 Report planned and actually executed coverage separately. Every relevant AC
 needs evidence whatever the overall percentage.
+
+## Test-first, and who writes which test
+
+| Test | Written by | From | Approved by |
+| --- | --- | --- | --- |
+| Unit test | Senior Developer, before the code it tests | The task, `rules.html`, and QA's cases | Technical Lead, in code review |
+| Integration test | Senior QA, in parallel with the code | The implementation documents: `api-spec.html`, `data-dict.html`, `flows.html` | QA Lead, before Senior Developer relies on it |
+
+An integration test calls the API and then checks the data in the database:
+the rows written, changed, or left alone, and the response. It runs against
+the worker's own `{project}_wt_{worktree}` database
+([stack](stack.md)), migrated and seeded, never a mocked
+database. Only third-party services are mocked
+(`INTEGRATION_<NAME>_MODE=mock`).
+
+The order:
+
+1. Technical Lead writes the implementation documents on the feature branch.
+2. Senior Developer writes unit tests first, then the code. At the same time,
+   Senior QA writes the integration tests and QA Lead turns its cases into
+   automated test cases.
+3. QA Lead reviews and approves the integration tests and automated cases.
+4. Senior Developer finishes when its unit tests and the approved integration
+   tests pass. It never edits an approved integration test.
+5. QA Lead approves the result ([completion gate](orchestration.md#shared-completion-gate-for-features-small-changes-and-bugs)).
+
+**A new table or column.** Senior QA writes the integration tests from
+`data-dict.html` before the migration exists. They may fail to compile until
+Senior Developer has built it; that is expected, and they are run once it is.
+If `data-dict.html` or `api-spec.html` lacks a table, column, or operation the
+tests need, Senior QA tells QA Lead, who takes it to Technical Lead. Senior QA
+never guesses a schema.
+
+**Seed data stays current.** Senior QA owns the seed data the tests use: small,
+deterministic, synthetic, with the role accounts the cases need. Whenever a
+change adds or edits a migration, Senior Developer says so in its result,
+Technical Lead routes it to QA Lead, and Senior QA checks and updates the seed
+before the next test run. A test that fails because the seed is stale is a
+seed defect, not a product defect.
+
+**When a test and the code disagree,** neither Senior changes the other's work.
+Senior Developer goes to Technical Lead, Senior QA to QA Lead. The two Leads
+compare both against the implementation documents: a wrong test goes back to
+Senior QA, wrong code to Senior Developer, and a gap in the documents to
+Technical Lead to fix first.
 
 ## Choose cases by risk
 

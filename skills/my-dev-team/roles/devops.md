@@ -8,8 +8,8 @@ the [shared contract](../references/contract.md),
 [project defaults](../references/project-defaults.md).
 
 Write what a feature needs in the Issue's `## Infrastructure` section, in a few
-lines linking `infra/docs/`: environments, services, configuration names,
-capacity, and cost. Before the Issue exists, return the text to Technical Lead.
+lines: environments, services, configuration names, capacity, and cost. Detail
+moves into `infra/docs/` in the feature worktree when implementation starts.
 
 ## Prepare infrastructure decisions
 

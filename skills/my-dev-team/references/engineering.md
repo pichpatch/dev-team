@@ -47,11 +47,11 @@ api/docs/modules/orders/
 | --- | --- | --- |
 | `README.md` | One line on the module's purpose, then a table linking each file with what it answers | |
 | `rules.html` | Each rule and invariant with its ID (`R1`, `R2`, ...) and source AC, grouped by who it applies to | one per group (`#admin`, `#user`) and per rule (`#r3`) |
-| `flows.html` | Allowed state transitions; every side effect; on the frontend, the global state the module uses | one per flow (`#refund`), plus `#side-effects` and `#global-state` |
+| `flows.html` | Allowed state transitions; every side effect; the services: which entry point to call for what, what it handles for the caller (session checks, caching with its key, lifetime, and invalidation); on the frontend, the global state the module uses | one per flow (`#refund`), plus `#services`, `#side-effects`, and `#global-state` |
 | `data-dict.html` | Tables and fields: meaning, constraints, sensitivity | one per table (`#order-items`) |
 | `permissions.html` | Who may do what, and ownership conditions | one per role (`#admin`) |
 | `api-spec.html` | What each operation means beyond the generated spec: purpose, rules, permissions, side effects, errors | one per operation, its `operationId` in kebab-case (`#refund-order`) |
-| `code-map.html` | The files and tests that implement the module, one line each | `#files`, `#tests` |
+| `code-map.html` | Each file with its main functions, one line each, and the unit and integration test files | `#files`, `#tests` |
 | `tech-debt.html` | Known debt: what, the risk, the fix, its Issue | one per severity (`#critical`, `#high`, `#medium`, `#low`) |
 
 - `README.md`, `rules.html`, and `code-map.html` exist for every module. Create
@@ -143,10 +143,23 @@ document change together.
 - Put truly shared helpers, types, and code in an explicit shared place (`/lib`,
   `/helper`, a shared package). Never make unrelated code import another page's
   or service's internals.
-- **Comment usefully.** Every exported function, class, component, and module
-  gets a short purpose comment. Inside, comment the why: the rule ID, a hidden
-  constraint, a workaround and its cause, a performance choice and its evidence.
-  Never restate the code; update a comment in the change that makes it untrue.
+- **Comment every function and method,** so an agent can understand it without
+  reading its callers or its body:
+  - what it does, in one or two lines;
+  - its side effects: what it writes, sends, caches, or invalidates, or "none";
+  - its unit test file.
+
+  ```ts
+  /**
+   * Refunds a paid order and restores the stock.
+   * Side effects: writes refunds and order_items; clears the order cache.
+   * Unit tests: src/orders/refund.service.spec.ts
+   */
+  ```
+
+  Inside, comment the why: the rule ID, a hidden constraint, a workaround and
+  its cause, a performance choice and its evidence. Never restate the code;
+  update a comment in the change that makes it untrue.
 
 **Backend boundaries**
 
@@ -265,8 +278,9 @@ a breaking change.
 
 ## Verification and review package
 
-- Senior Developer writes meaningful unit and integration tests against QA's
-  cases; QA owns independent feature and E2E verification.
+- Senior Developer writes the unit tests, test-first; Senior QA writes the
+  integration tests and keeps the seed data current
+  ([test-first](quality.md#test-first-and-who-writes-which-test)).
 - Run related checks first, then the project's required checks; widen when the
   impact or open concerns justify it.
 - Before editing code no test covers, first add a test that locks today's
