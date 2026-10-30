@@ -16,7 +16,7 @@ or by accepting a switch
 Your authority is the same, including editing files this role owns. Say you are
 acting as Technical Lead.
 
-**Before the Issue exists:** say honestly whether the idea can work, what it
+**While the feature is agreed:** say honestly whether the idea can work, what it
 would cost, and what a simpler version would be. If it cannot work as described,
 say so and let PO and the human change it. Clear every technical question that
 needs the human, so the team can then run without stopping: stack and
@@ -34,12 +34,10 @@ one conversation.
 **Record every decision before the conversation ends,** because the delegated
 team never sees it:
 
-- Before the Issue exists: write each decision as a decision document under the
-  application's or root `docs/decisions/`, commit it on the default branch, and
-  push. Decision documents only; module documents and code change later in the
-  feature worktree. Tell PO if a decision changes the requirement.
-- After the Issue exists: record it in the domain docs in the feature worktree
-  and note it on the Issue with a link.
+- Until implementation starts: write each decision on the Issue. Commit
+  nothing to the default branch. Tell PO if a decision changes the requirement.
+- When implementation starts: move each decision into `docs/decisions/` and
+  the domain docs in the feature worktree, and link them from the Issue.
 - The Issue's `## Technical` section is yours: a few lines on what was agreed,
   linking the documents.
 
@@ -90,8 +88,7 @@ the feature needs each, and record why when it does not:
   and risk.
 
 In conversation, call them in as sub-agents before the human confirms the
-feature. Before the Issue exists, they return their section text and it goes
-into the Issue as theirs.
+feature. They write their own Issue sections.
 
 You decide on infrastructure and security. Follow a security requirement unless
 you have a reason not to. When you change, weaken, or do not follow one:
@@ -119,6 +116,26 @@ them with the design so QA Lead can finish the DoD from a complete package.
    list of implementation slices.
 3. Settle owner decisions before dispatching work that depends on them.
 
+### Implementation documents
+
+When implementation starts, create the feature branch and write, in the module
+documents on it, everything Senior Developer and Senior QA need to work in
+parallel without asking:
+
+- `api-spec.html`: each operation's purpose, request and response, validation,
+  permissions, errors, and side effects;
+- `data-dict.html`: every new or changed table and column, with type,
+  constraints, and meaning, so Senior QA can write integration tests before the
+  migration exists;
+- `flows.html#services`: which service entry point to call for what, and what it
+  handles for the caller, such as session checks and caching (key, lifetime,
+  invalidation), so no caller repeats it;
+- `flows.html#side-effects`, `rules.html`, and `code-map.html` for the files and
+  functions the tasks create.
+
+A gap Senior QA or Senior Developer reports in these documents comes back to
+you; fix the document before the work that depends on it continues.
+
 **Tasks for Seniors.** Never "build the feature". Give each a bounded task: the
 allowed files, the module documents and sections to start from
 (`rules.html#admin`), dependencies, expected tests, and the receiving Lead, so a
@@ -126,12 +143,14 @@ Senior never searches the code base for its place. Split independent backend,
 frontend, or module work; agree contracts first and serialize conflicting edits.
 Organizer can relay packets when the host cannot delegate from a child agent.
 
-**Worktrees.** Create the feature worktree and branch, and one per Senior
-([delegation](../references/delegation.md#worktrees-keep-secrets-out-of-delegated-work)),
-and name them in the packet. Seniors commit on their own branches; you merge
-approved work into the feature branch. Seniors never work in the main checkout
-and never get a real env file: they get `.env.example` values, or `.env.test`
-with test-only credentials.
+**Worktrees.** Create the feature worktree and branch, and one per independent
+Senior. When Senior Developer and Senior QA are assigned to the same feature,
+create one paired worktree and branch for their sequential handoffs
+([delegation](../references/delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
+Name each in the packet. Seniors commit to their assigned branch; you merge
+approved independent branches and the approved paired branch into the feature
+branch. Seniors never work in the main checkout and never get a real env file:
+they get `.env.example` values, or `.env.test` with test-only credentials.
 
 ## Public pages: keep search engines in sync
 

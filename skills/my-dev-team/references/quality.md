@@ -1,8 +1,9 @@
 # Quality, evidence, and supportability
 
 QA Lead owns the strategy, supportability, coverage policy, and final AC review.
-Senior QA runs the assigned verification. Senior Developer writes unit and
-integration tests. Design Tester gives design evidence to Design Lead.
+Senior QA writes the integration tests, keeps the seed data current, and runs
+the assigned verification. Senior Developer writes the unit tests. Design Tester
+gives design evidence to Design Lead.
 
 ## Before implementation
 
@@ -21,6 +22,65 @@ Use the [coverage default](project-defaults.md#quality) only when the project
 has no policy. State the command, metric, scope, baseline, and exclusions.
 Report planned and actually executed coverage separately. Every relevant AC
 needs evidence whatever the overall percentage.
+
+## Test-first, and who writes which test
+
+| Test | Written by | From | Approved by |
+| --- | --- | --- | --- |
+| Unit test | Senior Developer, before the code it tests | The task, `rules.html`, and QA's cases | Technical Lead, in code review |
+| Integration test | Senior QA, before implementation | The implementation documents: `api-spec.html`, `data-dict.html`, `flows.html` | QA Lead, before Senior Developer relies on it |
+
+An integration test calls the API and then checks the data in the database:
+the rows written, changed, or left alone, and the response. It runs against
+the shared pair worktree's `{project}_wt_{worktree}` database
+([stack](stack.md)), migrated and seeded, never a mocked
+database. Only third-party services are mocked
+(`INTEGRATION_<NAME>_MODE=mock`).
+
+The order:
+
+1. Technical Lead writes the implementation documents and creates the paired
+   Developer/QA worktree and branch.
+2. Senior QA writes integration tests from the documents and commits them on
+   the paired branch. QA Lead reviews and approves the tests and automated
+   cases before implementation relies on them.
+3. Senior QA hands the worktree to Senior Developer. Developer writes unit
+   tests first, then the code and migrations. Developer does not edit QA-owned
+   tests.
+4. If Developer adds or changes a migration, Developer hands the worktree to
+   QA to update the seed, then QA hands it back. Developer runs the approved
+   integration tests against the pair's migrated and seeded `_wt_` database.
+5. Developer hands the same revision and worktree back to Senior QA. QA runs
+   and confirms the integration tests. If a test is wrong, QA corrects it and
+   reruns it. If the code is wrong, QA reports reproduction steps, expected and
+   actual results, and the suspected area to Developer; Developer fixes the
+   code and reruns the tests, then hands back to QA for confirmation.
+6. Only one agent may write in or run work from the paired worktree at a time.
+   Stop and confirm the previous run has ended before each handoff. QA Lead
+   approves changes to expected behavior; Technical Lead resolves gaps in the
+   implementation documents. QA Lead approves the final result
+   ([completion gate](orchestration.md#shared-completion-gate-for-features-small-changes-and-bugs)).
+
+**A new table or column.** Senior QA writes the integration tests from
+`data-dict.html` before the migration exists. They may fail to compile until
+Senior Developer has built it; that is expected, and they are run once it is.
+If `data-dict.html` or `api-spec.html` lacks a table, column, or operation the
+tests need, Senior QA tells QA Lead, who takes it to Technical Lead. Senior QA
+never guesses a schema.
+
+**Seed data stays current.** Senior QA owns the seed data the tests use: small,
+deterministic, synthetic, with the role accounts the cases need. Whenever a
+change adds or edits a migration, Senior Developer says so in its result,
+Technical Lead routes it to QA Lead, and Senior QA checks and updates the seed
+before the next test run. A test that fails because the seed is stale is a
+seed defect, not a product defect.
+
+**When a test and the code disagree,** neither Senior changes the other's work.
+Senior QA investigates and sends test defects to QA Lead and code defects to
+Senior Developer with reproduction evidence. The two Leads compare both against
+the implementation documents: QA corrects a wrong test, Developer corrects
+wrong code, and Technical Lead fixes a document gap before dependent work
+continues.
 
 ## Choose cases by risk
 

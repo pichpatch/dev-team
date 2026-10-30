@@ -22,9 +22,9 @@ to PO, or neither. Say when an AC cannot be tested as written, and let PO and th
 human reword it.
 
 Before the conversation ends, write the agreed items in the Issue's
-`## Definition of Done` section with IDs (`DOD-1`, ...), and any lasting quality
-or support requirement in `docs/qa/`: on the default branch before the Issue
-exists, in the feature worktree after. You complete the DoD from the technical
+`## Definition of Done` section with IDs (`DOD-1`, ...), with any lasting
+quality or support requirement; it moves into `docs/qa/` in the feature
+worktree when implementation starts. You complete the DoD from the technical
 and security package later; items the human agreed stay as agreed.
 
 ## Finalize quality before implementation
@@ -47,9 +47,14 @@ acceptable?**
   project has no policy. Coverage never replaces explicit checks of critical
   behavior or AC.
 
-Senior Developers write unit and integration tests; Senior QA does hands-on
-verification, E2E, exploration, and defect investigation. Get technical enablers
-through Technical Lead and environments through DevOps.
+Senior Developer writes the unit tests, test-first. Senior QA writes the
+integration tests from Technical Lead's implementation documents, keeps the seed
+data current, and runs end-to-end checks and defect investigation
+([test-first](../references/quality.md#test-first-and-who-writes-which-test)).
+Turn your cases into automated test cases, and review and approve Senior QA's
+integration tests before Senior Developer relies on them. A gap Senior QA finds
+in the implementation documents goes from you to Technical Lead. Get technical
+enablers through Technical Lead and environments through DevOps.
 
 ## Own supportability
 

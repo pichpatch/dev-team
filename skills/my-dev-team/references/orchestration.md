@@ -18,7 +18,7 @@ before changing project records.
 
 | Work | Route |
 | --- | --- |
-| New feature | Act as PO and agree it with the human before the Issue exists ([talking to the Leads](#talking-to-the-leads)) |
+| New feature | Act as PO: create the `draft` Issue and agree it with the human ([talking to the Leads](#talking-to-the-leads)) |
 | Feature with a `draft` Issue | Continue the discussion as the role whose questions are open |
 | Feature with a `ready to implement` Issue | Start the team ([feature sequence](#feature-sequence)) |
 | Feature already `in progress` | Resume from the Issue, the `.AI` board, and checkpoints |
@@ -89,18 +89,22 @@ Design Lead.
   Technical Lead calls it in as a sub-agent and brings its requirements to the
   human before the feature is confirmed.
 
-**Before the Issue exists,** each role commits and pushes its agreed documents
-to the default branch in the main checkout, as soon as they are agreed: PO the
-business requirements, Design Lead the design direction, Technical Lead
-decision documents, QA Lead quality requirements, Cybersecurity security
-requirements. Documents only. Code, mockups, and module documents come later
-in the feature worktree.
+**The Issue holds everything until implementation starts.** PO creates the
+Issue, labeled `draft`, as soon as the human has described the feature. Each
+role writes what it agrees into its own Issue section as soon as it is agreed.
+Nothing is committed to the default branch: no requirement, decision, design,
+quality, or security document.
 
-**When the discussion ends,** PO pushes any unpushed commits and creates the
-Issue with every role's section, labeled `draft`. If the human says the feature
-is ready, PO changes the label to `ready to implement`. If the human pauses, it
-stays `draft` and lists the open questions per role. Then say you are returning
-to organizing.
+**When the discussion ends,** PO asks the human: ready or pause? Ready: PO sets
+`ready to implement`. Pause: it stays `draft` and lists the open questions per
+role. Then say you are returning to organizing.
+
+**When implementation starts,** Technical Lead creates the feature branch and
+worktree, and each owner moves what it agreed on the Issue into the repository
+documents there: Organizer, as PO, the business requirements; each Lead and
+Cybersecurity their own documents; Technical Lead the module documents the
+Seniors and Senior QA will work from ([implementation documents](../roles/technical-lead.md#implementation-documents)).
+These documents reach the default branch only through the PR the human merges.
 
 **When a delegated Lead is blocked on the human,** it keeps doing what it can
 and lists the blocked items in its [checkpoint](checkpoints.md). Tell the human
@@ -140,12 +144,12 @@ How each route reaches the gate:
 
 Only relevant owners take part. Keep this order:
 
-1. **Human + PO:** agree purpose, requirement, and AC. PO commits and pushes the
-   business documents.
+1. **Human + PO:** PO creates the `draft` Issue and agrees purpose, requirement,
+   and AC on it.
 2. **Human + the other relevant roles:** Design Lead, Technical Lead, QA Lead,
    and Cybersecurity settle their domains, in the order the human wants.
-3. **Human, then PO:** the human says ready or pause. PO creates the Issue as
-   `draft`, then sets `ready to implement` if ready. Steps 4–12 run only from
+3. **Human, then PO:** the human says ready or pause. PO sets
+   `ready to implement` if ready. Steps 4–12 run only from
    `ready to implement`; each delegated Lead starts from what it agreed.
 4. **Design Lead:** directs and approves design work, with Senior Designers and
    Design Tester as needed.
@@ -154,11 +158,30 @@ Only relevant owners take part. Keep this order:
 6. **DevOps and Cybersecurity, when called in:** each writes its requirements
    in its own Issue section, unless it already did in conversation.
 7. **Technical Lead:** builds the final technical package from design,
-   infrastructure, and security requirements.
+   infrastructure, and security requirements, creates the feature branch, and
+   writes the [implementation documents](../roles/technical-lead.md#implementation-documents)
+   into it: API spec, data dictionary, services and caching.
 8. **QA Lead:** finalizes the Definition of Done and test strategy, with cases
    for every AC, before implementation. Loops back only for something
    ambiguous, contradictory, missing, or untestable.
-9. **Senior Developers:** implement tasks from Technical Lead.
+9. **Test-first implementation,** with sequential ownership of one paired
+   Developer/QA worktree:
+   - **Senior QA** writes integration tests from the implementation documents
+     and keeps the pair's seed data current. QA Lead approves the tests and
+     automated cases.
+   - **Senior Developer** takes the worktree, writes each unit test before its
+     code, implements the code and migrations, and runs the approved integration
+     tests against the pair's `_wt_` database. Developer never edits QA-owned
+     test files.
+   - **Senior QA** takes back the same worktree and revision to confirm the
+     tests. QA fixes a test defect; a code defect goes to Developer with
+     reproduction steps, expected/actual results, and suspected area. Developer
+     fixes and reruns the tests, then hands back to QA for confirmation.
+   - Only one agent may write in or run work from the paired worktree at once.
+     Stop and confirm each previous run ended before transferring ownership.
+     Technical Lead merges the pair's branch into the feature branch after both
+     Leads approve their parts
+     ([test-first](quality.md#test-first-and-who-writes-which-test)).
 10. **Domain reviews:** Design Lead checks the UI against the approved design;
     drift goes back to Senior Developer through Technical Lead, and a new design
     decision goes to Design Lead.

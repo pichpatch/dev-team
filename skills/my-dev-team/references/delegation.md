@@ -140,23 +140,25 @@ approval, and QA's result are different things.
 
 The main checkout is the human's and may hold real secrets in ignored files. A
 git worktree holds tracked files only, so it starts without them. All repository
-writes for a feature happen in worktrees, except the documents agreed live with
-the human before the Issue exists, which PO and the Leads commit on the default
-branch ([talking to the Leads](orchestration.md#talking-to-the-leads)).
+writes for a feature happen in worktrees. What is agreed with the human before
+implementation stays on the Issue
+([talking to the Leads](orchestration.md#talking-to-the-leads)).
 
 ```text
 projects/
   my-app/                                     main checkout: the human's, real `.env`
   worktrees/my-app/
     meetup-create-event/                      feature branch: Leads integrate here
-    meetup-create-event-senior-developer-1/   `.env.example` only (fake values)
-    meetup-create-event-senior-qa/            `.env.test` (test-only credentials)
+    meetup-create-event-dev-qa/                paired Dev/QA branch, `.env.test`
+    meetup-create-event-senior-designer-1/     `.env.example` only (fake values)
 ```
 
 - **Technical Lead creates the worktrees** outside the repository:
   `../worktrees/{repo}/{feature-slug}` for the feature branch and
-  `../worktrees/{repo}/{feature-slug}-{instance}` per Senior, unless the project
-  has its own convention. One worktree and branch per agent instance. Other
+  `../worktrees/{repo}/{feature-slug}-{instance}` per independent worker,
+  unless the project has its own convention. The Senior Developer and Senior QA
+  assigned to the same feature share one paired worktree and branch for their
+  test-first handoffs; other workers keep separate worktrees and branches. Other
   Leads ask Technical Lead for one; if a Lead cannot run git, Organizer creates
   it on that Lead's instruction.
 - **Never copy a real env file into a worktree.** For runnable config, use
@@ -169,28 +171,43 @@ projects/
 - **A Senior stays in its worktree.** It does not read the main checkout, other
   worktrees, or the home directory. The one exception: its own
   [checkpoint](checkpoints.md) file at the path the packet gives.
+- **Paired Developer/QA work is sequential in one shared worktree.** Only the
+  agent holding the handoff may run or edit there; stop and confirm the previous
+  run has ended before transferring ownership. Senior QA writes and commits the
+  approved integration tests first, then hands the worktree to Senior Developer.
+  Senior Developer writes unit tests and implementation, runs QA's integration
+  tests, and hands the same revision back to QA for confirmation. QA owns test
+  corrections; Developer owns code and migration corrections. QA reports a code
+  failure with reproduction steps, expected/actual results, and the suspected
+  area, then hands back to Developer. Repeat the handoff until QA confirms the
+  fix. Never edit another role's files. Technical Lead reviews the paired branch
+  and merges it into the feature branch after both Leads approve their parts.
 - **Do not switch branches or leave uncommitted changes in the main checkout,**
   except for work the human explicitly authorized there
   ([direct-checkout exception](ai-task-delegation.md)); then tell the human
   what is uncommitted.
-- **After integration,** remove the worker's worktree and local branch once its
-  changes are preserved, its process stopped, and no review needs it
+- **After integration,** remove the worker's (or pair's) worktree and local
+  branch once its changes are preserved, all processes have stopped, and no
+  review needs it
   ([cleanup safeguards](ai-task-delegation.md)).
 
 Branches, commits, and pushing:
 
 - Feature branch: `feat/{issue-number}-{slug}`. Issue-free bugs and small
-  changes: `fix/{descriptive-slug}`. Each Senior's branch is the owning branch
-  plus `-{instance}`, unless the project has its own convention.
-- A Senior commits on its own branch, in small commits that name the Issue (or
-  the task when there is none). It never merges, pushes, or touches another
-  branch.
+  changes: `fix/{descriptive-slug}`. An independent Senior's branch is the
+  owning branch plus `-{instance}`. The paired Senior Developer and Senior QA
+  share one branch named with `-dev-qa`, unless the project has its own
+  convention.
+- A Senior commits in small commits that name the Issue (or the task when there
+  is none). Paired agents commit their own changes to the shared branch only
+  during their handoff; neither edits the other's files. Seniors never merge,
+  push, or touch another branch.
 - The responsible Lead reviews; Technical Lead merges approved branches into the
   feature branch and verifies the result.
 - Organizer pushes only the feature branch and opens the PR.
-- Only PO, Cybersecurity, and the Leads commit to the default branch, and only
-  documents with no effect on code. Each pushes its own commits. Nobody
-  force-pushes or rewrites pushed history.
+- Nobody commits to the default branch. Documents and code reach it only
+  through a PR the human merges. Nobody force-pushes or rewrites pushed
+  history.
 - Remove the feature worktree after feature-branch verification when no review
   needs it; keep the feature branch for the PR. After the human merges, Technical
   Lead (or Organizer for it) removes the local feature branch when safe.

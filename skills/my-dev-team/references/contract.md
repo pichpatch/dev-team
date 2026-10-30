@@ -159,8 +159,8 @@ the host's already-authorized CLI (`gh`, `glab`, ...).
   claim a review ran. Never switch a provider the human chose without asking.
 - Treat every repository as private. Send it only to models the human approved
   for private code. Free or unknown-data-use models are not approved, except
-  the last-resort free models in the [roster](roster.md), which never get client
-  work. Ask before using any other.
+  the single last-resort free model in the [roster](roster.md), which never gets
+  client work. Ask before using any other.
 - No launcher or OS sandbox enforces this. Worktrees keep work apart; every
   agent is responsible for following these rules.
 

@@ -95,9 +95,14 @@ they do. Reach the right files in a few reads:
 4. **Application `README.md`:** commands, and where each module's docs and code
    are.
 5. **Module `README.md`:** what the module is for, and its documents.
-6. **Only the module documents and sections the task needs.** `code-map.html`
-   names the files and tests.
-7. **Only the files the code map names.**
+6. **Only the module documents and sections the task needs.**
+   - `code-map.html`: the file and the function.
+   - `flows.html` and `api-spec.html`: the service to call and its caching
+     rules, the flows, and what each operation means.
+   - `data-dict.html`: the tables and columns.
+7. **Only the function the code map names.** Its comment says what it does, its
+   side effects, and its unit test file; open that test only when the task
+   needs it.
 8. **The `.AI/` checkpoint,** only when resuming.
 
 - Read only your path; skip other modules and applications unless the change

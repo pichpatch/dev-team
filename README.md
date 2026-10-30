@@ -132,17 +132,19 @@ is the authoritative copy and holds the rules; change both together.
 
 | Role | Model | Notes |
 | --- | --- | --- |
-| Senior pool 1 | Codex `gpt-6-luna`, high | Senior Developer and Senior Designer; up to three at once. Simplest slices; used last when Codex organizes |
-| Senior pool 2 | Claude `claude-haiku-5-5`, high | Used last when Claude Code organizes |
-| Senior pool 3 | OpenCode `deepseek-v4.1-flash`, high | |
-| Senior pool 4 to 6 (free) | OpenCode `deepseek-v4.1-flash-free`, `glm-5.3-flash-free`, `minimax-m3.1-flash-free` | Only when 1 to 3 are limited; never for client-work repos |
-| Design Tester | OpenCode `mimo-v2.6-flash` | Shared with Senior QA |
-| Senior QA | OpenCode `mimo-v2.6-flash` | |
+| Senior pool 1 | Codex `gpt-6-luna`, high | Senior Designer; up to three independent tasks at once. Simplest slices; used last when Codex organizes |
+| Senior pool 2 | Claude `claude-haiku-5-5`, high | Senior Designer; used last when Claude Code organizes |
+| Senior pool 3 | OpenCode Go `deepseek-v4.1-flash`, high | Senior Designer |
+| Senior Developer | OpenCode Go `deepseek-v4.1-flash`, high | Normal model; if explicitly rate-limited, one free fallback: OpenCode `deepseek-v4.1-flash-free` |
+| Senior QA | OpenCode Go `mimo-v2.6-flash` | Same paired worktree as Senior Developer; sequential handoffs; never use the same free model to review code it produced |
+| Design Tester | OpenCode `mimo-v2.6-flash` | |
 | DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated |
 | QA Lead and Cybersecurity, delegated | Preferably a different provider from the Organizer: Codex `gpt-6.1-sol` medium under Claude Code; Claude Sonnet 5.5 high under Codex or OpenCode | If that provider is rate-limited: OpenCode under Claude Code or Codex, Codex under OpenCode |
-| Lead backups | Technical Lead: Sol high, `mimo-v2.6-pro`, `deepseek-v4.1-flash` max, `deepseek-v4.1-flash-free`. Design Lead: Sol medium, `glm-5.3-flash` max, `claude-haiku-5-5` xhigh (OpenCode Go), `glm-5.3-flash-free`. QA Lead: Astra medium, Sonnet 5.5 high, `claude-haiku-5-5` xhigh (OpenCode Go), `minimax-m3.1-flash-free`. Cybersecurity: Sol medium, Sonnet 5.5 high, `claude-haiku-5-5` xhigh (OpenCode Go), `minimax-m3.1-flash-free` | Free last backup never for client-work repos, nor for a draft release review |
-| PO and DevOps backups | The three OpenCode free models: `deepseek-v4.1-flash-free`, `glm-5.3-flash-free`, `minimax-m3.1-flash-free` | Never for client-work repos; DevOps never where it would read production configuration |
-| Every model at its limit | Stop and report | |
+| Lead free backup | `opencode/deepseek-v4.1-flash-free` | Single free model; never for client work or Cybersecurity release reviews |
+| PO and DevOps free backup | `opencode/deepseek-v4.1-flash-free` | Never for client work; DevOps never where it would read production configuration |
+| Free model concurrency | One active free-model run across Organizer and all agents; never parallelize free-model work | |
+| Go and its single free fallback both limited | Stop and report; do not select another model automatically | |
+| Every other model at its limit | Stop and report | |
 
 ### Scores
 
