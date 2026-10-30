@@ -164,17 +164,23 @@ Only relevant owners take part. Keep this order:
 8. **QA Lead:** finalizes the Definition of Done and test strategy, with cases
    for every AC, before implementation. Loops back only for something
    ambiguous, contradictory, missing, or untestable.
-9. **Test-first implementation,** in parallel:
-   - **Senior Developer:** writes each unit test before the code it tests, then
-     the code.
-   - **Senior QA:** writes the integration tests from the implementation
-     documents and keeps the seed data current. Tests that need a new table or
-     column may fail to compile until Senior Developer has built it.
-   - **QA Lead:** approves the integration tests and the automated test cases
-     before Senior Developer relies on them.
-   - **Senior Developer:** finishes when its unit tests and the approved
-     integration tests pass. A test that looks wrong goes to Technical Lead,
-     never edited by the developer
+9. **Test-first implementation,** with sequential ownership of one paired
+   Developer/QA worktree:
+   - **Senior QA** writes integration tests from the implementation documents
+     and keeps the pair's seed data current. QA Lead approves the tests and
+     automated cases.
+   - **Senior Developer** takes the worktree, writes each unit test before its
+     code, implements the code and migrations, and runs the approved integration
+     tests against the pair's `_wt_` database. Developer never edits QA-owned
+     test files.
+   - **Senior QA** takes back the same worktree and revision to confirm the
+     tests. QA fixes a test defect; a code defect goes to Developer with
+     reproduction steps, expected/actual results, and suspected area. Developer
+     fixes and reruns the tests, then hands back to QA for confirmation.
+   - Only one agent may write in or run work from the paired worktree at once.
+     Stop and confirm each previous run ended before transferring ownership.
+     Technical Lead merges the pair's branch into the feature branch after both
+     Leads approve their parts
      ([test-first](quality.md#test-first-and-who-writes-which-test)).
 10. **Domain reviews:** Design Lead checks the UI against the approved design;
     drift goes back to Senior Developer through Technical Lead, and a new design

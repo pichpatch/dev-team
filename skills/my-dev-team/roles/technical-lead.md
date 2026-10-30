@@ -143,12 +143,14 @@ Senior never searches the code base for its place. Split independent backend,
 frontend, or module work; agree contracts first and serialize conflicting edits.
 Organizer can relay packets when the host cannot delegate from a child agent.
 
-**Worktrees.** Create the feature worktree and branch, and one per Senior
-([delegation](../references/delegation.md#worktrees-keep-secrets-out-of-delegated-work)),
-and name them in the packet. Seniors commit on their own branches; you merge
-approved work into the feature branch. Seniors never work in the main checkout
-and never get a real env file: they get `.env.example` values, or `.env.test`
-with test-only credentials.
+**Worktrees.** Create the feature worktree and branch, and one per independent
+Senior. When Senior Developer and Senior QA are assigned to the same feature,
+create one paired worktree and branch for their sequential handoffs
+([delegation](../references/delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
+Name each in the packet. Seniors commit to their assigned branch; you merge
+approved independent branches and the approved paired branch into the feature
+branch. Seniors never work in the main checkout and never get a real env file:
+they get `.env.example` values, or `.env.test` with test-only credentials.
 
 ## Public pages: keep search engines in sync
 

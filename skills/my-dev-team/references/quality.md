@@ -28,25 +28,38 @@ needs evidence whatever the overall percentage.
 | Test | Written by | From | Approved by |
 | --- | --- | --- | --- |
 | Unit test | Senior Developer, before the code it tests | The task, `rules.html`, and QA's cases | Technical Lead, in code review |
-| Integration test | Senior QA, in parallel with the code | The implementation documents: `api-spec.html`, `data-dict.html`, `flows.html` | QA Lead, before Senior Developer relies on it |
+| Integration test | Senior QA, before implementation | The implementation documents: `api-spec.html`, `data-dict.html`, `flows.html` | QA Lead, before Senior Developer relies on it |
 
 An integration test calls the API and then checks the data in the database:
 the rows written, changed, or left alone, and the response. It runs against
-the worker's own `{project}_wt_{worktree}` database
+the shared pair worktree's `{project}_wt_{worktree}` database
 ([stack](stack.md)), migrated and seeded, never a mocked
 database. Only third-party services are mocked
 (`INTEGRATION_<NAME>_MODE=mock`).
 
 The order:
 
-1. Technical Lead writes the implementation documents on the feature branch.
-2. Senior Developer writes unit tests first, then the code. At the same time,
-   Senior QA writes the integration tests and QA Lead turns its cases into
-   automated test cases.
-3. QA Lead reviews and approves the integration tests and automated cases.
-4. Senior Developer finishes when its unit tests and the approved integration
-   tests pass. It never edits an approved integration test.
-5. QA Lead approves the result ([completion gate](orchestration.md#shared-completion-gate-for-features-small-changes-and-bugs)).
+1. Technical Lead writes the implementation documents and creates the paired
+   Developer/QA worktree and branch.
+2. Senior QA writes integration tests from the documents and commits them on
+   the paired branch. QA Lead reviews and approves the tests and automated
+   cases before implementation relies on them.
+3. Senior QA hands the worktree to Senior Developer. Developer writes unit
+   tests first, then the code and migrations. Developer does not edit QA-owned
+   tests.
+4. If Developer adds or changes a migration, Developer hands the worktree to
+   QA to update the seed, then QA hands it back. Developer runs the approved
+   integration tests against the pair's migrated and seeded `_wt_` database.
+5. Developer hands the same revision and worktree back to Senior QA. QA runs
+   and confirms the integration tests. If a test is wrong, QA corrects it and
+   reruns it. If the code is wrong, QA reports reproduction steps, expected and
+   actual results, and the suspected area to Developer; Developer fixes the
+   code and reruns the tests, then hands back to QA for confirmation.
+6. Only one agent may write in or run work from the paired worktree at a time.
+   Stop and confirm the previous run has ended before each handoff. QA Lead
+   approves changes to expected behavior; Technical Lead resolves gaps in the
+   implementation documents. QA Lead approves the final result
+   ([completion gate](orchestration.md#shared-completion-gate-for-features-small-changes-and-bugs)).
 
 **A new table or column.** Senior QA writes the integration tests from
 `data-dict.html` before the migration exists. They may fail to compile until
@@ -63,10 +76,11 @@ before the next test run. A test that fails because the seed is stale is a
 seed defect, not a product defect.
 
 **When a test and the code disagree,** neither Senior changes the other's work.
-Senior Developer goes to Technical Lead, Senior QA to QA Lead. The two Leads
-compare both against the implementation documents: a wrong test goes back to
-Senior QA, wrong code to Senior Developer, and a gap in the documents to
-Technical Lead to fix first.
+Senior QA investigates and sends test defects to QA Lead and code defects to
+Senior Developer with reproduction evidence. The two Leads compare both against
+the implementation documents: QA corrects a wrong test, Developer corrects
+wrong code, and Technical Lead fixes a document gap before dependent work
+continues.
 
 ## Choose cases by risk
 

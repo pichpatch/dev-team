@@ -87,9 +87,16 @@ create a feature or commit to the default branch.
   explicit quota errors from transient failures. A failed probe never kills a
   healthy worker. Confirm the run's own failure or real quota exhaustion before
   handing over; never repeat a non-idempotent action.
-- **Free models** come only after every paid model the role may use is limited,
-  and never for client work ([roster](roster.md)). Never expose production
-  values to a free or unapproved model.
+- **Senior Developer/QA fallback:** OpenCode Go is the normal route. After an
+  explicit Go quota-limit response, the paired worker may continue on the one
+  approved free fallback in the [roster](roster.md), never for client work, if
+  doing so preserves reviewer independence. Senior QA must not use the same
+  free model to confirm code produced by that model; if no distinct approved
+  reviewer model is available, stop and report. Only one free-model run may be
+  active at a time, including Organizer work. If the fallback is limited, stop
+  and report; do not select another model automatically. A transient error or
+  slow response does not establish quota exhaustion. Other roles follow their
+  roster entries. Never expose production values to a free or unapproved model.
 
 ## Integration and worktree cleanup
 
@@ -160,10 +167,11 @@ Organizer place delegated workers there.
 2. The original worker cannot be confirmed stopped: no second writer starts.
 3. A migration succeeded but the card says in progress: a read-only check
    prevents running it twice.
-4. Senior Developer reports done: QA has its own assignment; the developer
-   cannot mark it complete.
-5. A worker branch is merged and clean: its worktree and local branch are
-   removed; the feature branch and PR remain.
+4. Senior Developer reports done: Senior QA takes the paired worktree and
+   confirms the integration tests; the developer cannot mark QA complete.
+5. An independent worker branch or paired Developer/QA branch is merged and
+   clean: its worktree and branch are removed only after all worker processes
+   have stopped; the feature branch and PR remain.
 6. A worktree has uncommitted or unmerged changes, or an active review: cleanup
    is blocked with a reason, never forced.
 7. Client work or a provider with unclear data use: no free-model fallback.
