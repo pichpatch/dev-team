@@ -164,8 +164,8 @@ Only relevant owners take part. Keep this order:
 8. **QA Lead:** finalizes the Definition of Done and test strategy, with cases
    for every AC, before implementation. Loops back only for something
    ambiguous, contradictory, missing, or untestable.
-9. **Test-first implementation,** with sequential ownership of one paired
-   Developer/QA worktree:
+9. **Test-first implementation,** with sequential ownership of each pair's
+   Developer/QA worktree (one pair per API or data slice; pairs run in parallel):
    - **Senior QA** writes integration tests from the implementation documents
      and keeps the pair's seed data current. QA Lead approves the tests and
      automated cases.

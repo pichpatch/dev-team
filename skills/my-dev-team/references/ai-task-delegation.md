@@ -88,15 +88,14 @@ create a feature or commit to the default branch.
   healthy worker. Confirm the run's own failure or real quota exhaustion before
   handing over; never repeat a non-idempotent action.
 - **Senior Developer/QA fallback:** OpenCode Go is the normal route. After an
-  explicit Go quota-limit response, the paired worker may continue on the one
-  approved free fallback in the [roster](roster.md), never for client work, if
-  doing so preserves reviewer independence. Senior QA must not use the same
-  free model to confirm code produced by that model; if no distinct approved
-  reviewer model is available, stop and report. Only one free-model run may be
-  active at a time, including Organizer work. If the fallback is limited, stop
-  and report; do not select another model automatically. A transient error or
-  slow response does not establish quota exhaustion. Other roles follow their
-  roster entries. Never expose production values to a free or unapproved model.
+  explicit Go quota-limit response, a pair worker continues on the paid pool
+  rows in the [roster](roster.md), keeping Senior QA on a different model from
+  the Developer whose code it confirms. Only when OpenCode Go, Claude, and Codex
+  are all at their limit may it use a [free model](roster.md#free-models): any
+  of them, one active at a time, never for client work. Independence may then be
+  lost; record it, and do not stop for it. A transient error or slow response
+  does not establish quota exhaustion. Other roles follow their roster entries.
+  Never expose production values to a free or unapproved model.
 
 ## Integration and worktree cleanup
 

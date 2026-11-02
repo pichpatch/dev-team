@@ -156,9 +156,11 @@ projects/
 - **Technical Lead creates the worktrees** outside the repository:
   `../worktrees/{repo}/{feature-slug}` for the feature branch and
   `../worktrees/{repo}/{feature-slug}-{instance}` per independent worker,
-  unless the project has its own convention. The Senior Developer and Senior QA
-  assigned to the same feature share one paired worktree and branch for their
-  test-first handoffs; other workers keep separate worktrees and branches. Other
+  unless the project has its own convention. Each API or data slice gets a pair: a
+  Senior Developer and a Senior QA share one paired worktree and branch for their
+  test-first handoffs. A UI-only slice has no pair: its Senior Developer keeps a
+  separate worktree and QA covers it with end-to-end checks. Independent slices
+  and pairs run in parallel. Other
   Leads ask Technical Lead for one; if a Lead cannot run git, Organizer creates
   it on that Lead's instruction.
 - **Never copy a real env file into a worktree.** For runnable config, use
@@ -195,8 +197,8 @@ Branches, commits, and pushing:
 
 - Feature branch: `feat/{issue-number}-{slug}`. Issue-free bugs and small
   changes: `fix/{descriptive-slug}`. An independent Senior's branch is the
-  owning branch plus `-{instance}`. The paired Senior Developer and Senior QA
-  share one branch named with `-dev-qa`, unless the project has its own
+  owning branch plus `-{instance}`. The Senior Developer and Senior QA of a
+  pair share one branch named with `-dev-qa-{slice}`, unless the project has its own
   convention.
 - A Senior commits in small commits that name the Issue (or the task when there
   is none). Paired agents commit their own changes to the shared branch only

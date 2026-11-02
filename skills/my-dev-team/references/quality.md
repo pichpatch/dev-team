@@ -39,8 +39,8 @@ database. Only third-party services are mocked
 
 The order:
 
-1. Technical Lead writes the implementation documents and creates the paired
-   Developer/QA worktree and branch.
+1. Technical Lead writes the implementation documents and creates one paired
+   Developer/QA worktree and branch for each API or data slice.
 2. Senior QA writes integration tests from the documents and commits them on
    the paired branch. QA Lead reviews and approves the tests and automated
    cases before implementation relies on them.

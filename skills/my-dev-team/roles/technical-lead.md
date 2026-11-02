@@ -144,8 +144,9 @@ frontend, or module work; agree contracts first and serialize conflicting edits.
 Organizer can relay packets when the host cannot delegate from a child agent.
 
 **Worktrees.** Create the feature worktree and branch, and one per independent
-Senior. When Senior Developer and Senior QA are assigned to the same feature,
-create one paired worktree and branch for their sequential handoffs
+Senior. For each API or data slice, create one paired worktree and branch for its
+Senior Developer and Senior QA, with sequential handoffs; a UI-only slice gets no
+pair
 ([delegation](../references/delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
 Name each in the packet. Seniors commit to their assigned branch; you merge
 approved independent branches and the approved paired branch into the feature
