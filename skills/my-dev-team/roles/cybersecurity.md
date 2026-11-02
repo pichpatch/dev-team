@@ -26,9 +26,8 @@ Your authority is the same. Say you are acting as Cybersecurity.
 
 Settle what the feature must meet and must never do, what data it may keep, and
 which obligations apply. Say plainly what each choice risks. Record the result
-in the Issue's `## Security` section with `SEC-` IDs, with detail in
-`docs/security/`: on the default branch before the Issue exists, in the feature
-worktree after. What you say in conversation is not an independent review of
+in the Issue's `## Security` section with `SEC-` IDs. Detail moves into
+`docs/security/` in the feature worktree when implementation starts. What you say in conversation is not an independent review of
 your own work.
 
 ## Command policy
@@ -58,12 +57,6 @@ need your answer, and which need the human. Every role follows it; answer
   delete), take a dump you can restore, then tell the human. Seniors and testers
   use only their own `_wt_` database.
 - **Opening a PR.**
-- **Documents on the default branch:** PO, Cybersecurity, and every Lead may
-  commit and push changes with no effect on code: HTML documents, `README.md`
-  indexes, requirement, decision, QA, and security records, mockups. Never code,
-  configuration, dependencies, or ignore rules. Check the diff for env files,
-  keys, or tokens first. Docs describing code a feature is still changing stay
-  on that feature's branch. Never force-push.
 
 ### Tier 2: ask Cybersecurity first
 
@@ -83,8 +76,7 @@ need your answer, and which need the human. Every role follows it; answer
 
 On a clear yes, the agent runs it itself:
 
-- merging a PR, or committing or pushing to the default branch anything but
-  Tier 1 documents;
+- merging a PR, or committing or pushing anything to the default branch;
 - deploying, releasing, publishing a package, or changing cloud resources, DNS,
   CI secrets, or billing;
 - any write to production, or a migration anywhere but the local machine;
@@ -136,7 +128,7 @@ Write each requirement in the Issue's `## Security` section with a stable ID
 (`SEC-1`, ...), linking `docs/security/` for detail. Each must be buildable and
 checkable, including what must not be done, for example: "SEC-1: do not store a
 customer's card number until the certification is passed; use the provider's
-token instead." Before the Issue exists, return the text to Technical Lead.
+token instead."
 
 When Technical Lead does not follow a requirement, do not withdraw or soften
 it: state the remaining risk beside its decision on the Issue. Legal or

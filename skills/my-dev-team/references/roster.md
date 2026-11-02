@@ -8,6 +8,9 @@ human says so, here and in the host file below, in the same edit.
 
 - A reviewer runs on a different model from the work it reviews: a Lead and its
   Seniors, Design Tester and Senior Designer, QA and the developers.
+- Fallback keeps reviewer independence while any paid route is available. Only
+  when OpenCode Go, Claude, and Codex are all at their limit may a free model
+  be used (see [free models](#free-models)); independence can then be lost.
 - Only models the human approved for private code
   ([shared contract](contract.md)). A free model that trains on what it is sent
   is not approved, except the free last-resort rows below.
@@ -58,51 +61,76 @@ it moves down its row, skipping its own primary and any limited subscription:
 - Backup 4 is free and may train on what it is sent: never for client work.
   Cybersecurity never uses it for a release review, where it may read
   production configuration; it stops and reports instead.
-- PO and DevOps have no paid backups. When limited, they go straight to
-  `opencode/deepseek-v4.1-flash-free`, then `opencode/glm-5.3-flash-free`, then
-  `opencode/minimax-m3.1-flash-free`: never for client work, and DevOps never
+- PO and DevOps have no paid backups. When limited, they go straight to the
+  [free models](#free-models), in order: never for client work, and DevOps never
   where it would read production configuration.
 
 ## Delegated roles
 
-Organizer starts these as separate CLI runs, each in its own worktree.
+Organizer starts delegated work as separate CLI runs. A Senior Developer and
+Senior QA paired on a slice are the exception: they use the same worktree with
+sequential write ownership ([worktrees](delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
 
 ### Senior pool
 
-Senior Developer and Senior Designer work. Up to three Seniors at once.
+Senior Designer uses the Senior pool below. Senior Developer and Senior QA use
+the OpenCode Go route below. Independent tasks and independent Dev/QA pairs may
+run in parallel; the work inside one pair is sequential.
 
 | Order | Runs through | Subscription | Model | Effort |
 | --- | --- | --- | --- | --- |
 | 1 | Codex | ChatGPT | `gpt-6-luna` | `high` |
 | 2 | Claude | Claude | `claude-haiku-5-5` | `high` |
 | 3 | OpenCode | OpenCode Go | `opencode-go/deepseek-v4.1-flash` | `high` |
-| 4 (free) | OpenCode | OpenCode free | `opencode/deepseek-v4.1-flash-free` | `high` |
-| 5 (free) | OpenCode | OpenCode free | `opencode/glm-5.3-flash-free` | `max` |
-| 6 (free) | OpenCode | OpenCode free | `opencode/minimax-m3.1-flash-free` | `high` |
 
-- **Free rows 4–6** only when 1–3 are limited, and never for client work.
-  `opencode/glm-5.3-flash-free` does no Senior Designer work (same model as the
-  OpenCode Design Lead).
+- Senior Developer normally uses OpenCode Go `opencode-go/deepseek-v4.1-flash`;
+  Senior QA uses the distinct OpenCode Go model `opencode-go/mimo-v2.6-flash`.
+  The reviewer model must differ from the model used for the code it reviews.
+- If OpenCode Go returns an explicit quota-limit response, a pair worker
+  continues on the paid pool rows above (Codex `gpt-6-luna`, Claude
+  `claude-haiku-5-5`), keeping Senior QA on a different model from the Senior
+  Developer whose code it confirms. A transient error or slow response is not a
+  quota limit. Free models come only after OpenCode Go, Claude, and Codex are
+  all at their limit ([free models](#free-models)).
 - **Spare the host's subscription.** Take models from the top, but use the one
   on the organizing host's subscription last: `claude-haiku-5-5` under Claude
   Code, `gpt-6-luna` under Codex.
 - **Match the slice to the model.** `gpt-6-luna` is the cheapest and weakest
   coder; give it the simplest, most self-contained slices.
-- **At a limit,** continue that Senior's task on the next model not already
-  running a task.
+- Senior QA uses `opencode-go/mimo-v2.6-flash`, distinct from Senior
+  Developer's `opencode-go/deepseek-v4.1-flash`, so implementation and
+  integration tests come from different models.
+- At a limit on the Senior Designer pool, continue on the next available model
+  in the pool, then the [free models](#free-models).
 
-### Testers
+### Free models
 
-Both run on one model outside the Senior pool, so a tester never runs on the
-model that made the work. They may share it because neither reviews the other.
+Three OpenCode free models, used in this order: `opencode/deepseek-v4.1-flash-free`,
+`opencode/glm-5.3-flash-free`, `opencode/minimax-m3.1-flash-free`. They may
+train on what they are sent, so never for client work.
+
+- **Last resort for Seniors and Design Tester:** only when OpenCode Go, Claude,
+  and Codex are all at their limit. Any free model is then acceptable, even one
+  that also produced the work being reviewed. Prefer a different one, and record
+  that independence could not be kept. Do not stop for this.
+- **Backups for the Leads, PO, and DevOps** are listed above.
+- **One free-model run at a time** across the team, Organizer included. Wait for
+  the active free-model run to stop before starting another; never parallelize
+  free-model work.
+- When every free model is also at its limit, stop and report with a checkpoint.
+
+### Design Tester
+
+Design Tester runs outside the Senior pool, so it never runs on the model that
+made the design it checks.
 
 | Role | Runs through | Model | Effort |
 | --- | --- | --- | --- |
 | Design Tester | OpenCode | `opencode-go/mimo-v2.6-flash` | (none to set) |
-| Senior QA | OpenCode | `opencode-go/mimo-v2.6-flash` | (none to set) |
 
-A limited tester uses Senior pool rows 4–6 in order, skipping the model that
-produced the work it tests.
+When OpenCode Go returns an explicit quota-limit response, Design Tester uses a
+paid pool model other than the one that made the design. Only when OpenCode Go,
+Claude, and Codex are all at their limit does it use the [free models](#free-models).
 
 ### DevOps and Cybersecurity
 

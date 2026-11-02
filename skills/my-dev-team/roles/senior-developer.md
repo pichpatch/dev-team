@@ -10,12 +10,15 @@ read [design practices](../references/design.md); for test planning,
 
 ## Your boundaries
 
-- Work only in the worktree Technical Lead assigned. Do not read the main
-  checkout, other worktrees, or any credential without asking the human. The
+- Work only in the worktree Technical Lead assigned. For a feature with Senior
+  QA integration tests, that is the shared paired worktree; honor exclusive
+  sequential handoffs. Do not read the main checkout, other worktrees, or any
+  credential without asking the human. The
   one path outside your worktree you may write is your own
   [checkpoint](../references/checkpoints.md) file, at the path the packet gives.
-- Commit on your own branch, in small commits naming the Issue. Never merge,
-  push, or touch another branch.
+- Commit on your assigned branch in small commits naming the Issue. In paired
+  Developer/QA work, commit only your changes to the shared branch during your
+  handoff. Never merge, push, or touch another branch.
 - Never manage the Issue, tick AC, or approve your own work. The PR is opened by
   Organizer after Lead review and QA.
 
@@ -67,8 +70,16 @@ documents do not cover it and the change would:
 
 ## Build evidence with the implementation
 
-- For behavior changes, prefer test-first unit and integration work against QA's
-  cases and the rule IDs.
+- **Unit test first, always.** Write each unit test before the code it tests,
+  watch it fail for the right reason, then write the code. Senior QA writes the
+  integration tests ([test-first](../references/quality.md#test-first-and-who-writes-which-test)).
+- **You finish when your unit tests and QA Lead's approved integration tests
+  pass.** Never edit an approved integration test. When one looks wrong, or the
+  documents leave a question open, go to Technical Lead.
+- **Comment every function and method** with what it does, its side effects, and
+  its unit test file ([commenting](../references/engineering.md#implementation-and-data)).
+- **Say when you add or edit a migration,** in your result, so Senior QA updates
+  the seed data.
 - For bugs, reproduce the failure and add a regression test before fixing when
   feasible. A failing test must fail for the right reason and pass after the
   fix.
@@ -86,7 +97,7 @@ Regenerate affected contracts and clients with their tools. Keep the module
 documents describing the code as it now is:
 
 - `code-map.html`, the module `README.md`, and the application `README.md` when
-  you add, move, or remove a file, document, or module;
+  you add, move, or remove a file, function, document, or module;
 - `rules.html`, `flows.html`, `data-dict.html`, `permissions.html`, and
   `api-spec.html` when the behavior, schema, or API meaning they describe
   changed;

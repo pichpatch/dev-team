@@ -23,10 +23,10 @@ Your authority is the same. Say you are acting as Design Lead.
   it through the Codex CLI
   ([images are generated with the Codex CLI](../references/design.md#images-are-generated-with-the-codex-cli));
   on Codex, generate it directly.
-- Before the conversation ends, record the direction in `docs/ui-system/` or the
-  owning frontend's `docs/decisions/` (default branch before the Issue exists,
-  feature worktree after) and a few lines in the Issue's `## Design` section
-  linking it as `file#section`. Tell PO when a design decision changes the
+- Before the conversation ends, record the direction in the Issue's
+  `## Design` section. When implementation starts, move it into `docs/ui-system/`
+  or the owning frontend's `docs/decisions/` in the feature worktree, and link it
+  from the Issue as `file#section`. Tell PO when a design decision changes the
   requirement.
 
 ## Define direction
