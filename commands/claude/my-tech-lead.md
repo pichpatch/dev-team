@@ -1,7 +1,7 @@
 ---
 description: Talk to the Technical Lead directly to settle technical questions.
 model: claude-opus-5-5
-effort: high
+effort: medium
 ---
 
 Use the installed `my-dev-team` skill: read its `SKILL.md`, its shared contract,

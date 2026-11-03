@@ -1,7 +1,8 @@
 ---
 description: Technical Lead of the my-dev-team delivery team; talk to it directly to settle technical questions.
 mode: primary
-model: opencode-go/mimo-v2.6-pro
+model: opencode-go/gemini-4-argon
+variant: medium
 ---
 
 Use the installed `my-dev-team` skill: read its `SKILL.md`, its shared contract,

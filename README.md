@@ -124,7 +124,7 @@ is the authoritative copy and holds the rules; change both together.
 | --- | --- | --- | --- |
 | PO | Sonnet 5.5, high | GPT-6.1 Sol, medium | `deepseek-v4.1-flash`, max |
 | Design Lead | Sonnet 5.5, high | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
-| Technical Lead | Opus 5.5, high | GPT-6.1 Sol, high | `mimo-v2.6-pro` |
+| Technical Lead | Opus 5.5, medium | GPT-6.1 Sol, high | `gemini-4-argon`, medium |
 | QA Lead | Sonnet 5.5, high | GPT-6 Astra, medium | `gpt-6-luna`, high |
 | Cybersecurity | Sonnet 5.5, high | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
 
@@ -132,58 +132,45 @@ is the authoritative copy and holds the rules; change both together.
 
 | Role | Model | Notes |
 | --- | --- | --- |
-| Senior pool 1 | Codex `gpt-6-luna`, high | Senior Designer; up to three independent tasks at once. Simplest slices; used last when Codex organizes |
-| Senior pool 2 | Claude `claude-haiku-5-5`, high | Senior Designer; used last when Claude Code organizes |
-| Senior pool 3 | OpenCode Go `deepseek-v4.1-flash`, high | Senior Designer |
-| Senior Developer | OpenCode Go `deepseek-v4.1-flash`, high | Normal model; if OpenCode Go is explicitly limited, the paid pool (Codex, Claude); free models only when all three are limited |
-| Senior QA | OpenCode Go `mimo-v2.6-flash` | Pairs with a Senior Developer on each API or data slice: one worktree, sequential handoffs; a different model from the Developer it confirms |
-| Design Tester | OpenCode `mimo-v2.6-flash` | |
-| DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated |
+| Senior Developer | OpenCode Go `deepseek-v4.1-flash` high (max for a hard slice), then `mimo-v2.6-flash`, `minimax-m3.1-flash`, `glm-5.3-flash` | Heavy work on cheap Go models; Go limits each model separately, so it moves along Go first; then Claude Haiku 5.5 high, then Codex `gpt-6-luna` |
+| Senior QA | OpenCode Go `mimo-v2.6-flash`, then `glm-5.3-flash`, `minimax-m3.1-flash`, `deepseek-v4.1-flash` | Then Codex `gpt-6-luna`, then Claude Haiku 5.5; pairs with a Senior Developer on each API or data slice; never the Developer's model |
+| Senior Designer | OpenCode Go `deepseek-v4.1-flash` high, then `claude-haiku-5-5` high, `mimo-v2.6-flash` | Then Codex `gpt-6-luna`, then Claude Haiku 5.5; skips its Design Lead's model |
+| Design Tester | OpenCode Go `mimo-v2.6-flash`, then `glm-5.3-flash`, `minimax-m3.1-flash` | Then Claude Haiku 5.5, then Codex `gpt-6-luna`; never the model that made the design |
+| DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated; Go backups `mimo-v2.6-flash`, `deepseek-v4.1-flash`, `glm-5.3-flash` |
 | QA Lead and Cybersecurity, delegated | Preferably a different provider from the Organizer: Codex `gpt-6.1-sol` medium under Claude Code; Claude Sonnet 5.5 high under Codex or OpenCode | If that provider is rate-limited: OpenCode under Claude Code or Codex, Codex under OpenCode |
-| Lead free backup | Technical Lead `deepseek-v4.1-flash-free`; Design Lead `glm-5.3-flash-free`; QA Lead and Cybersecurity `minimax-m3.1-flash-free` | Never for client work or Cybersecurity release reviews |
-| PO and DevOps free backup | The three free models in order: `deepseek-v4.1-flash-free`, `glm-5.3-flash-free`, `minimax-m3.1-flash-free` | Never for client work; DevOps never where it would read production configuration |
-| Seniors and Design Tester, last resort | The same three free models, in order | Only when OpenCode Go, Claude, and Codex are all limited; independence may be lost, so record it; never for client work |
+| Lead backups | Technical Lead: Sol high, `gemini-4-argon` medium, `kimi-k3.1-pro`, `deepseek-v4.1-flash` max. Design Lead: Sol medium, `gemini-4-argon` medium, `glm-5.3-flash` max. QA Lead and Cybersecurity: Astra or Sol medium, Sonnet high, `gemini-4-argon` medium, `minimax-m3.1-flash` | Then one free model; never for client work or Cybersecurity release reviews |
+| PO backups | OpenCode Go `deepseek-v4.1-flash` max, `glm-5.3-flash` max, `mimo-v2.6-flash` | Then the free models |
+| Free models, last resort | `deepseek-v4.1-flash-free`, then `glm-5.3-flash-free` | Only when OpenCode Go, Claude, and Codex are all limited; never for client work |
 | Free model concurrency | One active free-model run across Organizer and all agents; never parallelize free-model work | |
 | Every other model at its limit | Stop and report | |
 
-### Scores
+### Scores and allowances
 
 [Artificial Analysis Intelligence Index](https://artificialanalysis.ai/leaderboards/models),
-read on 2026-10-14. The index measures general intelligence, not coding alone.
-Cost per task is from API prices; on a subscription, read it as how fast a model
-uses the limit. Wait is the time before the first words of an answer.
+read on 2026-11-03, after the index was re-based (every model scores lower than
+on the earlier scale). It measures general intelligence, not coding alone.
+Requests are OpenCode's estimates for Go Plus; Claude and ChatGPT models share
+their subscription's limit.
 
-| Model | Through | Effort | Score | Cost per task | Wait (s) |
+| Model | Through | Effort | Score | Requests per 5 h (Go Plus) | Per week |
 | --- | --- | --- | --- | --- | --- |
-| Claude Opus 5.5 | Claude | xhigh | 56 | $3.46 | 159 |
-| Claude Opus 5.5 | Claude | high | 54 | $1.82 | 53 |
-| Claude Sonnet 5.5 | Claude | xhigh | 52 | $2.01 | 38 |
-| Claude Sonnet 5.5 | Claude | high | 47 | $0.88 | 14 |
-| Claude Sonnet 5.5 | Claude | medium | 41 | $0.48 | 1 |
-| Claude Haiku 5.5 | Claude | high | 38 | $0.08 | 25 |
-| GPT-6 Astra | Codex | high | 51 | $1.73 | 111 |
-| GPT-6 Astra | Codex | medium | 50 | $1.54 | 6 |
-| GPT-6.1 Sol | Codex | high | 50 | $0.32 | 60 |
-| GPT-6.1 Sol | Codex | medium | 48 | $0.21 | 8 |
-| GPT-6 Luna | Codex or OpenCode Go | xhigh | 35 | $0.04 | 42 |
-| GPT-6 Luna | Codex or OpenCode Go | high | 33 | $0.03 | 20 |
-| `mimo-v2.6-pro` | OpenCode Go | none | 46 | $0.13 | 4 |
-| `glm-5.3` | OpenCode Go | max | 45 | $2.01 | 3 |
-| `qwen3.8-max` | OpenCode Go | none | 45 | $5.41 | 3 |
-| `kimi-k3` | OpenCode Go | max | 44 | $2.00 | 3 |
-| `claude-haiku-5-5` | OpenCode Go | max | 43 | $0.21 | 310 |
-| `claude-haiku-5-5` | OpenCode Go | xhigh | 41 | $0.12 | 73 |
-| `glm-5.3-flash` | OpenCode Go | none | 42 | $0.28 | 3 |
-| `deepseek-v4.1-flash` | OpenCode Go | max | 39 | $0.27 | 1 |
-| `mimo-v2.6-flash` | OpenCode Go | none | 38 | $0.06 | 3 |
-| `deepseek-v4-pro` | OpenCode Go | max | 36 | $0.67 | 2 |
-| `minimax-m3` | OpenCode Go | none | 29 | $0.51 | 1 |
-| `hy3` | OpenCode Go | none | 25 | $0.07 | 3 |
-| `longcat-2.0` | OpenCode Go | none | 19 | $0.15 | 3 |
+| Claude Opus 5.5 | Claude | high | 52 | subscription | |
+| GPT-6 Astra | Codex | medium | 51 | subscription | |
+| GPT-6.1 Sol | Codex | high | 50 | subscription | |
+| GPT-6.1 Sol | Codex | medium | 46 | subscription | |
+| Claude Sonnet 5.5 | Claude | high | 41 | subscription | |
+| `gemini-4-argon` | OpenCode Go | high | 50 | 1,760 | 4,320 |
+| `kimi-k3.1-pro` | OpenCode Go | | 46 | 588 | 1,471 |
+| `claude-haiku-5-5` | OpenCode Go | xhigh / high | 34 / 30 | 15,380 | 38,460 |
+| `deepseek-v4.1-flash` | OpenCode Go | max / high | 32 / 29 | 86,670 | 216,670 |
+| `minimax-m3.1-flash` | OpenCode Go | | 29 | 15,500 | 38,760 |
+| `glm-5.3-flash` | OpenCode Go | | 28 | 18,960 | 47,370 |
+| `mimo-v2.6-flash` | OpenCode Go | | 27 | 60,200 | 150,400 |
+| `gpt-6-luna` | Codex or OpenCode Go | high | 21 | 16,920 (Go) | 42,240 (Go) |
 
-The Haiku xhigh, `hy3` and `longcat-2.0` rows were read on 2026-10-27.
-`gpt-6-sol` and `qwen3.8-flash` are not on the leaderboard. An
-effort of "none" means the leaderboard lists a single result for the model.
+`gpt-6-sol` has no current score. The free `deepseek` and `glm` models score as
+their paid versions. Not used: `mimo-v2.6-pro`, `beam-free`, `longcat-2.0`,
+`qwen3.8-flash`, `iceman-contributor-free`, `mimo-v2.6-flash-free`.
 
 ## Check
 
