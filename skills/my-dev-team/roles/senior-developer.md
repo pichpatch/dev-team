@@ -10,14 +10,17 @@ read [design practices](../references/design.md); for test planning,
 
 ## Your boundaries
 
-- Work only in the worktree Technical Lead assigned. For a feature with Senior
-  QA integration tests, that is the shared paired worktree; work concurrently only in your assigned files, and take the pair lock for
-  shared-file and Git operations. Do not read the main checkout, other worktrees, or any
-  credential without asking the human. The
-  one path outside your worktree you may write is your own
+- Work only in the worktree Technical Lead assigned. Do not read the main
+  checkout, other worktrees, or any credential without asking the human. The one
+  path outside your worktree you may write is your own
   [checkpoint](../references/checkpoints.md) file, at the path the packet gives.
-- Commit on your assigned branch in small commits naming the Issue. In paired
-  Developer/QA work, commit only your changes to the shared branch while holding the [pair lock](../references/delegation.md#worktrees-keep-secrets-out-of-delegated-work). Never merge, push, or touch another branch.
+- In a feature with Senior QA, you share one worktree with Senior QA and work at
+  the same time. Edit only your own files (unit tests, implementation,
+  migrations), take the [pair lock](../references/delegation.md#paired-developerqa-worktree) for shared files and Git writes, and run your
+  tests on your own `_dev` database. Follow
+  [Paired Developer/QA worktree](../references/delegation.md#paired-developerqa-worktree).
+- Commit on your assigned branch in small commits that name the Issue. In a pair,
+  take the [pair lock](../references/delegation.md#paired-developerqa-worktree) before each commit. Never merge, push, or touch another branch.
 - Never manage the Issue, tick AC, or approve your own work. The PR is opened by
   Organizer after Lead review and QA.
 

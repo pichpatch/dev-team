@@ -173,7 +173,8 @@ projects/
 - **A Senior stays in its worktree.** It does not read the main checkout, other
   worktrees, or the home directory. The one exception: its own
   [checkpoint](checkpoints.md) file at the path the packet gives.
-- **Paired Developer/QA work is concurrent in one shared worktree.** Both agents may author simultaneously in disjoint, assigned files. QA owns integration tests and seed fixtures; Developer owns implementation, migrations, and unit tests. Neither edits the other's files. Shared files, code generation, installs, Git index operations, commits, and branch changes need the **pair lock**: before one of them, create the lock with `mkdir "$(git rev-parse --git-dir)/pair.lock"` (atomic, and kept out of the commit because it lives in the worktree's git directory); if it exists, the other agent holds it, so wait and retry. Do the operation, then `rmdir` the lock at once. Never hold it across a test run or a long task. Technical Lead removes a lock only after confirming its holder's process has stopped. Run concurrent tests only against isolated databases and outputs; never mutate the same database concurrently. QA may write tests before the API exists. Developer reports migrations so QA can update fixtures. After implementation, Technical Lead freezes code and shared test inputs, records a stable revision, and QA independently verifies that state against a migrated/seeded pair database. Corrections require another freeze and verification. Technical Lead merges only after both Leads approve.
+- **A Developer/QA pair shares one worktree** and works at the same time. Follow
+  [Paired Developer/QA worktree](#paired-developerqa-worktree).
 - **Do not switch branches or leave uncommitted changes in the main checkout,**
   except for work the human explicitly authorized there
   ([direct-checkout exception](ai-task-delegation.md)); then tell the human
@@ -182,6 +183,49 @@ projects/
   branch once its changes are preserved, all processes have stopped, and no
   review needs it
   ([cleanup safeguards](ai-task-delegation.md)).
+
+### Paired Developer/QA worktree
+
+One pair per API or data slice: one Senior Developer, one Senior QA, one worktree,
+one branch. They work at the same time, in different files.
+
+**Who owns which files**
+- Senior QA: integration tests and seed data.
+- Senior Developer: unit tests, implementation, migrations.
+- Never edit a file the other one owns. If you need a change there, ask them
+  through Technical Lead.
+
+**The pair lock.** Take it before you edit a shared file, run code generation or
+an install, or run a Git command that writes (`add`, `commit`, switching branch).
+
+1. Take it: `mkdir "$(git rev-parse --git-dir)/pair.lock"`.
+   If the command fails, the other agent holds the lock. Wait one minute and try again.
+2. Do the operation.
+3. Release it at once: `rmdir "$(git rev-parse --git-dir)/pair.lock"`.
+
+Never hold the lock during a test run or a long task. Only Technical Lead removes
+a lock it did not take, and only after confirming the holder's process has stopped.
+
+**Databases.** Each agent runs its tests on its own database and its own output
+folder, so two runs never touch the same data. The names are in
+[stack](stack.md#backend).
+
+**Order of work**
+1. Start together. Senior QA writes the integration tests from the implementation
+   documents. Senior Developer writes each unit test first, then the code.
+2. If a migration changes, Senior Developer says so in its result. Senior QA updates
+   the seed before the next run.
+3. Senior Developer is done when its unit tests and QA Lead's approved
+   integration tests pass. It reports done.
+4. Technical Lead freezes the revision: no more edits to code or shared test
+   inputs. Technical Lead records the commit hash.
+5. Senior QA verifies that exact revision on the `_verify` database and reports:
+   pass, test defect, or code defect (with reproduction steps, expected and
+   actual result, and the suspected area).
+6. Senior QA fixes a test defect; QA Lead approves first if the expected behavior
+   changes. Senior Developer fixes a code defect. After any fix, go back to step 4.
+7. After both Leads approve, Technical Lead merges the pair's branch into the
+   feature branch.
 
 Branches, commits, and pushing:
 

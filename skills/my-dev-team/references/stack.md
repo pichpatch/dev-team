@@ -353,21 +353,20 @@ Record the same-record rule in `data-dict.html` and every side effect in
   access to the human's local dev database and treats it as production, dumping
   it before anything destructive; and a worker may drop its own database
   (below). Seeding a new, empty worker database is not a reset.
-- **A worker gets its own database only when its task needs database-backed
-  work or verification.** Otherwise none. By default: a fresh local database
-  named for its worktree with the `_wt_` marker, migrations run, a small
-  deterministic synthetic seed that Senior QA keeps current with every
-  migration ([test-first](quality.md#test-first-and-who-writes-which-test)).
-  A Developer/QA pair shares one worktree and may author concurrently in
-  separately owned files. Each agent runs its tests on its own database and
-  output folder: `{project}_wt_{worktree}_dev` for Senior Developer and
-  `{project}_wt_{worktree}_qa` for Senior QA. Final QA verification uses a third,
-  stable, migrated and seeded database, `{project}_wt_{worktree}_verify`, after
-  implementation freezes. Each agent drops only its own. Never concurrently migrate, seed,
-  or test against one mutable database. Drop databases only after verification
-  finishes and all processes stop.
-  Redis gets its own key prefix or database number per worker. Drop the worker's
-  database when its task finishes or is abandoned.
+- **A worker gets its own database only when its task needs one** (database-backed
+  work or verification). Otherwise it gets none. Create a fresh local database
+  with the `_wt_` marker in its name, run the migrations, and load a small
+  deterministic synthetic seed that Senior QA keeps current
+  ([test-first](quality.md#test-first-and-who-writes-which-test)).
+- **Database names for a Developer/QA pair** (one shared worktree, three databases):
+  - `{project}_wt_{worktree}_dev`: Senior Developer's test runs.
+  - `{project}_wt_{worktree}_qa`: Senior QA's test runs while authoring.
+  - `{project}_wt_{worktree}_verify`: Senior QA's verification of the frozen
+    revision, migrated and seeded.
+  Each agent drops only its own database, when its task is finished or abandoned
+  and its processes have stopped. Never migrate, seed, or test against one
+  database from two agents at once.
+- **Redis:** one key prefix or database number per worker.
 - **Large snapshots only for a stated test need:** realistic volume or skew,
   migration from existing state, performance or query-plan checks, or anything
   else synthetic data cannot show. Use a sanitized fixture or copy-on-write

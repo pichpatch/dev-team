@@ -30,17 +30,14 @@ needs evidence whatever the overall percentage.
 | Unit test | Senior Developer, before the code it tests | The task, `rules.html`, and QA's cases | Technical Lead, in code review |
 | Integration test | Senior QA, before implementation | The implementation documents: `api-spec.html`, `data-dict.html`, `flows.html` | QA Lead, before Senior Developer relies on it |
 
-An integration test calls the API and checks the database response and rows written, changed, or left alone. It uses a real, migrated, seeded, isolated test database; only third-party services are mocked (`INTEGRATION_<NAME>_MODE=mock`). Each worker has an independent database when needed, and integrated verification has its own database. Never run parallel agents against one mutable database.
+An integration test calls the API, then checks the response and the rows written,
+changed, or left alone. It runs on a real, migrated, seeded database. Only
+third-party services are mocked (`INTEGRATION_<NAME>_MODE=mock`). Never run two
+agents against one mutable database.
 
-The contract-first sequence uses one shared worktree per Developer/QA pair.
-Both may write concurrently to separately assigned files. QA owns integration
-checks and fixtures; Developer owns implementation, migrations, and unit checks.
-Shared files and Git operations go through the pair lock
-([delegation](delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
-Concurrent test runs use separate databases. After implementation is stable,
-Technical Lead freezes changes and Senior QA independently verifies the same
-revision against a migrated and seeded test database. Corrections require
-another stable verification run. QA Lead approves expected behavior and results.
+Senior Developer and Senior QA work at the same time in one worktree. The steps,
+file ownership, and lock are in
+[Paired Developer/QA worktree](delegation.md#paired-developerqa-worktree).
 
 **A new table or column.** Senior QA writes the integration tests from
 `data-dict.html` before the migration exists. They may fail to compile until
@@ -50,10 +47,10 @@ tests need, Senior QA tells QA Lead, who takes it to Technical Lead. Senior QA
 never guesses a schema.
 
 **Seed data stays current.** Senior QA owns the seed data the tests use: small,
-deterministic, synthetic, with the role accounts the cases need. Whenever a migration changes, Developer informs Technical Lead and QA Lead;
-Senior QA updates the seed fixtures in the shared worktree before the next
-stable verification run. A test that fails because the seed is stale is a
-seed defect, not a product defect.
+deterministic, synthetic, with the role accounts the cases need. When a migration
+changes, Senior Developer says so in its result and Senior QA updates the seed
+before the next run. A test that fails because the seed is stale is a seed
+defect, not a product defect.
 
 **When a test and the code disagree,** neither Senior changes the other's work.
 Senior QA investigates and sends test defects to QA Lead and code defects to

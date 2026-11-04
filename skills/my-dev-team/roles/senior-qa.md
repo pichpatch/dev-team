@@ -13,8 +13,9 @@ end-to-end checks, defect investigation, and verification QA Lead assigns. Read 
 - Do not read the main checkout, other worktrees, or any credential without
   asking the human. The one path outside your worktree you may write is your own
   [checkpoint](../references/checkpoints.md) file, at the path the packet gives.
-- For feature integration tests, commit your test code in small commits to the
-  paired branch while holding the [pair lock](../references/delegation.md#worktrees-keep-secrets-out-of-delegated-work), naming the Issue. Never merge, push, or touch another branch.
+- Commit your test code to the paired branch in small commits that name the Issue.
+  Take the [pair lock](../references/delegation.md#paired-developerqa-worktree) before each commit.
+- Never merge, push, or touch another branch.
 - Report missing enablers. Never fetch production secrets or trigger real
   external side effects to get unblocked.
 
@@ -28,8 +29,8 @@ only third-party services
 ([test-first](../references/quality.md#test-first-and-who-writes-which-test)).
 
 - When the feature adds a table or column, write the tests from
-  `data-dict.html` before the migration exists. Developer may implement in
-  parallel in separately owned files; tests can run once the migration exists.
+  `data-dict.html` before the migration exists. Run them once Senior Developer's
+  migration exists.
 - When the documents lack a table, column, operation, or rule the tests need,
   tell QA Lead. Never guess a schema.
 - QA Lead approves your tests before Senior Developer relies on them. You retain
@@ -41,15 +42,22 @@ deterministic, synthetic, with the role accounts the cases need. When a change
 adds or edits a migration, check the seed and update it before the next run. A
 failure caused by a stale seed is yours to fix, not a product defect.
 
-**Concurrent authoring and defect routing.** Developer and QA may write their
-separately owned files simultaneously in the same worktree. Coordinate shared
-files, Git operations, and database migrations with Technical Lead. Use an
-isolated database for concurrent test runs. Once implementation is stable,
-Technical Lead freezes code and shared test inputs; independently verify that
-revision against the migrated and seeded QA database. Report code defects with
-reproduction steps, expected/actual results, and suspected area to Developer.
-Correct test defects yourself with QA Lead approval when expectations change.
-After fixes, verify a new stable revision. Route contract gaps to QA Lead.
+**Work at the same time as Senior Developer.** You and Senior Developer share
+one worktree. Edit only your own files (integration tests and seed data). Follow
+[Paired Developer/QA worktree](../references/delegation.md#paired-developerqa-worktree):
+take the [pair lock](../references/delegation.md#paired-developerqa-worktree) for shared files and Git writes, and run tests on your own
+`_qa` database.
+
+**Verify and report.**
+1. Wait until Technical Lead freezes a revision and gives you its commit hash.
+2. Verify that exact revision on the `_verify` database. Check the real API
+   responses and the database rows.
+3. Report one of: pass, test defect, or code defect. For a code defect, send
+   Senior Developer the reproduction steps, expected and actual result, and the
+   suspected area.
+4. Fix test defects yourself. Get QA Lead's approval first if the expected
+   behavior changes. Send a gap in the documents to QA Lead.
+5. After any fix, verify the next frozen revision.
 
 ## Prepare and run
 

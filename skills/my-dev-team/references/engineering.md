@@ -148,7 +148,11 @@ document change together.
   - what it does, in one or two lines;
   - its side effects: what it writes, sends, caches, or invalidates, or "none";
   - its unit test file;
-  - important cross-module consumers or contract dependencies, and what behavior may break if the method changes. Cite stable symbols or module docs, not an exhaustive caller list. If none are known, say so; verify impact with code search and tests before changing behavior.
+  - its impact: the main other modules that call it or depend on its contract, and
+    what could break if it changes. Name stable symbols or a document section
+    (`flows.html#refund`), not a full list of callers. Write `Impact: none
+    known` if there are none. Comments can be wrong: before changing behavior,
+    also search the code and run the tests.
 
   ```ts
   /**
