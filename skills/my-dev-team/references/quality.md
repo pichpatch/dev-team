@@ -32,13 +32,14 @@ needs evidence whatever the overall percentage.
 
 An integration test calls the API and checks the database response and rows written, changed, or left alone. It uses a real, migrated, seeded, isolated test database; only third-party services are mocked (`INTEGRATION_<NAME>_MODE=mock`). Each worker has an independent database when needed, and integrated verification has its own database. Never run parallel agents against one mutable database.
 
-The contract-first sequence:
-
-1. Technical Lead finalizes the API, data, service, and migration contracts before implementation and creates separate Developer and QA worktrees from the same approved revision.
-2. Senior QA writes integration tests and synthetic seed fixtures against the approved contract in its own branch while Senior Developer writes failing unit tests, code, and migrations in its own branch. QA Lead approves integration cases independently; neither role changes the other's files.
-3. Technical Lead integrates both branches into the feature branch. If migrations changed, Senior QA updates seed fixtures against the approved data dictionary; Technical Lead integrates the update before running tests. Integration tests that could not compile before the implementation existed are expected, but must compile and pass at this gate.
-4. Run the integrated revision against a migrated, seeded isolated integration database. Senior QA independently verifies that exact revision. QA corrects test defects; Developer corrects implementation defects. Technical Lead integrates fixes and coordinates focused retesting.
-5. Technical Lead resolves missing or conflicting contract details, updates the authoritative documents, and sends the new contract revision to both roles. QA Lead approves expected-behavior changes. Record test evidence against the integrated commit; do not reuse stale results.
+The contract-first sequence uses one shared worktree per Developer/QA pair.
+Both may write concurrently to separately assigned files. QA owns integration
+checks and fixtures; Developer owns implementation, migrations, and unit checks.
+Technical Lead coordinates exclusive access to shared files and Git operations.
+Concurrent test runs use separate databases. After implementation is stable,
+Technical Lead freezes changes and Senior QA independently verifies the same
+revision against a migrated and seeded test database. Corrections require
+another stable verification run. QA Lead approves expected behavior and results.
 
 **A new table or column.** Senior QA writes the integration tests from
 `data-dict.html` before the migration exists. They may fail to compile until
