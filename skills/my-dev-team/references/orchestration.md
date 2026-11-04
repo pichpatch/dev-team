@@ -164,24 +164,7 @@ Only relevant owners take part. Keep this order:
 8. **QA Lead:** finalizes the Definition of Done and test strategy, with cases
    for every AC, before implementation. Loops back only for something
    ambiguous, contradictory, missing, or untestable.
-9. **Test-first implementation,** with sequential ownership of each pair's
-   Developer/QA worktree (one pair per API or data slice; pairs run in parallel):
-   - **Senior QA** writes integration tests from the implementation documents
-     and keeps the pair's seed data current. QA Lead approves the tests and
-     automated cases.
-   - **Senior Developer** takes the worktree, writes each unit test before its
-     code, implements the code and migrations, and runs the approved integration
-     tests against the pair's `_wt_` database. Developer never edits QA-owned
-     test files.
-   - **Senior QA** takes back the same worktree and revision to confirm the
-     tests. QA fixes a test defect; a code defect goes to Developer with
-     reproduction steps, expected/actual results, and suspected area. Developer
-     fixes and reruns the tests, then hands back to QA for confirmation.
-   - Only one agent may write in or run work from the paired worktree at once.
-     Stop and confirm each previous run ended before transferring ownership.
-     Technical Lead merges the pair's branch into the feature branch after both
-     Leads approve their parts
-     ([test-first](quality.md#test-first-and-who-writes-which-test)).
+9. **Contract-first test and implementation in parallel:** Technical Lead gives Senior QA and Senior Developer separate worktrees and branches per API/data slice from the same approved implementation documents. Senior QA writes integration tests and fixtures, reviewed by QA Lead; Senior Developer writes unit tests before implementation and migrations. Neither edits the other's files. Technical Lead integrates both branches into the feature branch, coordinates QA seed updates for migrations, and runs approved integration tests against an isolated migrated database. Senior QA independently verifies the exact integrated revision. Test defects return to QA, code defects to Developer, and contract gaps to Technical Lead. Only approved integrated work advances ([test-first](quality.md#test-first-and-who-writes-which-test)).
 10. **Domain reviews:** Design Lead checks the UI against the approved design;
     drift goes back to Senior Developer through Technical Lead, and a new design
     decision goes to Design Lead.
