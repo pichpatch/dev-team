@@ -30,36 +30,15 @@ needs evidence whatever the overall percentage.
 | Unit test | Senior Developer, before the code it tests | The task, `rules.html`, and QA's cases | Technical Lead, in code review |
 | Integration test | Senior QA, before implementation | The implementation documents: `api-spec.html`, `data-dict.html`, `flows.html` | QA Lead, before Senior Developer relies on it |
 
-An integration test calls the API and then checks the data in the database:
-the rows written, changed, or left alone, and the response. It runs against
-the shared pair worktree's `{project}_wt_{worktree}` database
-([stack](stack.md)), migrated and seeded, never a mocked
-database. Only third-party services are mocked
-(`INTEGRATION_<NAME>_MODE=mock`).
+An integration test calls the API and checks the database response and rows written, changed, or left alone. It uses a real, migrated, seeded, isolated test database; only third-party services are mocked (`INTEGRATION_<NAME>_MODE=mock`). Each worker has an independent database when needed, and integrated verification has its own database. Never run parallel agents against one mutable database.
 
-The order:
+The contract-first sequence:
 
-1. Technical Lead writes the implementation documents and creates one paired
-   Developer/QA worktree and branch for each API or data slice.
-2. Senior QA writes integration tests from the documents and commits them on
-   the paired branch. QA Lead reviews and approves the tests and automated
-   cases before implementation relies on them.
-3. Senior QA hands the worktree to Senior Developer. Developer writes unit
-   tests first, then the code and migrations. Developer does not edit QA-owned
-   tests.
-4. If Developer adds or changes a migration, Developer hands the worktree to
-   QA to update the seed, then QA hands it back. Developer runs the approved
-   integration tests against the pair's migrated and seeded `_wt_` database.
-5. Developer hands the same revision and worktree back to Senior QA. QA runs
-   and confirms the integration tests. If a test is wrong, QA corrects it and
-   reruns it. If the code is wrong, QA reports reproduction steps, expected and
-   actual results, and the suspected area to Developer; Developer fixes the
-   code and reruns the tests, then hands back to QA for confirmation.
-6. Only one agent may write in or run work from the paired worktree at a time.
-   Stop and confirm the previous run has ended before each handoff. QA Lead
-   approves changes to expected behavior; Technical Lead resolves gaps in the
-   implementation documents. QA Lead approves the final result
-   ([completion gate](orchestration.md#shared-completion-gate-for-features-small-changes-and-bugs)).
+1. Technical Lead finalizes the API, data, service, and migration contracts before implementation and creates separate Developer and QA worktrees from the same approved revision.
+2. Senior QA writes integration tests and synthetic seed fixtures against the approved contract in its own branch while Senior Developer writes failing unit tests, code, and migrations in its own branch. QA Lead approves integration cases independently; neither role changes the other's files.
+3. Technical Lead integrates both branches into the feature branch. If migrations changed, Senior QA updates seed fixtures against the approved data dictionary; Technical Lead integrates the update before running tests. Integration tests that could not compile before the implementation existed are expected, but must compile and pass at this gate.
+4. Run the integrated revision against a migrated, seeded isolated integration database. Senior QA independently verifies that exact revision. QA corrects test defects; Developer corrects implementation defects. Technical Lead integrates fixes and coordinates focused retesting.
+5. Technical Lead resolves missing or conflicting contract details, updates the authoritative documents, and sends the new contract revision to both roles. QA Lead approves expected-behavior changes. Record test evidence against the integrated commit; do not reuse stale results.
 
 **A new table or column.** Senior QA writes the integration tests from
 `data-dict.html` before the migration exists. They may fail to compile until
@@ -69,10 +48,7 @@ tests need, Senior QA tells QA Lead, who takes it to Technical Lead. Senior QA
 never guesses a schema.
 
 **Seed data stays current.** Senior QA owns the seed data the tests use: small,
-deterministic, synthetic, with the role accounts the cases need. Whenever a
-change adds or edits a migration, Senior Developer says so in its result,
-Technical Lead routes it to QA Lead, and Senior QA checks and updates the seed
-before the next test run. A test that fails because the seed is stale is a
+deterministic, synthetic, with the role accounts the cases need. Whenever a\nchange adds or edits a migration, Senior Developer reports it to Technical\nLead, who routes it to QA Lead; Senior QA updates its seed branch and Technical\nLead integrates that update before the next integrated test run. A test that fails because the seed is stale is a
 seed defect, not a product defect.
 
 **When a test and the code disagree,** neither Senior changes the other's work.
