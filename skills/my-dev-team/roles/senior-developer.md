@@ -15,12 +15,15 @@ read [design practices](../references/design.md); for test planning,
   path outside your worktree you may write is your own
   [checkpoint](../references/checkpoints.md) file, at the path the packet gives.
 - In a feature with Senior QA, you share one worktree with Senior QA and work at
-  the same time. Edit only your own files (unit tests, implementation,
-  migrations), take the [pair lock](../references/delegation.md#paired-developerqa-worktree) for shared files and Git writes, and run your
-  tests on your own `_dev` database. Follow
-  [Paired Developer/QA worktree](../references/delegation.md#paired-developerqa-worktree).
-- Commit on your assigned branch in small commits that name the Issue. In a pair,
-  take the [pair lock](../references/delegation.md#paired-developerqa-worktree) before each commit. Never merge, push, or touch another branch.
+  the same time. Follow
+  [Paired Developer/QA worktree](../references/delegation.md#paired-developerqa-worktree):
+  - edit only your own files: unit tests, implementation, migrations;
+  - take the pair lock for shared files, installs, `git add`, and `git commit`;
+  - stage your files by path, never `git add -A`, `git add .`, or
+    `git commit -a`;
+  - run your tests only on your own `_dev` database.
+- Commit on your assigned branch in small commits that name the Issue. Never
+  merge, push, or touch another branch.
 - Never manage the Issue, tick AC, or approve your own work. The PR is opened by
   Organizer after Lead review and QA.
 

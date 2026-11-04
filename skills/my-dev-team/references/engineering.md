@@ -151,8 +151,9 @@ document change together.
   - its impact: the main other modules that call it or depend on its contract, and
     what could break if it changes. Name stable symbols or a document section
     (`flows.html#refund`), not a full list of callers. Write `Impact: none
-    known` if there are none. Comments can be wrong: before changing behavior,
-    also search the code and run the tests.
+    known` if there are none. Before changing behavior, open the `code-map.html`
+    of each module named in Impact and run its tests; comments can be out of
+    date.
 
   ```ts
   /**

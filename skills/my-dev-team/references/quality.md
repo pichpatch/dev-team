@@ -28,7 +28,7 @@ needs evidence whatever the overall percentage.
 | Test | Written by | From | Approved by |
 | --- | --- | --- | --- |
 | Unit test | Senior Developer, before the code it tests | The task, `rules.html`, and QA's cases | Technical Lead, in code review |
-| Integration test | Senior QA, before implementation | The implementation documents: `api-spec.html`, `data-dict.html`, `flows.html` | QA Lead, before Senior Developer relies on it |
+| Integration test | Senior QA, in parallel with the code | The implementation documents: `api-spec.html`, `data-dict.html`, `flows.html` | QA Lead, before Senior Developer runs it |
 
 An integration test calls the API, then checks the response and the rows written,
 changed, or left alone. It runs on a real, migrated, seeded database. Only
@@ -47,9 +47,9 @@ tests need, Senior QA tells QA Lead, who takes it to Technical Lead. Senior QA
 never guesses a schema.
 
 **Seed data stays current.** Senior QA owns the seed data the tests use: small,
-deterministic, synthetic, with the role accounts the cases need. When a migration
-changes, Senior Developer says so in its result and Senior QA updates the seed
-before the next run. A test that fails because the seed is stale is a seed
+deterministic, synthetic, with the role accounts the cases need. Before each
+test run, Senior QA checks for migration changes and updates the seed first
+([order of work](delegation.md#paired-developerqa-worktree)). A test that fails because the seed is stale is a seed
 defect, not a product defect.
 
 **When a test and the code disagree,** neither Senior changes the other's work.

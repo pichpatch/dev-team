@@ -363,9 +363,12 @@ Record the same-record rule in `data-dict.html` and every side effect in
   - `{project}_wt_{worktree}_qa`: Senior QA's test runs while authoring.
   - `{project}_wt_{worktree}_verify`: Senior QA's verification of the frozen
     revision, migrated and seeded.
-  Each agent drops only its own database, when its task is finished or abandoned
-  and its processes have stopped. Never migrate, seed, or test against one
-  database from two agents at once.
+  Each agent creates, migrates, and seeds its own database with the project's
+  commands (Senior Developer runs Senior QA's seed script; it never edits it).
+  Senior Developer owns `_dev`; Senior QA owns `_qa` and `_verify`. Each drops
+  only the databases it owns, when its task is finished or abandoned and its
+  processes have stopped. Never migrate, seed, or test against one database
+  from two agents at once.
 - **Redis:** one key prefix or database number per worker.
 - **Large snapshots only for a stated test need:** realistic volume or skew,
   migration from existing state, performance or query-plan checks, or anything

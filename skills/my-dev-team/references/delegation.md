@@ -190,42 +190,74 @@ One pair per API or data slice: one Senior Developer, one Senior QA, one worktre
 one branch. They work at the same time, in different files.
 
 **Who owns which files**
+
 - Senior QA: integration tests and seed data.
 - Senior Developer: unit tests, implementation, migrations.
-- Never edit a file the other one owns. If you need a change there, ask them
-  through Technical Lead.
+- Never edit a file the other one owns. If you need a change there, ask your own
+  Lead: Senior Developer asks Technical Lead, Senior QA asks QA Lead.
+- You may *run* the other's files (QA's seed script, Developer's migrations);
+  you never edit them.
 
-**The pair lock.** Take it before you edit a shared file, run code generation or
-an install, or run a Git command that writes (`add`, `commit`, switching branch).
+**Commit only your own files.** You share the working tree, so the other agent's
+unfinished files are in it too.
 
-1. Take it: `mkdir "$(git rev-parse --git-dir)/pair.lock"`.
-   If the command fails, the other agent holds the lock. Wait one minute and try again.
+- Stage files by path: `git add src/orders/refund.service.ts`.
+- Never `git add -A`, `git add .`, or `git commit -a`.
+- Before each commit, run `git diff --cached --name-only` and check that every
+  file listed is yours. Unstage any that is not: `git restore --staged <file>`.
+- Never switch branches, stash, reset, or check out files in the pair's
+  worktree.
+
+**The pair lock.** Take it before you edit a shared file (one neither of you
+owns, such as a route index or a package file), run code generation or an
+install, or run `git add` or `git commit`.
+
+1. Take it: `mkdir "$(git rev-parse --git-dir)/pair.lock"`. If the command
+   fails, the other agent holds the lock: wait one minute and try again. After
+   10 failed tries, stop and report to your Lead.
 2. Do the operation.
 3. Release it at once: `rmdir "$(git rev-parse --git-dir)/pair.lock"`.
 
 Never hold the lock during a test run or a long task. Only Technical Lead removes
-a lock it did not take, and only after confirming the holder's process has stopped.
+a lock it did not take, and only after confirming the holder's process has
+stopped.
 
-**Databases.** Each agent runs its tests on its own database and its own output
-folder, so two runs never touch the same data. The names are in
-[stack](stack.md#backend).
+**Databases.** Each agent migrates and seeds its own database with the project's
+commands, and runs its tests only there, with its own output folder. The names
+are in [stack](stack.md), under "Local databases".
 
 **Order of work**
-1. Start together. Senior QA writes the integration tests from the implementation
-   documents. Senior Developer writes each unit test first, then the code.
-2. If a migration changes, Senior Developer says so in its result. Senior QA updates
-   the seed before the next run.
-3. Senior Developer is done when its unit tests and QA Lead's approved
-   integration tests pass. It reports done.
-4. Technical Lead freezes the revision: no more edits to code or shared test
-   inputs. Technical Lead records the commit hash.
-5. Senior QA verifies that exact revision on the `_verify` database and reports:
-   pass, test defect, or code defect (with reproduction steps, expected and
-   actual result, and the suspected area).
-6. Senior QA fixes a test defect; QA Lead approves first if the expected behavior
-   changes. Senior Developer fixes a code defect. After any fix, go back to step 4.
-7. After both Leads approve, Technical Lead merges the pair's branch into the
-   feature branch.
+
+1. **Start together.** Senior QA writes the integration tests from the
+   implementation documents. Senior Developer writes each unit test first, then
+   the code.
+2. **Senior QA's test runs before the freeze are for its own use.** Senior
+   Developer's code is unfinished then, so a failure is not a code defect. Never
+   report a code defect from these runs.
+3. **QA Lead approves the integration tests** when Senior QA has finished them.
+   Senior Developer runs only approved integration tests.
+4. **Migrations.** Before each test run, Senior QA lists migration changes since
+   its last check: `git log --name-only <last-checked-commit>..HEAD -- <migrations folder>`.
+   If any are listed, it updates the seed, re-migrates and re-seeds its database,
+   then runs the tests. Senior Developer also names each migration it adds or
+   edits in its result.
+5. **Senior Developer is done** when its unit tests and the approved integration
+   tests pass on its own database. It commits its files and reports done.
+6. **Technical Lead freezes the revision:** it records the commit hash and tells
+   both Seniors. Nobody edits code or test files until Senior QA reports.
+7. **Senior QA checks the revision before verifying:** `git rev-parse HEAD`
+   must equal the hash, and `git status --porcelain` must print nothing. If
+   either fails, do not verify: report it to QA Lead.
+8. **Senior QA verifies** on the `_verify` database, freshly migrated and
+   seeded, and reports one of: pass, test defect, or code defect. A code defect
+   includes the reproduction steps, the expected and actual result, and the
+   suspected area.
+9. **Fixes.** Senior QA fixes a test defect; QA Lead approves first if the
+   expected behavior changes. Senior Developer fixes a code defect. After any
+   fix, go back to step 6. The [review loop limits](contract.md#every-review-loop-is-bounded)
+   apply.
+10. **After both Leads approve,** Technical Lead merges the pair's branch into
+    the feature branch.
 
 Branches, commits, and pushing:
 

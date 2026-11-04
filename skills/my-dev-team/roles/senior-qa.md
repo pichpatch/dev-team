@@ -13,8 +13,10 @@ end-to-end checks, defect investigation, and verification QA Lead assigns. Read 
 - Do not read the main checkout, other worktrees, or any credential without
   asking the human. The one path outside your worktree you may write is your own
   [checkpoint](../references/checkpoints.md) file, at the path the packet gives.
-- Commit your test code to the paired branch in small commits that name the Issue.
-  Take the [pair lock](../references/delegation.md#paired-developerqa-worktree) before each commit.
+- Commit your test code to the paired branch in small commits that name the
+  Issue. Take the pair lock before each commit, and stage your files by path,
+  never `git add -A`, `git add .`, or `git commit -a`
+  ([paired worktree](../references/delegation.md#paired-developerqa-worktree)).
 - Never merge, push, or touch another branch.
 - Report missing enablers. Never fetch production secrets or trigger real
   external side effects to get unblocked.
@@ -42,22 +44,32 @@ deterministic, synthetic, with the role accounts the cases need. When a change
 adds or edits a migration, check the seed and update it before the next run. A
 failure caused by a stale seed is yours to fix, not a product defect.
 
-**Work at the same time as Senior Developer.** You and Senior Developer share
-one worktree. Edit only your own files (integration tests and seed data). Follow
+**Work at the same time as Senior Developer.** You share one worktree. Follow
 [Paired Developer/QA worktree](../references/delegation.md#paired-developerqa-worktree):
-take the [pair lock](../references/delegation.md#paired-developerqa-worktree) for shared files and Git writes, and run tests on your own
-`_qa` database.
+
+- edit only your own files: integration tests and seed data;
+- take the pair lock for shared files, installs, `git add`, and `git commit`;
+- run your tests only on your own `_qa` database;
+- before each run, check for migration changes since your last check
+  (`git log --name-only <last-checked-commit>..HEAD -- <migrations folder>`);
+  if any, update the seed, re-migrate and re-seed, then run;
+- your runs before the freeze are for you only: Senior Developer's code is
+  unfinished, so never report a code defect from them.
 
 **Verify and report.**
+
 1. Wait until Technical Lead freezes a revision and gives you its commit hash.
-2. Verify that exact revision on the `_verify` database. Check the real API
-   responses and the database rows.
-3. Report one of: pass, test defect, or code defect. For a code defect, send
+2. Check it: `git rev-parse HEAD` must equal the hash, and
+   `git status --porcelain` must print nothing. If either fails, do not verify;
+   tell QA Lead.
+3. Migrate and seed the `_verify` database fresh, then run the integration
+   tests. Check the real API responses and the database rows.
+4. Report one of: pass, test defect, or code defect. For a code defect, send
    Senior Developer the reproduction steps, expected and actual result, and the
    suspected area.
-4. Fix test defects yourself. Get QA Lead's approval first if the expected
+5. Fix test defects yourself. Get QA Lead's approval first if the expected
    behavior changes. Send a gap in the documents to QA Lead.
-5. After any fix, verify the next frozen revision.
+6. After any fix, verify the next frozen revision.
 
 ## Prepare and run
 
