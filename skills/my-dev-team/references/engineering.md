@@ -147,13 +147,14 @@ document change together.
   reading its callers or its body:
   - what it does, in one or two lines;
   - its side effects: what it writes, sends, caches, or invalidates, or "none";
-  - its unit test file.
+  - its unit test file;
+  - important cross-module consumers or contract dependencies, and what behavior may break if the method changes. Cite stable symbols or module docs, not an exhaustive caller list. If none are known, say so; verify impact with code search and tests before changing behavior.
 
   ```ts
   /**
    * Refunds a paid order and restores the stock.
    * Side effects: writes refunds and order_items; clears the order cache.
-   * Unit tests: src/orders/refund.service.spec.ts
+   * Impact: checkout refund status and inventory availability; see flows.html#refund.\n   * Unit tests: src/orders/refund.service.spec.ts
    */
   ```
 
