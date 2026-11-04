@@ -166,8 +166,9 @@ Organizer place delegated workers there.
 2. The original worker cannot be confirmed stopped: no second writer starts.
 3. A migration succeeded but the card says in progress: a read-only check
    prevents running it twice.
-4. Senior Developer reports done: Senior QA takes the paired worktree and
-   confirms the integration tests; the developer cannot mark QA complete.
+4. Senior Developer reports done: Technical Lead freezes the revision and
+   Senior QA verifies it in the paired worktree; the developer cannot mark QA
+   complete.
 5. An independent worker branch or paired Developer/QA branch is merged and
    clean: its worktree and branch are removed only after all worker processes
    have stopped; the feature branch and PR remain.

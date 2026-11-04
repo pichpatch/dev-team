@@ -145,8 +145,8 @@ Organizer can relay packets when the host cannot delegate from a child agent.
 
 **Worktrees.** Create the feature worktree and branch, and one per independent
 Senior. For each API or data slice, create one paired worktree and branch for its
-Senior Developer and Senior QA, with concurrent authoring in disjoint files, exclusive shared-file/Git
-operations, and a stable QA verification freeze; a UI-only slice gets no
+Senior Developer and Senior QA, with concurrent authoring in disjoint files, the pair lock for shared-file and
+Git operations, and a stable QA verification freeze; a UI-only slice gets no
 pair
 ([delegation](../references/delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
 Name each in the packet. Seniors commit to their assigned branch; you merge

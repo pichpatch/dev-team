@@ -35,7 +35,8 @@ An integration test calls the API and checks the database response and rows writ
 The contract-first sequence uses one shared worktree per Developer/QA pair.
 Both may write concurrently to separately assigned files. QA owns integration
 checks and fixtures; Developer owns implementation, migrations, and unit checks.
-Technical Lead coordinates exclusive access to shared files and Git operations.
+Shared files and Git operations go through the pair lock
+([delegation](delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
 Concurrent test runs use separate databases. After implementation is stable,
 Technical Lead freezes changes and Senior QA independently verifies the same
 revision against a migrated and seeded test database. Corrections require

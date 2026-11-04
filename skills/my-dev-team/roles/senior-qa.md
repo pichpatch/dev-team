@@ -14,7 +14,7 @@ end-to-end checks, defect investigation, and verification QA Lead assigns. Read 
   asking the human. The one path outside your worktree you may write is your own
   [checkpoint](../references/checkpoints.md) file, at the path the packet gives.
 - For feature integration tests, commit your test code in small commits to the
-  paired branch during a Technical Lead-coordinated exclusive Git window, naming the Issue. Never merge, push, or touch another branch.
+  paired branch while holding the [pair lock](../references/delegation.md#worktrees-keep-secrets-out-of-delegated-work), naming the Issue. Never merge, push, or touch another branch.
 - Report missing enablers. Never fetch production secrets or trigger real
   external side effects to get unblocked.
 

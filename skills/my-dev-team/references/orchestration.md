@@ -164,7 +164,7 @@ Only relevant owners take part. Keep this order:
 8. **QA Lead:** finalizes the Definition of Done and test strategy, with cases
    for every AC, before implementation. Loops back only for something
    ambiguous, contradictory, missing, or untestable.
-9. **Concurrent Developer/QA work in one shared worktree:** Technical Lead assigns disjoint file ownership per API/data slice. Senior QA authors integration tests and fixtures while Senior Developer authors unit tests and implementation against the same approved contract. Shared-file and Git operations require exclusive coordination; simultaneous test runs use isolated databases. After implementation, Technical Lead freezes a stable revision for independent QA verification. Recheck after corrections. Technical Lead merges the paired branch after both Leads approve ([test-first](quality.md#test-first-and-who-writes-which-test)).
+9. **Concurrent Developer/QA work in one shared worktree:** Technical Lead assigns disjoint file ownership per API/data slice. Senior QA authors integration tests and fixtures while Senior Developer authors unit tests and implementation against the same approved contract. Shared-file and Git operations go through the pair lock; simultaneous test runs use isolated databases. After implementation, Technical Lead freezes a stable revision for independent QA verification. Recheck after corrections. Technical Lead merges the paired branch after both Leads approve ([test-first](quality.md#test-first-and-who-writes-which-test)).
 10. **Domain reviews:** Design Lead checks the UI against the approved design;
     drift goes back to Senior Developer through Technical Lead, and a new design
     decision goes to Design Lead.

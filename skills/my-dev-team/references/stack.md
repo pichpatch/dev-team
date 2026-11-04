@@ -359,9 +359,11 @@ Record the same-record rule in `data-dict.html` and every side effect in
   deterministic synthetic seed that Senior QA keeps current with every
   migration ([test-first](quality.md#test-first-and-who-writes-which-test)).
   A Developer/QA pair shares one worktree and may author concurrently in
-  separately owned files. Concurrent test runs use isolated worker databases
-  and outputs. Final QA verification uses a stable migrated and seeded pair
-  database after implementation freezes. Never concurrently migrate, seed,
+  separately owned files. Each agent runs its tests on its own database and
+  output folder: `{project}_wt_{worktree}_dev` for Senior Developer and
+  `{project}_wt_{worktree}_qa` for Senior QA. Final QA verification uses a third,
+  stable, migrated and seeded database, `{project}_wt_{worktree}_verify`, after
+  implementation freezes. Each agent drops only its own. Never concurrently migrate, seed,
   or test against one mutable database. Drop databases only after verification
   finishes and all processes stop.
   Redis gets its own key prefix or database number per worker. Drop the worker's

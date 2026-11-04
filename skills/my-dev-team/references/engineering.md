@@ -154,7 +154,8 @@ document change together.
   /**
    * Refunds a paid order and restores the stock.
    * Side effects: writes refunds and order_items; clears the order cache.
-   * Impact: checkout refund status and inventory availability; see flows.html#refund.\n   * Unit tests: src/orders/refund.service.spec.ts
+   * Impact: checkout refund status and inventory availability; see flows.html#refund.
+   * Unit tests: src/orders/refund.service.spec.ts
    */
   ```
 

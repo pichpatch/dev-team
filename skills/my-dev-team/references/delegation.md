@@ -173,7 +173,7 @@ projects/
 - **A Senior stays in its worktree.** It does not read the main checkout, other
   worktrees, or the home directory. The one exception: its own
   [checkpoint](checkpoints.md) file at the path the packet gives.
-- **Paired Developer/QA work is concurrent in one shared worktree.** Both agents may author simultaneously in disjoint, assigned files. QA owns integration tests and seed fixtures; Developer owns implementation, migrations, and unit tests. Neither edits the other's files. Shared files, code generation, installs, Git index operations, commits, and branch changes require a Technical Lead-coordinated exclusive window. Run concurrent tests only against isolated databases and outputs; never mutate the same database concurrently. QA may write tests before the API exists. Developer reports migrations so QA can update fixtures. After implementation, Technical Lead freezes code and shared test inputs, records a stable revision, and QA independently verifies that state against a migrated/seeded pair database. Corrections require another freeze and verification. Technical Lead merges only after both Leads approve.
+- **Paired Developer/QA work is concurrent in one shared worktree.** Both agents may author simultaneously in disjoint, assigned files. QA owns integration tests and seed fixtures; Developer owns implementation, migrations, and unit tests. Neither edits the other's files. Shared files, code generation, installs, Git index operations, commits, and branch changes need the **pair lock**: before one of them, create the lock with `mkdir "$(git rev-parse --git-dir)/pair.lock"` (atomic, and kept out of the commit because it lives in the worktree's git directory); if it exists, the other agent holds it, so wait and retry. Do the operation, then `rmdir` the lock at once. Never hold it across a test run or a long task. Technical Lead removes a lock only after confirming its holder's process has stopped. Run concurrent tests only against isolated databases and outputs; never mutate the same database concurrently. QA may write tests before the API exists. Developer reports migrations so QA can update fixtures. After implementation, Technical Lead freezes code and shared test inputs, records a stable revision, and QA independently verifies that state against a migrated/seeded pair database. Corrections require another freeze and verification. Technical Lead merges only after both Leads approve.
 - **Do not switch branches or leave uncommitted changes in the main checkout,**
   except for work the human explicitly authorized there
   ([direct-checkout exception](ai-task-delegation.md)); then tell the human
@@ -192,7 +192,7 @@ Branches, commits, and pushing:
   convention.
 - A Senior commits in small commits that name the Issue (or the task when there
   is none). Paired agents commit their own changes to the shared branch only
-  during their handoff; neither edits the other's files. Seniors never merge,
+  while holding the pair lock (above); neither edits the other's files. Seniors never merge,
   push, or touch another branch.
 - The responsible Lead reviews; Technical Lead merges approved branches into the
   feature branch and verifies the result.

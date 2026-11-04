@@ -76,8 +76,8 @@ it moves along its row, skipping its own primary and any limited model:
 ## Delegated roles
 
 Organizer starts delegated work as separate CLI runs. A Senior Developer and
-Senior QA paired on a slice are the exception: they use the same worktree with
-sequential write ownership ([worktrees](delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
+Senior QA paired on a slice are the exception: they use the same worktree and
+write concurrently to separately owned files ([worktrees](delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
 
 ### Workers: smart scope, cheap heavy work
 
@@ -97,9 +97,9 @@ separately, so a worker moves to the next Go model before leaving Go.
   that made the design: skip that model in the row. A Senior Designer skips the
   model its Design Lead is running.
 - A Senior Developer and Senior QA paired on a slice share one worktree with
-  sequential write ownership ([worktrees](delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
-  Independent tasks and independent pairs may run in parallel; the work inside
-  one pair is sequential.
+  concurrent authoring in separately owned files
+  ([worktrees](delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
+  Independent tasks and independent pairs may run in parallel.
 - **Match the slice to the model.** `deepseek-v4.1-flash` takes most of the
   work: the largest allowance and a fast first answer. Its peak hours
   (01:00-04:00 and 06:00-10:00 UTC on weekdays) use the allowance twice as fast;
