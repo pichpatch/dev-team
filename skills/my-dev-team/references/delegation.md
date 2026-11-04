@@ -149,16 +149,14 @@ projects/
   my-app/                                     main checkout: the human's, real `.env`
   worktrees/my-app/
     meetup-create-event/                      feature branch: Leads integrate here
-    meetup-create-event-dev-qa/                paired Dev/QA branch, `.env.test`
+    meetup-create-event-senior-developer/      implementation branch, `.env.test`\n    meetup-create-event-senior-qa/             integration-test branch, `.env.test`
     meetup-create-event-senior-designer-1/     `.env.example` only (fake values)
 ```
 
 - **Technical Lead creates the worktrees** outside the repository:
   `../worktrees/{repo}/{feature-slug}` for the feature branch and
   `../worktrees/{repo}/{feature-slug}-{instance}` per independent worker,
-  unless the project has its own convention. Each API or data slice gets a pair: a
-  Senior Developer and a Senior QA share one paired worktree and branch for their
-  test-first handoffs. A UI-only slice has no pair: its Senior Developer keeps a
+  unless the project has its own convention. Each API or data slice gets separate Senior Developer and Senior QA worktrees and branches. They work independently from the same approved contract and baseline; Technical Lead integrates their commits into the feature branch. A UI-only slice has no pair: its Senior Developer keeps a
   separate worktree and QA covers it with end-to-end checks. Independent slices
   and pairs run in parallel. Other
   Leads ask Technical Lead for one; if a Lead cannot run git, Organizer creates
@@ -173,18 +171,7 @@ projects/
 - **A Senior stays in its worktree.** It does not read the main checkout, other
   worktrees, or the home directory. The one exception: its own
   [checkpoint](checkpoints.md) file at the path the packet gives.
-- **Paired Developer/QA work is sequential in one shared worktree.** Only the
-  agent holding the handoff may run or edit there; stop and confirm the previous
-  run has ended before transferring ownership. Senior QA writes and commits the
-  approved integration tests first, then hands the worktree to Senior Developer.
-  Senior Developer writes unit tests and implementation, runs QA's integration
-  tests, and hands the same revision back to QA for confirmation. QA owns test
-  corrections; Developer owns code and migration corrections. QA reports a code
-  failure with reproduction steps, expected/actual results, and the suspected
-  area, then hands back to Developer. Repeat the handoff until QA confirms the
-  fix. Never edit another role's files. Technical Lead reviews the paired branch
-  and merges it into the feature branch after both Leads approve their parts.
-- **Do not switch branches or leave uncommitted changes in the main checkout,**
+- **Developer and QA work in separate worktrees.** QA writes integration tests from the approved contract independently of implementation, and QA Lead reviews the cases. Developer writes unit tests first and implements code in its own branch. Neither role edits the other's files. Technical Lead integrates the QA tests and implementation into the feature branch, resolves merge conflicts with the owning roles, then runs the approved integration tests on a migrated, seeded isolated integration database. QA verifies that exact integrated revision independently. A test defect returns to QA; a product defect returns to Developer with reproduction and expected/actual results. Technical Lead re-integrates corrections and requests focused retesting. Keep per-worktree databases and credentials isolated; never concurrently mutate the integration database. Changes to API/schema contracts go through Technical Lead and require both roles to rebase their work on the approved revision. Parallel work is optional when scope is too small to justify it; preserve independent QA ownership regardless.\n- **Do not switch branches or leave uncommitted changes in the main checkout,**
   except for work the human explicitly authorized there
   ([direct-checkout exception](ai-task-delegation.md)); then tell the human
   what is uncommitted.
@@ -197,9 +184,7 @@ Branches, commits, and pushing:
 
 - Feature branch: `feat/{issue-number}-{slug}`. Issue-free bugs and small
   changes: `fix/{descriptive-slug}`. An independent Senior's branch is the
-  owning branch plus `-{instance}`. The Senior Developer and Senior QA of a
-  pair share one branch named with `-dev-qa-{slice}`, unless the project has its own
-  convention.
+  owning branch plus `-{instance}`. Developer and QA use distinct branches named `-senior-developer-{slice}` and `-senior-qa-{slice}` unless the project has its own convention.
 - A Senior commits in small commits that name the Issue (or the task when there
   is none). Paired agents commit their own changes to the shared branch only
   during their handoff; neither edits the other's files. Seniors never merge,
