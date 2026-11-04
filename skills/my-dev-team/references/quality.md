@@ -49,7 +49,9 @@ tests need, Senior QA tells QA Lead, who takes it to Technical Lead. Senior QA
 never guesses a schema.
 
 **Seed data stays current.** Senior QA owns the seed data the tests use: small,
-deterministic, synthetic, with the role accounts the cases need. Whenever a\nchange adds or edits a migration, Senior Developer reports it to Technical\nLead, who routes it to QA Lead; Senior QA updates its seed branch and Technical\nLead integrates that update before the next integrated test run. A test that fails because the seed is stale is a
+deterministic, synthetic, with the role accounts the cases need. Whenever a migration changes, Developer informs Technical Lead and QA Lead;
+Senior QA updates the seed fixtures in the shared worktree before the next
+stable verification run. A test that fails because the seed is stale is a
 seed defect, not a product defect.
 
 **When a test and the code disagree,** neither Senior changes the other's work.
