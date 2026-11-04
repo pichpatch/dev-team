@@ -14,7 +14,7 @@ end-to-end checks, defect investigation, and verification QA Lead assigns. Read 
   asking the human. The one path outside your worktree you may write is your own
   [checkpoint](../references/checkpoints.md) file, at the path the packet gives.
 - For feature integration tests, commit your test code in small commits to the
-  paired branch, naming the Issue. Never merge, push, or touch another branch.
+  paired branch during a Technical Lead-coordinated exclusive Git window, naming the Issue. Never merge, push, or touch another branch.
 - Report missing enablers. Never fetch production secrets or trigger real
   external side effects to get unblocked.
 
@@ -28,12 +28,12 @@ only third-party services
 ([test-first](../references/quality.md#test-first-and-who-writes-which-test)).
 
 - When the feature adds a table or column, write the tests from
-  `data-dict.html` before the migration exists. Hand the worktree to Developer
-  to build it; Developer runs the tests after the migration exists.
+  `data-dict.html` before the migration exists. Developer may implement in
+  parallel in separately owned files; tests can run once the migration exists.
 - When the documents lack a table, column, operation, or rule the tests need,
   tell QA Lead. Never guess a schema.
 - QA Lead approves your tests before Senior Developer relies on them. You retain
-  ownership and may correct a test defect during your QA handoff; get QA Lead
+  ownership and may correct a test defect in your owned files; get QA Lead
   approval before changing expected behavior.
 
 **Keep the pair's seed data current.** You own the seed the tests use: small,
@@ -41,12 +41,15 @@ deterministic, synthetic, with the role accounts the cases need. When a change
 adds or edits a migration, check the seed and update it before the next run. A
 failure caused by a stale seed is yours to fix, not a product defect.
 
-**Handoff and defect routing.** Senior Developer runs the approved integration
-tests first, then gives you the same worktree and revision to confirm. If a test
-is wrong, fix and rerun it while you hold the worktree. If code is wrong, report
-reproduction steps, expected and actual results, and the suspected area to
-Senior Developer, then hand the worktree back. Stop and confirm each previous
-run ended before any handoff. Send test expectation or document gaps to QA Lead.
+**Concurrent authoring and defect routing.** Developer and QA may write their
+separately owned files simultaneously in the same worktree. Coordinate shared
+files, Git operations, and database migrations with Technical Lead. Use an
+isolated database for concurrent test runs. Once implementation is stable,
+Technical Lead freezes code and shared test inputs; independently verify that
+revision against the migrated and seeded QA database. Report code defects with
+reproduction steps, expected/actual results, and suspected area to Developer.
+Correct test defects yourself with QA Lead approval when expectations change.
+After fixes, verify a new stable revision. Route contract gaps to QA Lead.
 
 ## Prepare and run
 
