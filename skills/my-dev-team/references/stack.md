@@ -358,10 +358,7 @@ Record the same-record rule in `data-dict.html` and every side effect in
   named for its worktree with the `_wt_` marker, migrations run, a small
   deterministic synthetic seed that Senior QA keeps current with every
   migration ([test-first](quality.md#test-first-and-who-writes-which-test)).
-  A paired Developer/QA worktree uses one database for the pair's sequential
-  handoffs; independent workers never share mutable state. Drop the pair's
-  database only after both tasks are complete or abandoned and both processes
-  have stopped.
+  Developer and QA worktrees use separate databases when needed. Integrated\n  verification uses its own migrated, seeded `_wt_` database and only one\n  verification process mutates it at a time. Never share mutable state between\n  parallel workers. Drop test databases only after work and verification finish\n  and their processes have stopped.
   Redis gets its own key prefix or database number per worker. Drop the worker's
   database when its task finishes or is abandoned.
 - **Large snapshots only for a stated test need:** realistic volume or skew,
