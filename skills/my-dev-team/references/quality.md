@@ -28,38 +28,16 @@ needs evidence whatever the overall percentage.
 | Test | Written by | From | Approved by |
 | --- | --- | --- | --- |
 | Unit test | Senior Developer, before the code it tests | The task, `rules.html`, and QA's cases | Technical Lead, in code review |
-| Integration test | Senior QA, before implementation | The implementation documents: `api-spec.html`, `data-dict.html`, `flows.html` | QA Lead, before Senior Developer relies on it |
+| Integration test | Senior QA, in parallel with the code | The implementation documents: `api-spec.html`, `data-dict.html`, `flows.html` | QA Lead, before Senior Developer runs it |
 
-An integration test calls the API and then checks the data in the database:
-the rows written, changed, or left alone, and the response. It runs against
-the shared pair worktree's `{project}_wt_{worktree}` database
-([stack](stack.md)), migrated and seeded, never a mocked
-database. Only third-party services are mocked
-(`INTEGRATION_<NAME>_MODE=mock`).
+An integration test calls the API, then checks the response and the rows written,
+changed, or left alone. It runs on a real, migrated, seeded database. Only
+third-party services are mocked (`INTEGRATION_<NAME>_MODE=mock`). Never run two
+agents against one mutable database.
 
-The order:
-
-1. Technical Lead writes the implementation documents and creates one paired
-   Developer/QA worktree and branch for each API or data slice.
-2. Senior QA writes integration tests from the documents and commits them on
-   the paired branch. QA Lead reviews and approves the tests and automated
-   cases before implementation relies on them.
-3. Senior QA hands the worktree to Senior Developer. Developer writes unit
-   tests first, then the code and migrations. Developer does not edit QA-owned
-   tests.
-4. If Developer adds or changes a migration, Developer hands the worktree to
-   QA to update the seed, then QA hands it back. Developer runs the approved
-   integration tests against the pair's migrated and seeded `_wt_` database.
-5. Developer hands the same revision and worktree back to Senior QA. QA runs
-   and confirms the integration tests. If a test is wrong, QA corrects it and
-   reruns it. If the code is wrong, QA reports reproduction steps, expected and
-   actual results, and the suspected area to Developer; Developer fixes the
-   code and reruns the tests, then hands back to QA for confirmation.
-6. Only one agent may write in or run work from the paired worktree at a time.
-   Stop and confirm the previous run has ended before each handoff. QA Lead
-   approves changes to expected behavior; Technical Lead resolves gaps in the
-   implementation documents. QA Lead approves the final result
-   ([completion gate](orchestration.md#shared-completion-gate-for-features-small-changes-and-bugs)).
+Senior Developer and Senior QA work at the same time in one worktree. The steps,
+file ownership, and lock are in
+[Paired Developer/QA worktree](delegation.md#paired-developerqa-worktree).
 
 **A new table or column.** Senior QA writes the integration tests from
 `data-dict.html` before the migration exists. They may fail to compile until
@@ -69,11 +47,10 @@ tests need, Senior QA tells QA Lead, who takes it to Technical Lead. Senior QA
 never guesses a schema.
 
 **Seed data stays current.** Senior QA owns the seed data the tests use: small,
-deterministic, synthetic, with the role accounts the cases need. Whenever a
-change adds or edits a migration, Senior Developer says so in its result,
-Technical Lead routes it to QA Lead, and Senior QA checks and updates the seed
-before the next test run. A test that fails because the seed is stale is a
-seed defect, not a product defect.
+deterministic, synthetic, with the role accounts the cases need. Before each
+test run, Senior QA checks for migration changes and updates the seed first
+([order of work](delegation.md#paired-developerqa-worktree)). A test that fails because the seed is stale is a seed
+defect, not a product defect.
 
 **When a test and the code disagree,** neither Senior changes the other's work.
 Senior QA investigates and sends test defects to QA Lead and code defects to

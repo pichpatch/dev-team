@@ -147,12 +147,19 @@ document change together.
   reading its callers or its body:
   - what it does, in one or two lines;
   - its side effects: what it writes, sends, caches, or invalidates, or "none";
-  - its unit test file.
+  - its unit test file;
+  - its impact: the main other modules that call it or depend on its contract, and
+    what could break if it changes. Name stable symbols or a document section
+    (`flows.html#refund`), not a full list of callers. Write `Impact: none
+    known` if there are none. Before changing behavior, open the `code-map.html`
+    of each module named in Impact and run its tests; comments can be out of
+    date.
 
   ```ts
   /**
    * Refunds a paid order and restores the stock.
    * Side effects: writes refunds and order_items; clears the order cache.
+   * Impact: checkout refund status and inventory availability; see flows.html#refund.
    * Unit tests: src/orders/refund.service.spec.ts
    */
   ```
