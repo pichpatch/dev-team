@@ -179,11 +179,14 @@ allowances), so check the model.
   limit or quota error means limited. No answer in 45 seconds is a failed check,
   not proof of a used-up quota. Either way, use the role's next choice for new
   work. A good answer counts for 10 minutes.
-- **While a run works,** check its subscription or model every 10 minutes. If it answers,
-  the run is just slow: keep waiting. A failed check never stops a running
-  worker. Hand over only on an explicit limit error or the run's own failure:
-  confirm the worker stopped, then continue the same task on the next model from
-  its worktree and `.AI` record ([model fallback](ai-task-delegation.md#model-fallback-and-safe-recovery)).
+- **While a run works,** check the worker every 5 minutes
+  ([watching a running worker](ai-task-delegation.md#watching-a-running-worker)).
+  A provider that answers `hi` does not show the worker is working. A failed
+  `hi` alone never stops a running worker. Hand over on an explicit limit error,
+  the run's own failure, or a stall (20 minutes with no activity): confirm the
+  worker stopped, then continue the same task on the next model from its
+  worktree and `.AI` record
+  ([model fallback](ai-task-delegation.md#model-fallback-and-safe-recovery)).
 - Record each switch in the worker's result, with the model that ran.
 - **When every model a role may use is exhausted,** stop: save a checkpoint,
   tell the human which limits were hit, and wait.
@@ -199,6 +202,18 @@ codex exec -m gpt-6-luna -c model_reasoning_effort="high" --sandbox danger-full-
 claude -p --model claude-haiku-5-5 --effort high "<task packet>"
 agy --model <model> -p="<task packet>"
 ```
+
+Start every worker in the background, with its output in the log file the
+[stall check](ai-task-delegation.md#watching-a-running-worker) reads, and write
+its process ID in its card:
+
+```bash
+log="<main-checkout>/.AI/<feature-slug>/<role>-<instance>.log"
+opencode run -m opencode-go/deepseek-v4.1-flash --variant high "<task packet>" > "$log" 2>&1 &
+echo $!   # write this process ID in the card
+```
+
+Add the same `> "$log" 2>&1 &` to the other commands above.
 
 The Codex profiles (`codex -p my-dev-team`, `codex -p my-tech-lead`, ...) also
 turn the sandbox off: OpenCode cannot run inside Codex's sandbox, and a

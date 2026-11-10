@@ -55,6 +55,9 @@ create a feature or commit to the default branch.
   milestone in progress before starting it; on completion, add short evidence
   (file paths, commits, test results, migration IDs). Update at milestones, not
   after every command.
+- **Heartbeat:** before a step that may take more than 5 minutes (the full test
+  suite, an install, a build), add one line to your card saying which step it
+  is. Organizer reads it to tell a long step from a stuck worker.
 - A worker may refine its plan but never silently change the assignment, the
   Issue, or the AC. Changed scope or a blocked dependency goes to the owning
   Lead; requirement changes go through PO.
@@ -63,6 +66,45 @@ create a feature or commit to the default branch.
   the Issue and the real artifacts, not the implementer's claims. The owning
   Lead accepts or asks for changes. Each dependent stage starts only after its
   predecessor's approval.
+
+## Watching a running worker
+
+Check the worker every 5 minutes. A provider that answers `hi` does not show that
+the worker is working, so always check the worker itself.
+
+**Step 1: look for activity.** Any one of these since the last check means the
+worker is working. Keep waiting and start the count again.
+- The log file grew (`wc -c` on `.AI/<feature-slug>/<role>-<instance>.log`).
+- The output of `git -C <worktree> status --short` or `git -C <worktree> diff --stat`
+  changed, or there is a new commit.
+- The worker's card was updated.
+- A child process of the worker's process ID (`pgrep -P <pid>`) is using CPU
+  (`ps -o pcpu= -p <child>`): a test run, install, or build. This counts for at
+  most 30 minutes in a row.
+
+**Step 2: no activity, so the stall clock runs.**
+
+| Silent for | Do this |
+| --- | --- |
+| 15 minutes | Check the process is alive (`ps -p <pid>`). Send `hi` to the worker's model. A limit error: use [model fallback](#model-fallback-and-safe-recovery). It answers: the model is up and the worker is stuck. |
+| 20 minutes | The worker is stalled. Copy `git status --short`, `git diff --stat`, and the last 20 log lines into its card. Stop the process and confirm it stopped (`ps -p <pid>` shows nothing). Restart the same task from its card, in the same worktree, on the same model. |
+| 20 more minutes, silent again | Do the same, but continue on the next model in the roster row. |
+
+Write each stall in the card, with the time and the model. If the process is
+already gone and the card is not `review` or `done`, the run failed: use
+[model fallback](#model-fallback-and-safe-recovery). A restart follows the same
+rules as a handover: stop first, confirm, and check side effects read-only
+before repeating anything.
+
+**Slow is not silent.** A slow model still produces output. Peak hours, a busy
+provider, or a long answer never explain 20 minutes with no log output, no file
+change, and no card update.
+
+**Step 3: report facts.** Each time you tell the human about a running worker,
+say all four: the last activity and what it was (log, files, card, or child
+process); whether the process is alive; the provider check result (ok, limit,
+no answer, or not run); and what you will do next. Never fill the gap with a
+guess such as "may be peak-hour slowdown".
 
 ## Model fallback and safe recovery
 
