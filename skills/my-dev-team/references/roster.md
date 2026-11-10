@@ -90,7 +90,7 @@ separately, so a worker moves to the next Go model before leaving Go.
 | Senior Developer | `opencode-go/deepseek-v4.1-flash` `high` (`max` for a hard slice); `opencode-go/mimo-v2.6-flash`; `opencode-go/minimax-m3.1-flash` `high`; `opencode-go/glm-5.3-flash` `high` | Claude `claude-haiku-5-5` `high`; Codex `gpt-6-luna` `high`; then the [free models](#free-models) |
 | Senior QA | Claude `claude-haiku-5-5` `high`; `opencode-go/mimo-v2.6-flash`; `opencode-go/glm-5.3-flash` `high`; `opencode-go/minimax-m3.1-flash` `high`; `opencode-go/deepseek-v4.1-flash` `high` | Codex `gpt-6-luna` `high`; then the free models |
 | Senior Designer | `opencode-go/deepseek-v4.1-flash` `high`; `opencode-go/claude-haiku-5-5` `high`; `opencode-go/mimo-v2.6-flash` | Codex `gpt-6-luna` `high`; Claude `claude-haiku-5-5` `high`; then the free models |
-| Design Tester | Codex `gpt-6-luna` `medium`; `opencode-go/mimo-v2.6-flash`; `opencode-go/glm-5.3-flash` `high`; `opencode-go/minimax-m3.1-flash` `high` | Claude `claude-haiku-5-5` `high`; then the free models |
+| Design Tester | Codex `gpt-6-luna` `high`; `opencode-go/mimo-v2.6-flash`; `opencode-go/glm-5.3-flash` `high`; `opencode-go/minimax-m3.1-flash` `high` | Claude `claude-haiku-5-5` `high`; then the free models |
 
 - **Senior QA starts on Claude** (`claude-haiku-5-5`, through `claude -p`), so its
   work uses the Claude allowance and the OpenCode Go allowance goes to the
@@ -203,17 +203,22 @@ claude -p --model claude-haiku-5-5 --effort high "<task packet>"
 agy --model <model> -p="<task packet>"
 ```
 
-Start every worker in the background, with its output in the log file the
+Start every worker in the background with `nohup`, so it keeps running when the
+shell that started it exits. Send its output to the log file the
 [stall check](ai-task-delegation.md#watching-a-running-worker) reads, and write
 its process ID in its card:
 
 ```bash
 log="<main-checkout>/.AI/<feature-slug>/<role>-<instance>.log"
-opencode run -m opencode-go/deepseek-v4.1-flash --variant high "<task packet>" > "$log" 2>&1 &
+nohup opencode run -m opencode-go/deepseek-v4.1-flash --variant high "<task packet>" > "$log" 2>&1 &
 echo $!   # write this process ID in the card
 ```
 
-Add the same `> "$log" 2>&1 &` to the other commands above.
+Start the other commands above the same way: `nohup` before, `> "$log" 2>&1 &`
+after. When the host has its own way to run a command in the background (such
+as a background-task option), use it instead, still writing to the log file.
+If the stall check finds the process gone right after starting it, the start
+failed: read the log, fix the command, and do not count it as a stall.
 
 The Codex profiles (`codex -p my-dev-team`, `codex -p my-tech-lead`, ...) also
 turn the sandbox off: OpenCode cannot run inside Codex's sandbox, and a

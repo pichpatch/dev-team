@@ -56,8 +56,10 @@ create a feature or commit to the default branch.
   (file paths, commits, test results, migration IDs). Update at milestones, not
   after every command.
 - **Heartbeat:** before a step that may take more than 5 minutes (the full test
-  suite, an install, a build), add one line to your card saying which step it
-  is. Organizer reads it to tell a long step from a stuck worker.
+  suite, an install, a build), add one line to your card with the step and how
+  long you expect it to take, for example
+  `Heartbeat 14:05: full integration suite, about 40 minutes`. Organizer reads
+  it to tell a long step from a stuck worker.
 - A worker may refine its plan but never silently change the assignment, the
   Issue, or the AC. Changed scope or a blocked dependency goes to the owning
   Lead; requirement changes go through PO.
@@ -78,16 +80,20 @@ worker is working. Keep waiting and start the count again.
 - The output of `git -C <worktree> status --short` or `git -C <worktree> diff --stat`
   changed, or there is a new commit.
 - The worker's card was updated.
-- A child process of the worker's process ID (`pgrep -P <pid>`) is using CPU
-  (`ps -o pcpu= -p <child>`): a test run, install, or build. This counts for at
-  most 30 minutes in a row.
+- A heartbeat line was added to the card (a long step started).
+- A process in the worker's process group is using CPU: a test run, install,
+  or build, however deep it runs. Find the group with
+  `ps -o pgid= -p <pid>`, then list it with `ps -o pid=,pcpu=,command= -g <pgid>`.
+  CPU alone counts for at most 30 minutes in a row, or until the time the
+  latest heartbeat gave has passed, whichever is longer, but never more than
+  2 hours. After that, only a log, file, or card change resets the clock.
 
 **Step 2: no activity, so the stall clock runs.**
 
 | Silent for | Do this |
 | --- | --- |
-| 15 minutes | Check the process is alive (`ps -p <pid>`). Send `hi` to the worker's model. A limit error: use [model fallback](#model-fallback-and-safe-recovery). It answers: the model is up and the worker is stuck. |
-| 20 minutes | The worker is stalled. Copy `git status --short`, `git diff --stat`, and the last 20 log lines into its card. Stop the process and confirm it stopped (`ps -p <pid>` shows nothing). Restart the same task from its card, in the same worktree, on the same model. |
+| 15 minutes | Check the process is alive (`ps -p <pid>`). Send `hi` to the worker's model. A limit error: use [model fallback](#model-fallback-and-safe-recovery). It answers, or there is no answer: do nothing yet; keep the clock running and act at 20 minutes. |
+| 20 minutes | The worker is stalled. Copy `git status --short`, `git diff --stat`, and the last 20 log lines into its card. Stop the process and its group (`kill -- -<pgid>`), and confirm it stopped (`ps -p <pid>` shows nothing). If it was a paired worker, check the pair lock (below). Restart the same task from its card, in the same worktree, on the same model. |
 | 20 more minutes, silent again | Do the same, but continue on the next model in the roster row. |
 
 Write each stall in the card, with the time and the model. If the process is
@@ -95,6 +101,13 @@ already gone and the card is not `review` or `done`, the run failed: use
 [model fallback](#model-fallback-and-safe-recovery). A restart follows the same
 rules as a handover: stop first, confirm, and check side effects read-only
 before repeating anything.
+
+**A stopped paired worker may leave the pair lock.** After stopping a Senior
+Developer or Senior QA that shares a paired worktree, check for the lock:
+`ls -d "$(git -C <worktree> rev-parse --git-dir)/pair.lock"`. If it exists, tell
+Technical Lead, who removes it (`rmdir` on the same path) now that the holder's
+process is confirmed stopped, before either worker continues
+([pair lock](delegation.md#paired-developerqa-worktree)).
 
 **Slow is not silent.** A slow model still produces output. Peak hours, a busy
 provider, or a long answer never explain 20 minutes with no log output, no file
