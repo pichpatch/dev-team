@@ -88,10 +88,14 @@ separately, so a worker moves to the next Go model before leaving Go.
 | Worker | Models, in order | Then |
 | --- | --- | --- |
 | Senior Developer | `opencode-go/deepseek-v4.1-flash` `high` (`max` for a hard slice); `opencode-go/mimo-v2.6-flash`; `opencode-go/minimax-m3.1-flash` `high`; `opencode-go/glm-5.3-flash` `high` | Claude `claude-haiku-5-5` `high`; Codex `gpt-6-luna` `high`; then the [free models](#free-models) |
-| Senior QA | `opencode-go/mimo-v2.6-flash`; `opencode-go/glm-5.3-flash` `high`; `opencode-go/minimax-m3.1-flash` `high`; `opencode-go/deepseek-v4.1-flash` `high` | Codex `gpt-6-luna` `high`; Claude `claude-haiku-5-5` `high`; then the free models |
+| Senior QA | Claude `claude-haiku-5-5` `high`; `opencode-go/mimo-v2.6-flash`; `opencode-go/glm-5.3-flash` `high`; `opencode-go/minimax-m3.1-flash` `high`; `opencode-go/deepseek-v4.1-flash` `high` | Codex `gpt-6-luna` `high`; then the free models |
 | Senior Designer | `opencode-go/deepseek-v4.1-flash` `high`; `opencode-go/claude-haiku-5-5` `high`; `opencode-go/mimo-v2.6-flash` | Codex `gpt-6-luna` `high`; Claude `claude-haiku-5-5` `high`; then the free models |
 | Design Tester | `opencode-go/mimo-v2.6-flash`; `opencode-go/glm-5.3-flash` `high`; `opencode-go/minimax-m3.1-flash` `high` | Claude `claude-haiku-5-5` `high`; Codex `gpt-6-luna` `high`; then the free models |
 
+- **Senior QA starts on Claude** (`claude-haiku-5-5`, through `claude -p`), so its
+  work uses the Claude allowance and the OpenCode Go allowance goes to the
+  Senior Developer. If Claude is limited, Senior QA moves to the Go models in
+  the row.
 - **Never the same model on both sides.** Senior QA never runs on the model the
   Senior Developer it pairs with is using, and Design Tester never on the one
   that made the design: skip that model in the row. A Senior Designer skips the
@@ -193,7 +197,7 @@ Run each from the worktree its packet names, so it uses its own files and its
 opencode run -m opencode-go/deepseek-v4.1-flash --variant high "<task packet>"
 codex exec -m gpt-6-luna -c model_reasoning_effort="high" --sandbox danger-full-access "<task packet>"
 claude -p --model claude-haiku-5-5 --effort high "<task packet>"
-agy -p --model <model> "<task packet>"
+agy --model <model> -p="<task packet>"
 ```
 
 The Codex profiles (`codex -p my-dev-team`, `codex -p my-tech-lead`, ...) also

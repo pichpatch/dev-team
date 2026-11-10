@@ -133,7 +133,7 @@ is the authoritative copy and holds the rules; change both together.
 | Role | Model | Notes |
 | --- | --- | --- |
 | Senior Developer | OpenCode Go `deepseek-v4.1-flash` high (max for a hard slice), then `mimo-v2.6-flash`, `minimax-m3.1-flash`, `glm-5.3-flash` | Heavy work on cheap Go models; Go limits each model separately, so it moves along Go first; then Claude Haiku 5.5 high, then Codex `gpt-6-luna` |
-| Senior QA | OpenCode Go `mimo-v2.6-flash`, then `glm-5.3-flash`, `minimax-m3.1-flash`, `deepseek-v4.1-flash` | Then Codex `gpt-6-luna`, then Claude Haiku 5.5; pairs with a Senior Developer on each API or data slice; never the Developer's model |
+| Senior QA | Claude Haiku 5.5 high, then OpenCode Go `mimo-v2.6-flash`, `glm-5.3-flash`, `minimax-m3.1-flash`, `deepseek-v4.1-flash` | Then Codex `gpt-6-luna`; pairs with a Senior Developer on each API or data slice; never the Developer's model |
 | Senior Designer | OpenCode Go `deepseek-v4.1-flash` high, then `claude-haiku-5-5` high, `mimo-v2.6-flash` | Then Codex `gpt-6-luna`, then Claude Haiku 5.5; skips its Design Lead's model |
 | Design Tester | OpenCode Go `mimo-v2.6-flash`, then `glm-5.3-flash`, `minimax-m3.1-flash` | Then Claude Haiku 5.5, then Codex `gpt-6-luna`; never the model that made the design |
 | DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated; Go backups `mimo-v2.6-flash`, `deepseek-v4.1-flash`, `glm-5.3-flash` |
