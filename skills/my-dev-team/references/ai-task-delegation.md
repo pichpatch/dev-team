@@ -71,16 +71,19 @@ create a feature or commit to the default branch.
 
 ## Watching a running worker
 
-Check the worker every 5 minutes. A provider that answers `hi` does not show that
-the worker is working, so always check the worker itself.
+Every worker writes a JSON event log: one line for each step it takes (a file
+read, an edit, a command, a message), and its session ID
+([starting a run](roster.md#starting-a-run)). The log is the progress report;
+the worker does not need to report on a timer. Check the worker every 5 minutes.
+Do not send `hi` while a worker runs: the log and the resume below show
+everything `hi` would.
 
 **Step 1: look for activity.** Any one of these since the last check means the
 worker is working. Keep waiting and start the count again.
 - The log file grew (`wc -c` on `.AI/<feature-slug>/<role>-<instance>.log`).
 - The output of `git -C <worktree> status --short` or `git -C <worktree> diff --stat`
   changed, or there is a new commit.
-- The worker's card was updated.
-- A heartbeat line was added to the card (a long step started).
+- The worker's card was updated, including a heartbeat line.
 - A process in the worker's process group is using CPU: a test run, install,
   or build, however deep it runs. Find the group with
   `ps -o pgid= -p <pid>`, then list it with `ps -o pid=,pcpu=,command= -g <pgid>`.
@@ -88,19 +91,40 @@ worker is working. Keep waiting and start the count again.
   latest heartbeat gave has passed, whichever is longer, but never more than
   2 hours. After that, only a log, file, or card change resets the clock.
 
-**Step 2: no activity, so the stall clock runs.**
+**Step 2: 10 minutes with no activity.** Check, in this order:
+
+1. **Is the process alive?** `ps -p <pid>`. If it is gone, the run ended: read
+   the end of the log. Finished with a result: review it. Failed or limited:
+   use [model fallback](#model-fallback-and-safe-recovery).
+2. **Does the log end in an error?** `tail -n 20 <log>`. A limit or quota error
+   (for example `"type":"error"` with "usage limit", or `"turn.failed"`): stop
+   the worker and use [model fallback](#model-fallback-and-safe-recovery).
+3. **Alive, no error: ask by resuming.** Copy `git status --short`,
+   `git diff --stat`, and the last 20 log lines into the card. Stop the process
+   and its group (`kill -- -<pgid>`) and confirm it stopped (`ps -p <pid>`
+   shows nothing). If it was a paired worker, check the pair lock (below).
+   Then resume the same session, in the same worktree, on the same model, with
+   this prompt:
+
+   > Report your status in one short paragraph: what you finished, what you
+   > were doing when you stopped, and what is left. Then continue the task.
+
+   The resume commands are in [starting a run](roster.md#starting-a-run). The
+   resume is also the model check: if the model is limited, the resume fails
+   at once with the limit error, and you use
+   [model fallback](#model-fallback-and-safe-recovery). Copy the status
+   paragraph into the card.
+
+**Step 3: still silent.**
 
 | Silent for | Do this |
 | --- | --- |
-| 15 minutes | Check the process is alive (`ps -p <pid>`). Send `hi` to the worker's model. A limit error: use [model fallback](#model-fallback-and-safe-recovery). It answers, or there is no answer: do nothing yet; keep the clock running and act at 20 minutes. |
-| 20 minutes | The worker is stalled. Copy `git status --short`, `git diff --stat`, and the last 20 log lines into its card. Stop the process and its group (`kill -- -<pgid>`), and confirm it stopped (`ps -p <pid>` shows nothing). If it was a paired worker, check the pair lock (below). Restart the same task from its card, in the same worktree, on the same model. |
-| 20 more minutes, silent again | Do the same, but continue on the next model in the roster row. |
+| 10 minutes after the resume | Stop it the same way, then restart the task from its card (a new session), in the same worktree, on the same model. |
+| 10 minutes after the restart | Stop it the same way, then continue on the next model in the roster row. |
 
-Write each stall in the card, with the time and the model. If the process is
-already gone and the card is not `review` or `done`, the run failed: use
-[model fallback](#model-fallback-and-safe-recovery). A restart follows the same
-rules as a handover: stop first, confirm, and check side effects read-only
-before repeating anything.
+Write each stall, resume, and restart in the card, with the time and the
+model. A resume or restart follows the same rules as a handover: stop first,
+confirm, and check side effects read-only before repeating anything.
 
 **A stopped paired worker may leave the pair lock.** After stopping a Senior
 Developer or Senior QA that shares a paired worktree, check for the lock:
@@ -109,15 +133,15 @@ Technical Lead, who removes it (`rmdir` on the same path) now that the holder's
 process is confirmed stopped, before either worker continues
 ([pair lock](delegation.md#paired-developerqa-worktree)).
 
-**Slow is not silent.** A slow model still produces output. Peak hours, a busy
-provider, or a long answer never explain 20 minutes with no log output, no file
-change, and no card update.
+**Slow is not silent.** A slow model still writes log events. Peak hours, a busy
+provider, or a long answer never explain 10 minutes with no log event, no file
+change, no card update, and no CPU.
 
-**Step 3: report facts.** Each time you tell the human about a running worker,
-say all four: the last activity and what it was (log, files, card, or child
-process); whether the process is alive; the provider check result (ok, limit,
-no answer, or not run); and what you will do next. Never fill the gap with a
-guess such as "may be peak-hour slowdown".
+**Step 4: report facts.** Each time you tell the human about a running worker,
+say all four: the last activity and what it was (log, files, card, or CPU);
+whether the process is alive; the end of the log (working, error, or limit);
+and what you will do next. Never fill the gap with a guess such as "may be
+peak-hour slowdown".
 
 ## Model fallback and safe recovery
 

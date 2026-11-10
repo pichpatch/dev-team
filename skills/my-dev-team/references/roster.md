@@ -179,13 +179,12 @@ allowances), so check the model.
   limit or quota error means limited. No answer in 45 seconds is a failed check,
   not proof of a used-up quota. Either way, use the role's next choice for new
   work. A good answer counts for 10 minutes.
-- **While a run works,** check the worker every 5 minutes
-  ([watching a running worker](ai-task-delegation.md#watching-a-running-worker)).
-  A provider that answers `hi` does not show the worker is working. A failed
-  `hi` alone never stops a running worker. Hand over on an explicit limit error,
-  the run's own failure, or a stall (20 minutes with no activity): confirm the
-  worker stopped, then continue the same task on the next model from its
-  worktree and `.AI` record
+- **While a run works,** do not send `hi`. Check the worker itself every 5
+  minutes ([watching a running worker](ai-task-delegation.md#watching-a-running-worker)):
+  its JSON log, files, card, and CPU. Hand over on a limit error in the log or
+  a failed resume, the run's own failure, or a stall that a resume and a
+  restart did not clear: confirm the worker stopped, then continue the same
+  task on the next model from its worktree and `.AI` record
   ([model fallback](ai-task-delegation.md#model-fallback-and-safe-recovery)).
 - Record each switch in the worker's result, with the model that ran.
 - **When every model a role may use is exhausted,** stop: save a checkpoint,
@@ -193,34 +192,56 @@ allowances), so check the model.
 
 ## Starting a run
 
-Run each from the worktree its packet names, so it uses its own files and its
-[own database](stack.md). No CLI runs in an OS sandbox ([delegation](delegation.md)):
+Run each worker from the worktree its packet names, so it uses its own files and
+its [own database](stack.md). No CLI runs in an OS sandbox
+([delegation](delegation.md)).
 
-```bash
-opencode run -m opencode-go/deepseek-v4.1-flash --variant high "<task packet>"
-codex exec -m gpt-6-luna -c model_reasoning_effort="high" --sandbox danger-full-access "<task packet>"
-claude -p --model claude-haiku-5-5 --effort high "<task packet>"
-agy --model <model> -p="<task packet>"
-```
-
-Start every worker in the background with `nohup`, so it keeps running when the
-shell that started it exits. Send its output to the log file the
-[stall check](ai-task-delegation.md#watching-a-running-worker) reads, and write
-its process ID in its card:
+Start every worker in the background, writing JSON events to its log file, and
+record two things in its card: the process ID and the session ID.
 
 ```bash
 log="<main-checkout>/.AI/<feature-slug>/<role>-<instance>.log"
-nohup opencode run -m opencode-go/deepseek-v4.1-flash --variant high "<task packet>" > "$log" 2>&1 &
-echo $!   # write this process ID in the card
+
+# OpenCode
+nohup opencode run -m opencode-go/deepseek-v4.1-flash --variant high --format json "<task packet>" < /dev/null > "$log" 2>&1 &
+# Codex
+nohup codex exec -m gpt-6-luna -c model_reasoning_effort="high" --sandbox danger-full-access --json "<task packet>" < /dev/null > "$log" 2>&1 &
+# Claude
+nohup claude -p --model claude-haiku-5-5 --effort high --output-format stream-json --verbose "<task packet>" < /dev/null > "$log" 2>&1 &
+
+echo $!   # the process ID: write it in the card
 ```
 
-Start the other commands above the same way: `nohup` before, `> "$log" 2>&1 &`
-after. When the host has its own way to run a command in the background (such
-as a background-task option), use it instead, still writing to the log file.
-If the stall check finds the process gone right after starting it, the start
-failed: read the log, fix the command, and do not count it as a stall.
+- `nohup` keeps the worker running when the shell that started it exits. When
+  the host has its own way to run a command in the background (such as a
+  background-task option), use it instead, still writing to the log file.
+- `< /dev/null` matters: `codex exec` otherwise waits for more input and hangs.
+- If the process is gone right after starting, the start failed: read the log,
+  fix the command, and do not count it as a stall.
+- Antigravity (`agy --model <model> -p="<task packet>"`) has no JSON event log
+  here; watch it by its files, card, and CPU only.
+
+**The session ID** is in the first lines of the log. Write it in the card:
+
+| CLI | Find it with |
+| --- | --- |
+| OpenCode | `grep -o -m1 '"sessionID":"[^"]*"' "$log"` |
+| Codex | `grep -o -m1 '"thread_id":"[^"]*"' "$log"` |
+| Claude | `grep -o -m1 '"session_id":"[^"]*"' "$log"` |
+
+**Resuming a session** keeps the worker's context. Use it for the status
+question in the [stall check](ai-task-delegation.md#watching-a-running-worker).
+Append to the same log (`>>`):
+
+```bash
+nohup opencode run -m <same model> --variant <same variant> --session <id> --format json "<prompt>" < /dev/null >> "$log" 2>&1 &
+nohup codex exec resume <id> -c sandbox_mode="danger-full-access" --json "<prompt>" < /dev/null >> "$log" 2>&1 &
+nohup claude -p --resume <id> --model <same model> --output-format stream-json --verbose "<prompt>" < /dev/null >> "$log" 2>&1 &
+```
+
+Write the new process ID in the card. Check each CLI's `--help` for the flags
+the installed version supports.
 
 The Codex profiles (`codex -p my-dev-team`, `codex -p my-tech-lead`, ...) also
 turn the sandbox off: OpenCode cannot run inside Codex's sandbox, and a
-sandboxed Codex worker cannot commit. Check each CLI's `--help` for the flags
-the installed version supports.
+sandboxed Codex worker cannot commit.
