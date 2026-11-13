@@ -123,50 +123,56 @@ is the authoritative copy and holds the rules; change both together.
 | Role | Claude Code | Codex | OpenCode |
 | --- | --- | --- | --- |
 | PO | Sonnet 5.5, high | GPT-6.1 Sol, medium | `deepseek-v4.1-flash`, max |
-| Design Lead | Sonnet 5.5, high | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
+| Design Lead | Opus 5.5, medium | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
 | Technical Lead | Opus 5.5, medium | GPT-6.1 Sol, high | `gemini-4-argon`, medium |
-| QA Lead | Sonnet 5.5, high | GPT-6 Astra, medium | `gpt-6-luna`, high |
+| QA Lead | Opus 5.5, medium | GPT-6 Astra, medium | `gpt-6-luna`, high |
 | Cybersecurity | Sonnet 5.5, high | GPT-6.1 Sol, medium | `glm-5.3-flash`, max |
 
 ### Delegated roles
 
-| Role | Model | Notes |
+Claude Max carries the judgement and the code, OpenCode Go the testing and the
+paperwork, Codex the independent approvals. Organizer runs on Sonnet 5.5 high in
+Claude Code.
+
+| Role | Model | Backups, then notes |
 | --- | --- | --- |
-| Senior Developer | OpenCode Go `deepseek-v4.1-flash` high (max for a hard slice), then `mimo-v2.6-flash`, `minimax-m3.1-flash`, `glm-5.3-flash` | Heavy work on cheap Go models; Go limits each model separately, so it moves along Go first; then Claude Haiku 5.5 high, then Codex `gpt-6-luna` |
-| Senior QA | Claude Haiku 5.5 high, then OpenCode Go `mimo-v2.6-flash`, `glm-5.3-flash`, `minimax-m3.1-flash`, `deepseek-v4.1-flash` | Then Codex `gpt-6-luna`; pairs with a Senior Developer on each API or data slice; never the Developer's model |
-| Senior Designer | OpenCode Go `deepseek-v4.1-flash` high, then `claude-haiku-5-5` high, `mimo-v2.6-flash` | Then Codex `gpt-6-luna`, then Claude Haiku 5.5; skips its Design Lead's model |
-| Design Tester | Codex `gpt-6-luna` high, then OpenCode Go `mimo-v2.6-flash`, `glm-5.3-flash`, `minimax-m3.1-flash` | Then Claude Haiku 5.5; never the model that made the design |
-| DevOps | Claude Sonnet 5.5 medium, Codex `gpt-6-sol` medium, or OpenCode `mimo-v2.6-flash`, by host | Always delegated; Go backups `mimo-v2.6-flash`, `deepseek-v4.1-flash`, `glm-5.3-flash` |
-| QA Lead and Cybersecurity, delegated | Preferably a different provider from the Organizer: Codex `gpt-6.1-sol` medium under Claude Code; Claude Sonnet 5.5 high under Codex or OpenCode | If that provider is rate-limited: OpenCode under Claude Code or Codex, Codex under OpenCode |
-| Lead backups | Technical Lead: Sol high, `gemini-4-argon` medium, `kimi-k3.1-pro`, `deepseek-v4.1-flash` max. Design Lead: Sol medium, `gemini-4-argon` medium, `glm-5.3-flash` max. QA Lead and Cybersecurity: Astra or Sol medium, Sonnet high, `gemini-4-argon` medium, `minimax-m3.1-flash` | Then one free model; never for client work or Cybersecurity release reviews |
-| PO backups | OpenCode Go `deepseek-v4.1-flash` max, `glm-5.3-flash` max, `mimo-v2.6-flash` | Then the free models |
-| Free models, last resort | `deepseek-v4.1-flash-free`, then `glm-5.3-flash-free` | Only when OpenCode Go, Claude, and Codex are all limited; never for client work |
-| Free model concurrency | One active free-model run across Organizer and all agents; never parallelize free-model work | |
-| Every other model at its limit | Stop and report | |
+| Technical Lead | Claude Opus 5.5 medium | Sol high, `gemini-4-argon` medium, `kimi-k3.1-pro`, `deepseek-v4.1-flash` max |
+| Design Lead | Claude Opus 5.5 medium | Sol medium, `gemini-4-argon` medium, `glm-5.3-flash` max. Owns the Design System and approves every change to it |
+| QA Lead | Codex `gpt-6-astra` medium | `gemini-4-argon` medium, `kimi-k3.1-pro`, Opus 5.5 medium. Never Sonnet, which writes the code |
+| Cybersecurity | Codex `gpt-6.1-sol` medium | `gemini-4-argon` medium, `minimax-m3.1-flash`. Never Sonnet; never a free model for a release review |
+| Senior Developer | Claude Sonnet 5.5 medium, at most two at once | Go `deepseek-v4.1-flash` high, `mimo-v2.6-flash`, `minimax-m3.1-flash`, `glm-5.3-flash` |
+| Senior Designer | Claude Sonnet 5.5 medium | Go `deepseek-v4.1-flash` high, `claude-haiku-5-5` high, `mimo-v2.6-flash`. Maintains the Design System; Design Lead approves |
+| DevOps | Claude Sonnet 5.5 medium | Go `mimo-v2.6-flash`, `deepseek-v4.1-flash`, `glm-5.3-flash` |
+| Senior QA | OpenCode Go `deepseek-v4.1-flash` high | `mimo-v2.6-flash`, `glm-5.3-flash`, `minimax-m3.1-flash`. Never its paired Developer's model |
+| Design Tester | Codex `gpt-6.1-sol` medium | Go `mimo-v2.6-flash`, `glm-5.3-flash`. Never the designer's model |
+| Drafting runs (any Lead) | OpenCode Go `mimo-v2.6-flash` | `glm-5.3-flash`, `minimax-m3.1-flash`, `deepseek-v4.1-flash`. Pre-review and paperwork; the Lead checks before posting |
+| PO backups | Go `deepseek-v4.1-flash` max, `glm-5.3-flash` max, `mimo-v2.6-flash` | Then the free models |
+| Free models, last resort | `deepseek-v4.1-flash-free`, then `glm-5.3-flash-free` | Only when every paid option for the role is limited; one run at a time; never for client work |
+| Every model at its limit | Stop and report | |
 
 ### Scores and allowances
 
 [Artificial Analysis Intelligence Index](https://artificialanalysis.ai/leaderboards/models),
 read on 2026-11-03, after the index was re-based (every model scores lower than
 on the earlier scale). It measures general intelligence, not coding alone.
-Requests are OpenCode's estimates for Go Plus; Claude and ChatGPT models share
+Requests are OpenCode's estimates for the Go plan; Claude and ChatGPT models share
 their subscription's limit.
 
-| Model | Through | Effort | Score | Requests per 5 h (Go Plus) | Per week |
+| Model | Through | Effort | Score | Requests per 5 h (Go) | Per week |
 | --- | --- | --- | --- | --- | --- |
 | Claude Opus 5.5 | Claude | high | 52 | subscription | |
 | GPT-6 Astra | Codex | medium | 51 | subscription | |
 | GPT-6.1 Sol | Codex | high | 50 | subscription | |
 | GPT-6.1 Sol | Codex | medium | 46 | subscription | |
 | Claude Sonnet 5.5 | Claude | high | 41 | subscription | |
-| `gemini-4-argon` | OpenCode Go | high | 50 | 1,760 | 4,320 |
-| `kimi-k3.1-pro` | OpenCode Go | | 46 | 588 | 1,471 |
-| `claude-haiku-5-5` | OpenCode Go | xhigh / high | 34 / 30 | 15,380 | 38,460 |
-| `deepseek-v4.1-flash` | OpenCode Go | max / high | 32 / 29 | 86,670 | 216,670 |
-| `minimax-m3.1-flash` | OpenCode Go | | 29 | 15,500 | 38,760 |
-| `glm-5.3-flash` | OpenCode Go | | 28 | 18,960 | 47,370 |
-| `mimo-v2.6-flash` | OpenCode Go | | 27 | 60,200 | 150,400 |
-| `gpt-6-luna` | Codex or OpenCode Go | high | 21 | 16,920 (Go) | 42,240 (Go) |
+| `gemini-4-argon` | OpenCode Go | high | 50 | 440 | 1,080 |
+| `kimi-k3.1-pro` | OpenCode Go | | 46 | 147 | 368 |
+| `claude-haiku-5-5` | OpenCode Go | xhigh / high | 34 / 30 | 3,850 | 9,620 |
+| `deepseek-v4.1-flash` | OpenCode Go | max / high | 32 / 29 | 43,330 | 108,330 |
+| `minimax-m3.1-flash` | OpenCode Go | | 29 | 3,880 | 9,690 |
+| `glm-5.3-flash` | OpenCode Go | | 28 | 6,320 | 15,790 |
+| `mimo-v2.6-flash` | OpenCode Go | | 27 | 30,100 | 75,200 |
+| `gpt-6-luna` | Codex or OpenCode Go | high | 21 | 4,230 (Go) | 10,560 (Go) |
 
 `gpt-6-sol` has no current score. The free `deepseek` and `glm` models score as
 their paid versions. Not used: `mimo-v2.6-pro`, `beam-free`, `longcat-2.0`,

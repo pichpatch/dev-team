@@ -53,10 +53,13 @@ replace it.
   it in the packet with the documents and sections to start from. Give Design
   Tester the worktree and revision to test, read-only
   ([delegation](../references/delegation.md)).
-- Senior Designers evolve the Design System during normal work, within its
-  standards; routine components and variants need no approval from you.
-- Escalate early only for global changes: core tokens, foundational interaction
-  rules, replacing a product-wide pattern.
+- **You own the Design System; Senior Designers maintain it.** They add and
+  update tokens, components, variants, and `docs/ui-system/` as part of their
+  work, and every change comes to you with the deliverable. Approve the new
+  design and every Design System change before anyone builds on it. Check that
+  each design uses the system and adds no one-off UI.
+- Senior Designers raise global changes early, before designing on them: core
+  tokens, foundational interaction rules, replacing a product-wide pattern.
 - Use Design Tester for independent verification where useful; it reports, you
   decide.
 

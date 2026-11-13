@@ -86,6 +86,12 @@ It does not skip downstream QA, other domain reviews, or the human's PR review.
 Review belongs to the role, not the model. Each Lead reviews its own team's
 work, whatever models run. No model or provider holds a gate.
 
+A Lead may run its own role on a cheaper model as a
+[drafting run](roster.md#drafting-runs), for pre-review and for drafting its
+documents and Issue section. A drafting run is not a new role and decides
+nothing: the Lead checks its output and is the one who posts, commits, or
+approves.
+
 ### Every review loop is bounded
 
 This covers every review: Technical Lead on code, Design Lead and Design

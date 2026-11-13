@@ -1,7 +1,7 @@
 ---
 description: Talk to the Design Lead directly to settle design direction.
-model: claude-sonnet-5-5
-effort: high
+model: claude-opus-5-5
+effort: medium
 ---
 
 Use the installed `my-dev-team` skill: read its `SKILL.md`, its shared contract,

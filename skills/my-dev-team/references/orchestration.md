@@ -47,8 +47,11 @@ merges, add the same lines to the main checkout's `.git/info/exclude`.
 - Role headings in one answer are never a substitute for delegation.
 - Organizer, PO, Design Lead, and Technical Lead may switch roles in one
   session to keep context.
-- Delegated QA Lead and Cybersecurity always run as separate sub-agents,
-  preferably on another provider ([delegation](delegation.md)). When the human
+- Delegated QA Lead and Cybersecurity always run as separate sub-agents, on a
+  different provider from the code's author ([delegation](delegation.md)).
+- Any Lead may hand pre-review and paperwork to a
+  [drafting run](roster.md#drafting-runs); the Lead checks the result before it
+  is posted or committed. When the human
   talks to them directly, they stay in the conversation.
 
 ## Talking to the Leads

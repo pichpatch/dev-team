@@ -37,11 +37,11 @@
 - A role the human talks to directly stays in the conversation on its command's
   model; do not spawn a copy of it. DevOps is never talked to directly.
 - **Delegated QA Lead and Cybersecurity** always run as separate sub-agents,
-  preferably on another provider than Organizer
-  ([cross-provider routes](roster.md#cross-provider-independent-reviewers)).
+  on a different provider from the code's author
+  ([independent reviewers](roster.md#independent-reviewers)).
   A different effort level of the same model does not count. If no other
-  provider is available, use another approved model, Organizer's own provider
-  if need be, record that the review was not cross-provider, and continue.
+  provider is available, use the role's next approved backup, record that the
+  review was not on another provider, and continue.
   Never self-approve. When the human talks to them directly, no sub-agent is
   needed, but that work is not independently verified.
 - Technical Lead may share Organizer's context and model.
