@@ -11,8 +11,9 @@
 - If the bound model cannot be selected, report it and ask when a choice is
   needed. Never fall back to the parent model silently. Only human-approved
   models ([contract](contract.md)).
-- Record the model that actually ran, or `unknown`. Never claim a provider ran
-  because another model played it.
+- Record the model that actually ran, or `unknown`, and sign every comment,
+  review, and report with it ([signature](records.md#durable-updates)). Never
+  claim a provider ran because another model played it.
 - If real delegation is impossible, report that and keep the pending work.
   Self-review is never an independent approval.
 - Organizer dispatches owners; Leads set Senior tasks and review them. If a
