@@ -9,9 +9,9 @@ human says so, here and in the host file below, in the same edit.
 - A reviewer runs on a different model from the work it reviews: a Lead and its
   Seniors, Design Tester and Senior Designer, QA and the developers.
 - Fallback keeps reviewer independence while any paid route is available. Paid
-  OpenCode Go models come before any free model. Only when OpenCode Go, Claude,
-  and Codex are all at their limit may a free model be used (see
-  [free models](#free-models)); independence can then be lost.
+  models come before any free model. A free model is used only when every paid
+  model in the role's row is limited (see [free models](#free-models));
+  independence can then be lost.
 - Only models the human approved for private code
   ([shared contract](contract.md)). A free model that trains on what it is sent
   is not approved, except the free last-resort rows below.
@@ -27,12 +27,15 @@ human says so, here and in the host file below, in the same edit.
 | Role | Claude Code | Codex | OpenCode |
 | --- | --- | --- | --- |
 | PO | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/deepseek-v4.1-flash`, variant `max` |
-| Design Lead | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
+| Design Lead | `claude-opus-5-5`, effort `medium` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
 | Technical Lead | `claude-opus-5-5`, effort `medium` | `gpt-6.1-sol`, effort `high` | `opencode-go/gemini-4-argon`, variant `medium` |
-| QA Lead | `claude-sonnet-5-5`, effort `high` | `gpt-6-astra`, effort `medium` | `opencode-go/gpt-6-luna`, variant `high` |
+| QA Lead | `claude-opus-5-5`, effort `medium` | `gpt-6-astra`, effort `medium` | `opencode-go/gpt-6-luna`, variant `high` |
 | Cybersecurity | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
 
 Antigravity has no binding: a role there runs on the session's model.
+Organizer is the host session itself, not a role; in Claude Code, run it on
+`claude-sonnet-5-5`, effort `high`, so Claude Max is kept for the Leads and the
+developers.
 
 | Host | Where the binding lives | How the human uses it |
 | --- | --- | --- |
@@ -43,35 +46,17 @@ Antigravity has no binding: a role there runs on the session's model.
 When the human asks a role something mid-turn, answer on the model already
 running, and say so if the role's own model would matter.
 
-### Backups for the Leads, PO, and DevOps
+## Plan
 
-When a role's model is limited ([checking for limits](#checking-for-limits)),
-it moves along its row, skipping its own primary and any limited model:
+Claude Max carries the judgement and the code; OpenCode Go carries the testing
+and the paperwork; Codex carries the independent approvals.
 
-| Role | Backups, in order | Free, last |
-| --- | --- | --- |
-| Technical Lead | `gpt-6.1-sol` `high`; `opencode-go/gemini-4-argon` `medium`; `opencode-go/kimi-k3.1-pro` `high`; `opencode-go/deepseek-v4.1-flash` `max` | `opencode/deepseek-v4.1-flash-free` |
-| Design Lead | `gpt-6.1-sol` `medium`; `opencode-go/gemini-4-argon` `medium`; `opencode-go/glm-5.3-flash` `max` | `opencode/glm-5.3-flash-free` |
-| QA Lead | `gpt-6-astra` `medium`; `claude-sonnet-5-5` `high`; `opencode-go/gemini-4-argon` `medium`; `opencode-go/minimax-m3.1-flash` `high` | `opencode/deepseek-v4.1-flash-free` |
-| Cybersecurity | `gpt-6.1-sol` `medium`; `claude-sonnet-5-5` `high`; `opencode-go/gemini-4-argon` `medium`; `opencode-go/minimax-m3.1-flash` `high` | `opencode/deepseek-v4.1-flash-free` |
-| PO | `opencode-go/deepseek-v4.1-flash` `max`; `opencode-go/glm-5.3-flash` `max`; `opencode-go/mimo-v2.6-flash` | the [free models](#free-models), in order |
-| DevOps | `opencode-go/mimo-v2.6-flash`; `opencode-go/deepseek-v4.1-flash` `high`; `opencode-go/glm-5.3-flash` `high` | the [free models](#free-models), in order |
-
-- `gemini-4-argon` through OpenCode Go is the strong backup: it scores close to
-  Sol and Opus, and Go gives it its own allowance, so it never uses up the
-  workers'. Use `medium` to stretch it, and use it there, not through
-  Antigravity, whose weekly limit is small. `kimi-k3.1-pro` is strong but has a
-  small allowance: Lead turns only. OpenCode Go does not offer Sol; OpenCode's
-  `openai/gpt-6.1-sol` runs on the same ChatGPT subscription as Codex, so it
-  adds nothing once Sol is limited.
-- QA Lead and Cybersecurity also skip whatever model Technical Lead is running.
-- Delegated QA Lead and Cybersecurity use the
-  [cross-provider route](#cross-provider-independent-reviewers) first; this
-  row applies after it.
-- The free column may train on what it is sent: never for client work.
-  Cybersecurity never uses it for a release review, where it may read
-  production configuration; it stops and reports instead. DevOps never uses it
-  where it would read production configuration.
+| Provider | Roles |
+| --- | --- |
+| Claude (Max) | Organizer, PO, Technical Lead, Design Lead, Senior Developer, Senior Designer, DevOps; QA Lead and Cybersecurity in conversation |
+| OpenCode Go | Senior QA, drafting runs for every Lead, backups |
+| Codex | QA Lead and Cybersecurity when delegated, Design Tester |
+| Antigravity | Nothing automatic; a design second opinion when the human asks |
 
 ## Delegated roles
 
@@ -79,38 +64,75 @@ Organizer starts delegated work as separate CLI runs. A Senior Developer and
 Senior QA paired on a slice are the exception: they use the same worktree and
 write concurrently to separately owned files ([worktrees](delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
 
-### Workers: smart scope, cheap heavy work
+When a role's model is limited ([checking for limits](#checking-for-limits)),
+it moves along its row, skipping any limited model and any model the row's
+rules exclude.
 
-The Leads write the scope and the instructions; the heavy work runs on cheap
-OpenCode Go models with large allowances. OpenCode Go limits each model
-separately, so a worker moves to the next Go model before leaving Go.
+| Role | Model | Backups, in order | Free, last |
+| --- | --- | --- | --- |
+| Technical Lead | Claude `claude-opus-5-5` `medium` | `gpt-6.1-sol` `high`; `opencode-go/gemini-4-argon` `medium`; `opencode-go/kimi-k3.1-pro` `high`; `opencode-go/deepseek-v4.1-flash` `max` | `opencode/deepseek-v4.1-flash-free` |
+| Design Lead | Claude `claude-opus-5-5` `medium` | `gpt-6.1-sol` `medium`; `opencode-go/gemini-4-argon` `medium`; `opencode-go/glm-5.3-flash` `max` | `opencode/glm-5.3-flash-free` |
+| QA Lead | Codex `gpt-6-astra` `medium` | `opencode-go/gemini-4-argon` `medium`; `opencode-go/kimi-k3.1-pro` `high`; Claude `claude-opus-5-5` `medium` | `opencode/deepseek-v4.1-flash-free` |
+| Cybersecurity | Codex `gpt-6.1-sol` `medium` | `opencode-go/gemini-4-argon` `medium`; `opencode-go/minimax-m3.1-flash` `high` | `opencode/deepseek-v4.1-flash-free`, never for a release review |
+| PO | not delegated; backups when its conversation model is limited | `opencode-go/deepseek-v4.1-flash` `max`; `opencode-go/glm-5.3-flash` `max`; `opencode-go/mimo-v2.6-flash` | the [free models](#free-models), in order |
+| DevOps | Claude `claude-sonnet-5-5` `medium` | `opencode-go/mimo-v2.6-flash`; `opencode-go/deepseek-v4.1-flash` `high`; `opencode-go/glm-5.3-flash` `high` | the free models, never where it reads production configuration |
+| Senior Developer | Claude `claude-sonnet-5-5` `medium`, at most two at once | `opencode-go/deepseek-v4.1-flash` `high`; `opencode-go/mimo-v2.6-flash`; `opencode-go/minimax-m3.1-flash` `high`; `opencode-go/glm-5.3-flash` `high` | the free models |
+| Senior Designer | Claude `claude-sonnet-5-5` `medium` | `opencode-go/deepseek-v4.1-flash` `high`; `opencode-go/claude-haiku-5-5` `high`; `opencode-go/mimo-v2.6-flash` | the free models |
+| Senior QA | `opencode-go/deepseek-v4.1-flash` `high` | `opencode-go/mimo-v2.6-flash`; `opencode-go/glm-5.3-flash` `high`; `opencode-go/minimax-m3.1-flash` `high` | the free models |
+| Design Tester | Codex `gpt-6.1-sol` `medium` | `opencode-go/mimo-v2.6-flash`; `opencode-go/glm-5.3-flash` `high` | the free models |
+| Drafting run (any Lead) | `opencode-go/mimo-v2.6-flash` | `opencode-go/glm-5.3-flash` `high`; `opencode-go/minimax-m3.1-flash` `high`; `opencode-go/deepseek-v4.1-flash` `high` | none: the Lead does the work itself |
 
-| Worker | Models, in order | Then |
-| --- | --- | --- |
-| Senior Developer | `opencode-go/deepseek-v4.1-flash` `high` (`max` for a hard slice); `opencode-go/mimo-v2.6-flash`; `opencode-go/minimax-m3.1-flash` `high`; `opencode-go/glm-5.3-flash` `high` | Claude `claude-haiku-5-5` `high`; Codex `gpt-6-luna` `high`; then the [free models](#free-models) |
-| Senior QA | Claude `claude-haiku-5-5` `high`; `opencode-go/mimo-v2.6-flash`; `opencode-go/glm-5.3-flash` `high`; `opencode-go/minimax-m3.1-flash` `high`; `opencode-go/deepseek-v4.1-flash` `high` | Codex `gpt-6-luna` `high`; then the free models |
-| Senior Designer | `opencode-go/deepseek-v4.1-flash` `high`; `opencode-go/claude-haiku-5-5` `high`; `opencode-go/mimo-v2.6-flash` | Codex `gpt-6-luna` `high`; Claude `claude-haiku-5-5` `high`; then the free models |
-| Design Tester | Codex `gpt-6-luna` `high`; `opencode-go/mimo-v2.6-flash`; `opencode-go/glm-5.3-flash` `high`; `opencode-go/minimax-m3.1-flash` `high` | Claude `claude-haiku-5-5` `high`; then the free models |
+**Never the same model on both sides.** A reviewer never runs on the model that
+made the work, at any effort level. Skip that model in the row:
 
-- **Senior QA starts on Claude** (`claude-haiku-5-5`, through `claude -p`), so its
-  work uses the Claude allowance and the OpenCode Go allowance goes to the
-  Senior Developer. If Claude is limited, Senior QA moves to the Go models in
-  the row.
-- **Never the same model on both sides.** Senior QA never runs on the model the
-  Senior Developer it pairs with is using, and Design Tester never on the one
-  that made the design: skip that model in the row. A Senior Designer skips the
-  model its Design Lead is running.
-- A Senior Developer and Senior QA paired on a slice share one worktree with
-  concurrent authoring in separately owned files
-  ([worktrees](delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
-  Independent tasks and independent pairs may run in parallel.
-- **Match the slice to the model.** `deepseek-v4.1-flash` takes most of the
-  work: the largest allowance and a fast first answer. Its peak hours
-  (01:00-04:00 and 06:00-10:00 UTC on weekdays) use the allowance twice as fast;
-  queue large batches outside them when you can. `gpt-6-luna` is the weakest
-  coder: the simplest, most self-contained slices only.
-- A transient error or a slow response is not a limit. Free models come only
-  after OpenCode Go, Claude, and Codex are all at their limit.
+- Delegated QA Lead and Cybersecurity never run on `claude-sonnet-5-5`, which
+  writes the code, and skip whatever model Technical Lead is running. (In
+  conversation with the human they keep their conversation binding: they agree
+  requirements there, and review nothing.)
+- Senior QA never runs on the model its paired Senior Developer is using.
+- Design Tester never runs on the model that made the design, and a Senior
+  Designer skips the model its Design Lead is running.
+- A drafting run's text is checked by its Lead, who runs on a different model.
+
+**Load.** Claude Max is shared by Organizer, the Leads on Opus, and every Sonnet
+worker. Run at most two Sonnet Senior Developers at once; a third waits or
+starts on its first Go backup. Senior Designers and DevOps are not counted:
+they rarely run alongside implementation. If they do and Claude runs short,
+they move to their Go backups first. When Claude is
+limited, the workers move to their Go backups first, so the Leads keep Claude.
+
+**Backups.** `gemini-4-argon` through OpenCode Go is the strong backup: it
+scores close to Sol and Opus, and Go gives it its own allowance. Use it at
+`medium`, and through Go, not Antigravity, whose weekly limit is small.
+`kimi-k3.1-pro` is strong but has a small allowance: Lead turns only. OpenCode
+Go does not offer Sol; OpenCode's `openai/gpt-6.1-sol` runs on the same
+ChatGPT subscription as Codex, so it adds nothing once Sol is limited.
+
+**Match the slice to the model.** When a Senior Developer falls back to
+`deepseek-v4.1-flash`, give it the simpler, self-contained slices. Its peak
+hours (01:00-04:00 and 06:00-10:00 UTC on weekdays) use the allowance twice as
+fast; queue large batches outside them when you can.
+
+A transient error or a slow response is not a limit.
+
+### Drafting runs
+
+A Lead (PO and Cybersecurity included) may start a drafting run: its own role,
+run on a cheap OpenCode Go model, for work that does not need its judgement.
+It is not a new role. Use one to:
+
+- pre-review an Issue, a document, or a diff against a checklist (missing
+  sections, untestable AC, docs not updated, missing method comments, env files
+  in the diff); every finding cites a file and line, or a command and its
+  output;
+- draft the Lead's document updates or its Issue section from decisions the
+  Lead already made.
+
+A drafting run never decides, approves, posts to the Issue, or commits. It
+returns text or a diff. The Lead checks it, changes what is wrong, and only
+then posts or commits it. Its findings never block: the Lead decides each one.
+Start it like any worker ([starting a run](#starting-a-run)), with a packet
+that names the checklist or the decisions to write up.
 
 ### Free models
 
@@ -118,10 +140,9 @@ Used in this order: `opencode/deepseek-v4.1-flash-free`, then
 `opencode/glm-5.3-flash-free`. Both keep no data and do not train on it. Both
 are free for a limited time. Never for client work.
 
-- **Last resort for workers:** only when OpenCode Go, Claude, and Codex are all
-  at their limit. Any free model is then acceptable, even one that also
+- **Last resort:** only when every paid model in the role's row is limited. Any free model is then acceptable, even one that also
   produced the work being reviewed. Prefer a different one, and record that
-  independence could not be kept. Do not stop for this.
+  independence could not be kept.
 - **One free-model run at a time** across the team, Organizer included. Wait for
   the active free-model run to stop before starting another; never parallelize
   free-model work.
@@ -130,43 +151,21 @@ are free for a limited time. Never for client work.
   `iceman-contributor-free`, `mimo-v2.6-flash-free`, and
   `opencode/minimax-m3.1-flash-free` (no longer offered).
 
-### DevOps and Cybersecurity
+### Independent reviewers
 
-They do not use the worker rows above. DevOps is always delegated. Cybersecurity in
-conversation uses its row in the table above; delegated, it takes the
-cross-provider route below.
+Delegated QA Lead and Cybersecurity always run as separate sub-agents, on a
+different provider from the code's author. The code is written on Claude, so
+they run on Codex, whichever host organizes. When Codex is limited, they use
+their Go backups; Claude `claude-opus-5-5` is QA Lead's last paid backup.
+Record the model that ran; when a review could not stay on another provider,
+say so and never present it as independent. Never self-approve. A role the
+human talks to directly uses its conversation binding and needs no sub-agent,
+but that is not an independent review.
 
-| Role | Claude Code | Codex | OpenCode |
-| --- | --- | --- | --- |
-| DevOps | `claude-sonnet-5-5`, effort `medium` | `gpt-6-sol`, effort `medium` | `opencode-go/mimo-v2.6-flash` |
-| Cybersecurity | `claude-sonnet-5-5`, effort `high` | `gpt-6.1-sol`, effort `medium` | `opencode-go/glm-5.3-flash`, variant `max` |
-
-Technical Lead reviews their outputs; a security report is checked only against
+Technical Lead reviews DevOps and Cybersecurity output; a security report is
+checked only against
 [when the report is complete](owasp-security.md#when-the-report-is-complete).
 Verify model IDs with each installed host before dispatch.
-
-### Cross-provider independent reviewers
-
-Delegated QA Lead and Cybersecurity always run as separate sub-agents,
-preferably on another provider than Organizer. A different effort of the same
-model does not count. The preference never blocks the work.
-
-| Organizer | Delegated QA Lead and Cybersecurity run on | If that provider is limited |
-| --- | --- | --- |
-| Claude Code | Codex: `gpt-6.1-sol`, effort `medium` | OpenCode: the role's OpenCode binding |
-| Codex | Claude: `claude-sonnet-5-5`, effort `high` | OpenCode: the role's OpenCode binding |
-| OpenCode | Claude: `claude-sonnet-5-5`, effort `high` | Codex: `gpt-6.1-sol`, effort `medium` |
-
-When both are unavailable, use any other approved model as a separate
-sub-agent, Organizer's own provider if need be. Record the model that ran and
-that the review was not cross-provider; never present it as independent, and
-never self-approve. A role the human talks to directly uses its conversation
-binding and needs no sub-agent, but that is not an independent review.
-
-### Other delegated Leads
-
-Delegated Design Lead and Technical Lead use their conversation binding for the
-organizing host. Technical Lead may share Organizer's context.
 
 ## Checking for limits
 
@@ -199,18 +198,25 @@ its [own database](stack.md). No CLI runs in an OS sandbox
 Start every worker in the background, writing JSON events to its log file, and
 record two things in its card: the process ID and the session ID.
 
+Take the CLI, model, and effort from the role's row in
+[delegated roles](#delegated-roles), or from the backup in use.
+
 ```bash
 log="<main-checkout>/.AI/<feature-slug>/<role>-<instance>.log"
 
-# OpenCode
-nohup opencode run -m opencode-go/deepseek-v4.1-flash --variant high --format json "<task packet>" < /dev/null > "$log" 2>&1 &
-# Codex
-nohup codex exec -m gpt-6-luna -c model_reasoning_effort="high" --sandbox danger-full-access --json "<task packet>" < /dev/null > "$log" 2>&1 &
-# Claude
-nohup claude -p --model claude-haiku-5-5 --effort high --output-format stream-json --verbose "<task packet>" < /dev/null > "$log" 2>&1 &
+# Claude: <model> is claude-opus-5-5 for a delegated Lead, claude-sonnet-5-5 for a worker
+nohup claude -p --model <model> --effort <effort> --output-format stream-json --verbose "<task packet>" < /dev/null > "$log" 2>&1 &
+# OpenCode Go: Senior QA, drafting runs, Go backups
+nohup opencode run -m opencode-go/<model> --variant <effort> --format json "<task packet>" < /dev/null > "$log" 2>&1 &
+# Codex: QA Lead (gpt-6-astra), Cybersecurity and Design Tester (gpt-6.1-sol)
+nohup codex exec -m <model> -c model_reasoning_effort="<effort>" --sandbox danger-full-access --json "<task packet>" < /dev/null > "$log" 2>&1 &
 
 echo $!   # the process ID: write it in the card
 ```
+
+For example, Senior QA: `opencode run -m opencode-go/deepseek-v4.1-flash --variant high ...`;
+a Senior Developer: `claude -p --model claude-sonnet-5-5 --effort medium ...`.
+Omit `--variant` for a Go model that has none, such as `mimo-v2.6-flash`.
 
 - `nohup` keeps the worker running when the shell that started it exits. When
   the host has its own way to run a command in the background (such as a

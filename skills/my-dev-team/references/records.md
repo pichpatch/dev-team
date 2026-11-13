@@ -339,6 +339,33 @@ AC stays and the fix follows the bug route.
 
 ## Durable updates
 
+**Sign everything you write for others.** Every Issue comment, PR comment, PR
+review, report, and `.AI` card result starts with one line naming the model
+that actually ran and the role it played:
+
+```text
+{Provider} - {Model} {effort}:[{Role}]
+```
+
+| Who wrote it | Signature |
+| --- | --- |
+| Technical Lead on Claude | `Claude - Opus 5.5 medium:[Technical Lead]` |
+| QA Lead on Codex | `Codex - GPT-6 Astra medium:[QA Lead]` |
+| Senior QA on OpenCode Go | `OpenCode Go - DeepSeek V4.1 Flash high:[Senior QA]` |
+| A Go model with no effort setting | `OpenCode Go - MiMo V2.6 Flash:[Design Tester]` |
+| A drafting run, posted by its Lead | `OpenCode Go - MiMo V2.6 Flash:[Technical Lead, drafting run]`, then the Lead's own signature on the line below once it has checked the text |
+| A backup standing in | the backup's name, never the bound model: `OpenCode Go - Gemini 4 Argon medium:[QA Lead]` |
+
+- **Provider** is the service that ran it: `Claude`, `Codex`, `OpenCode Go`,
+  `OpenCode` (free models), or `Antigravity`.
+- **Model** is its name as the roster gives it, followed by the effort or
+  variant used. Leave out the effort when the model has none.
+- **Role** is one of the ten role names. Organizer signs as `[Organizer]`.
+- When an Issue section is edited, end the section with the same line, so the
+  last writer is visible.
+- Never sign with a model or role that did not do the work. If the model is
+  not known, write `unknown`, as in `Claude - unknown:[Senior Developer]`.
+
 - Leads record scope, decisions, review outcomes, evidence links, and remaining
   work on the owning Issue, or in the PR and linked records when there is no
   Issue. Specialists record their own results; Seniors report to their Lead.

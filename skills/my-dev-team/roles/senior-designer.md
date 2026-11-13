@@ -35,10 +35,13 @@ Lead instead of searching the repository.
 
 ## Design the complete product state
 
-- **Design System first.** Reuse tokens and components. When a component,
-  variant, or state is missing, add it to the Design System as part of the work,
-  following its standards; routine additions need no per-component approval.
-  Escalate foundational or global changes early.
+- **Design System first; you maintain it.** Reuse tokens and components. When
+  a component, variant, or state is missing, add it to the Design System as
+  part of the work, following its standards, and list every Design System
+  change in your result. Design Lead approves each change with the
+  deliverable; nothing builds on an unapproved change. Raise foundational or
+  global changes (core tokens, interaction rules, a product-wide pattern) with
+  Design Lead before designing on them.
 - **Every state:** loading, empty, success, error, validation, disabled,
   permission, offline or interrupted, destructive, recovery.
 - **Every context:** supported viewports, longer translated text, themes,

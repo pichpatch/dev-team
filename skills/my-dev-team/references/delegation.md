@@ -11,8 +11,9 @@
 - If the bound model cannot be selected, report it and ask when a choice is
   needed. Never fall back to the parent model silently. Only human-approved
   models ([contract](contract.md)).
-- Record the model that actually ran, or `unknown`. Never claim a provider ran
-  because another model played it.
+- Record the model that actually ran, or `unknown`, and sign every comment,
+  review, and report with it ([signature](records.md#durable-updates)). Never
+  claim a provider ran because another model played it.
 - If real delegation is impossible, report that and keep the pending work.
   Self-review is never an independent approval.
 - Organizer dispatches owners; Leads set Senior tasks and review them. If a
@@ -37,11 +38,11 @@
 - A role the human talks to directly stays in the conversation on its command's
   model; do not spawn a copy of it. DevOps is never talked to directly.
 - **Delegated QA Lead and Cybersecurity** always run as separate sub-agents,
-  preferably on another provider than Organizer
-  ([cross-provider routes](roster.md#cross-provider-independent-reviewers)).
+  on a different provider from the code's author
+  ([independent reviewers](roster.md#independent-reviewers)).
   A different effort level of the same model does not count. If no other
-  provider is available, use another approved model, Organizer's own provider
-  if need be, record that the review was not cross-provider, and continue.
+  provider is available, use the role's next approved backup, record that the
+  review was not on another provider, and continue.
   Never self-approve. When the human talks to them directly, no sub-agent is
   needed, but that work is not independently verified.
 - Technical Lead may share Organizer's context and model.
@@ -160,7 +161,10 @@ projects/
   Senior Developer and a Senior QA share one paired worktree and branch for their
   concurrent work on separate files. A UI-only slice has no pair: its Senior Developer keeps a
   separate worktree and QA covers it with end-to-end checks. Independent slices
-  and pairs run in parallel. Other
+  and pairs run in parallel, up to the
+  [Senior Developer cap](roster.md#delegated-roles): at most two Senior
+  Developers on Claude at once. A third pair waits for a free place or starts
+  its Senior Developer on its first Go backup. Other
   Leads ask Technical Lead for one; if a Lead cannot run git, Organizer creates
   it on that Lead's instruction.
 - **Never copy a real env file into a worktree.** For runnable config, use
