@@ -160,7 +160,10 @@ projects/
   Senior Developer and a Senior QA share one paired worktree and branch for their
   concurrent work on separate files. A UI-only slice has no pair: its Senior Developer keeps a
   separate worktree and QA covers it with end-to-end checks. Independent slices
-  and pairs run in parallel. Other
+  and pairs run in parallel, up to the
+  [Senior Developer cap](roster.md#delegated-roles): at most two Senior
+  Developers on Claude at once. A third pair waits for a free place or starts
+  its Senior Developer on its first Go backup. Other
   Leads ask Technical Lead for one; if a Lead cannot run git, Organizer creates
   it on that Lead's instruction.
 - **Never copy a real env file into a worktree.** For runnable config, use

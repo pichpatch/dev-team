@@ -169,6 +169,8 @@ Only relevant owners take part. Keep this order:
    ambiguous, contradictory, missing, or untestable.
 9. **Developer/QA pairs, in parallel:** one pair per API or data slice, each
    following [Paired Developer/QA worktree](delegation.md#paired-developerqa-worktree).
+   At most two Senior Developers run on Claude at once; a third pair waits or
+   starts its Senior Developer on its Go backup ([roster](roster.md#delegated-roles)).
    Technical Lead merges a pair's branch after both Leads approve
    ([test-first](quality.md#test-first-and-who-writes-which-test)).
 10. **Domain reviews:** Design Lead checks the UI against the approved design;

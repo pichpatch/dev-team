@@ -147,7 +147,7 @@ Claude Code.
 | Design Tester | Codex `gpt-6.1-sol` medium | Go `mimo-v2.6-flash`, `glm-5.3-flash`. Never the designer's model |
 | Drafting runs (any Lead) | OpenCode Go `mimo-v2.6-flash` | `glm-5.3-flash`, `minimax-m3.1-flash`, `deepseek-v4.1-flash`. Pre-review and paperwork; the Lead checks before posting |
 | PO backups | Go `deepseek-v4.1-flash` max, `glm-5.3-flash` max, `mimo-v2.6-flash` | Then the free models |
-| Free models, last resort | `deepseek-v4.1-flash-free`, then `glm-5.3-flash-free` | Only when every paid option for the role is limited; one run at a time; never for client work |
+| Free models, last resort | `deepseek-v4.1-flash-free`, then `glm-5.3-flash-free` | Only when every paid model in the role's row is limited; one run at a time; never for client work |
 | Every model at its limit | Stop and report | |
 
 ### Scores and allowances
@@ -155,8 +155,10 @@ Claude Code.
 [Artificial Analysis Intelligence Index](https://artificialanalysis.ai/leaderboards/models),
 read on 2026-11-03, after the index was re-based (every model scores lower than
 on the earlier scale). It measures general intelligence, not coding alone.
-Requests are OpenCode's estimates for the Go plan; Claude and ChatGPT models share
-their subscription's limit.
+Requests are OpenCode's own estimates for the Go plan, from
+[its Go page](https://opencode.ai/docs/go/), read on 2026-11-03. Each model has
+its own monthly limit per plan, so the drop from Go Plus is not the same for
+every model. Claude and ChatGPT models share their subscription's limit.
 
 | Model | Through | Effort | Score | Requests per 5 h (Go) | Per week |
 | --- | --- | --- | --- | --- | --- |
