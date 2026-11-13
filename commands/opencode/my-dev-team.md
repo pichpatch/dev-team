@@ -10,5 +10,10 @@ for one or calls `/my-po`, `/my-design-lead`, `/my-tech-lead`, `/my-qa-lead`, or
 role is speaking each time it changes. Everything else is delegated, and domain
 owners make their own decisions. Use actual available sub-agent tools or
 authorized CLIs for delegated work.
+Sign every Issue comment, PR comment, review, and report you write with one
+first line naming the model that actually runs and your role, as
+`{Provider} - {Model} {effort}:[{Role}]` (the skill's records reference,
+"Durable updates"), for example `OpenCode Go - DeepSeek V4.1 Flash max:[Organizer]`. Name the session's actual model, and
+sign as the role you are acting as when you write for PO or a Lead.
 
 User request: $ARGUMENTS

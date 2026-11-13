@@ -21,6 +21,11 @@ The human has final authority.
 
 Do not load every guide into every agent.
 
+Every agent, Organizer included, starts each Issue comment, PR comment, review,
+and report with its signature, `{Provider} - {Model} {effort}:[{Role}]`, naming
+the model that actually ran, for example `Claude - Opus 5.5 medium:[Technical Lead]`
+([records](references/records.md#durable-updates)).
+
 | Role | Guide | Owns | Runs |
 | --- | --- | --- | --- |
 | PO | [PO](roles/po.md) | Business requirement and AC | Conversation only |
