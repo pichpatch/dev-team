@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Validate the shipped skill bundle and relative resource links using stdlib."""
 
+import os
 import re
 import sys
 from pathlib import Path
@@ -157,7 +158,7 @@ def validate():
         script = ROOT / relative
         if not script.is_file():
             errors.append(f"Missing script: {relative}")
-        elif not script.stat().st_mode & 0o111:
+        elif os.name != "nt" and not script.stat().st_mode & 0o111:
             errors.append(f"Script must be executable: {relative}")
     return errors
 
