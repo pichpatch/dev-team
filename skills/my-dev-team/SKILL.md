@@ -13,7 +13,8 @@ The human has final authority.
 
 ## What to read
 
-- **Always:** [the shared contract](references/contract.md).
+- **Always:** [the shared contract](references/contract.md). To find or change
+  any document: [the document map](references/doc-map.md).
 - **Assigned a role:** that role's guide below, plus only the references your
   task needs.
 - **Organizing:** [orchestration](references/orchestration.md),
@@ -49,11 +50,15 @@ Read only what the task needs:
 
 | Reference | Read it for |
 | --- | --- |
-| [Records](references/records.md) | Docs as HTML, `README.md` indexes, the feature Issue, changing AC |
+| [Document map](references/doc-map.md) | Who owns each document and file, where it lives, how to reach code in a few reads |
+| [Records](references/records.md) | Docs as HTML, `README.md` indexes, the feature Issue, changing AC, signatures |
+| [Delegation](references/delegation.md) | Organizer and Leads: who dispatches whom, the task packet, review |
+| [Worktrees](references/worktrees.md) | Every delegated worker: worktree rules, the Developer/QA pair, branches |
 | [Local task delegation](references/ai-task-delegation.md) | The `.AI` board, model handover, worktree cleanup |
 | [Release lifecycle](references/release-lifecycle.md) | Who owns what, before and after implementation |
 | [Pause and resume](references/checkpoints.md) | Checkpoints in `.AI` |
-| [Engineering](references/engineering.md) | Any engineering task |
+| [Module documents](references/module-docs.md) | What each module document holds; rule IDs |
+| [Engineering](references/engineering.md) | Code shape, function comments, data, API contracts, test runs |
 | [Performance](references/performance.md) | Bulk writes, an index, a slow endpoint, or a background job |
 | [Standard stack](references/stack.md) | A new project or application, and any implementation |
 | [Project defaults](references/project-defaults.md) | A new project: the human's standard choices |

@@ -18,7 +18,11 @@ and authority boundaries.
 - [Skill entrypoint](skills/my-dev-team/SKILL.md): role routing and supporting references.
 - [Shared contract](skills/my-dev-team/references/contract.md): authority and access rules.
 - [Feature workflow](skills/my-dev-team/references/orchestration.md): agreement through finished PR.
+- [Document map](skills/my-dev-team/references/doc-map.md): who owns each document
+  and file, where it lives, and how an agent reaches code in a few reads.
 - [Delegation](skills/my-dev-team/references/delegation.md): stateless assignments and Lead review.
+- [Worktrees](skills/my-dev-team/references/worktrees.md): worktree rules, the
+  Developer/QA pair, and branches, for every delegated worker.
 - [Persistent records](skills/my-dev-team/references/records.md): repo truth as HTML
   documents indexed by `README.md` files, and feature Issues.
 - [Pause/resume](skills/my-dev-team/references/checkpoints.md): unfinished `.AI` state only.
@@ -26,6 +30,8 @@ and authority boundaries.
   standard choices for a new project; an existing project keeps its own.
 - [Standard stack](skills/my-dev-team/references/stack.md): the applications,
   repository layout, typed API contract, and identifiers for a new project.
+- [Module documents](skills/my-dev-team/references/module-docs.md): what each
+  module document holds. Leads own the documents; Seniors own the code comments.
 - [Engineering](skills/my-dev-team/references/engineering.md),
   [design](skills/my-dev-team/references/design.md), and
   [quality](skills/my-dev-team/references/quality.md): detailed practices loaded as needed.

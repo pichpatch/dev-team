@@ -79,7 +79,7 @@ alpha-food/
   app's docs describe only what is specific to it.
 - Each application's `README.md` gives its commands and maps its modules to their
   documents and code; the root `README.md` maps the applications
-  ([navigate by documents](records.md#navigate-by-documents-not-by-code)).
+  ([navigate by documents](doc-map.md#navigate-by-documents-not-by-code)).
 
 ## One typed contract, end to end
 
@@ -163,7 +163,7 @@ through two commands:
   a screen. A component then reads `const { submit, isPending } = useCheckout()`
   and `onClick={submit}`. Record every store slice, what changes with it, and
   every `subscribe` in the module's `flows.html#global-state`
-  ([module documents](engineering.md#module-documents-and-rule-identifiers)).
+  ([module documents](module-docs.md)).
 - **Zustand, per its own guides:**
   - One store per app, made of slices (`createCartSlice`, `createFilterSlice`)
     kept in their modules and combined into one bound store. Middleware

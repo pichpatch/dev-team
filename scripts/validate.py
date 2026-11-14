@@ -17,6 +17,15 @@ ROLES = {
 }
 
 
+def heading_ids(path):
+    """Section ids of a Markdown file, as the hosts build them from headings."""
+    text = re.sub(r"^```[^\n]*\n.*?^```\s*$", "", path.read_text(encoding="utf-8"), flags=re.M | re.S)
+    ids = set()
+    for heading in re.findall(r"^#+\s+(.*)$", text, flags=re.M):
+        ids.add(re.sub(r"[^\w\- ]", "", heading.strip().lower()).replace(" ", "-"))
+    return ids
+
+
 def validate():
     errors = []
     entry = SKILL / "SKILL.md"
@@ -65,7 +74,12 @@ def validate():
         for raw in re.findall(r"\[[^\]\n]*\]\(([^)\n]+)\)", content):
             target = raw.strip().strip("<>")
             parsed = urlsplit(target)
-            if parsed.scheme or parsed.netloc or not parsed.path:
+            if parsed.scheme or parsed.netloc:
+                continue
+            if not parsed.path:
+                # A link to a section of the same file.
+                if parsed.fragment and parsed.fragment not in heading_ids(source):
+                    errors.append(f"Broken section link: {source.relative_to(ROOT)} -> {target}")
                 continue
             path = (source.parent / unquote(parsed.path)).resolve()
             try:
@@ -75,8 +89,11 @@ def validate():
                 continue
             if not path.is_file():
                 errors.append(f"Broken link: {source.relative_to(ROOT)} -> {target}")
-            elif path not in visited:
-                pending.append(path)
+            else:
+                if path.suffix == ".md" and parsed.fragment and parsed.fragment not in heading_ids(path):
+                    errors.append(f"Broken section link: {source.relative_to(ROOT)} -> {target}")
+                if path not in visited:
+                    pending.append(path)
 
     for folder in ("roles", "references", "assets"):
         for path in (SKILL / folder).rglob("*"):
@@ -93,6 +110,10 @@ def validate():
                 continue
             if token.rsplit("/", 1)[-1] not in ("README.md", "SKILL.md"):
                 errors.append(f"Project docs are HTML, not Markdown: {source.relative_to(ROOT)} names {token}")
+    # Every document and file has one owner, listed in one table.
+    doc_map = SKILL / "references" / "doc-map.md"
+    if doc_map not in visited or "who-owns-what" not in heading_ids(doc_map):
+        errors.append("Missing or unlinked owner table: references/doc-map.md#who-owns-what")
     if SKILL / "assets/document.html" not in visited:
         errors.append("Missing or unlinked HTML doc template: assets/document.html")
 

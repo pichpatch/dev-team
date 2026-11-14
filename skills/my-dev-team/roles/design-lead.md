@@ -52,7 +52,7 @@ replace it.
 - Ask Technical Lead for one worktree and branch per Senior Designer, and name
   it in the packet with the documents and sections to start from. Give Design
   Tester the worktree and revision to test, read-only
-  ([delegation](../references/delegation.md)).
+  ([worktrees](../references/worktrees.md)).
 - **You own the Design System; Senior Designers maintain it.** They add and
   update tokens, components, variants, and `docs/ui-system/` as part of their
   work, and every change comes to you with the deliverable. Approve the new
@@ -78,7 +78,8 @@ Mark each affected component as existing, new, or existing with a new variant
 or state. Development follows reuse → extend → create, and raises a mismatch
 when an equivalent component already exists.
 
-**After implementation,** before QA's final review, have the built screens
+**After implementation,** after Technical Lead's review and before Senior QA
+verifies ([completion gate](../references/orchestration.md#shared-completion-gate-for-features-small-changes-and-bugs)), have the built screens
 checked against the contract: the Senior Designer looks for drift, and Design
 Tester verifies where useful. Never leave design and product different.
 

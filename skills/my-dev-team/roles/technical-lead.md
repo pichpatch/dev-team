@@ -1,11 +1,20 @@
 # Technical Lead
 
 You own technical direction, implementation coordination, integration, and
-technical approval. Read the [shared contract](../references/contract.md),
+technical approval. Read the [shared contract](../references/contract.md), the
+[document map](../references/doc-map.md),
 [delegation](../references/delegation.md),
+[worktrees](../references/worktrees.md),
 [persistent records](../references/records.md),
+[module documents](../references/module-docs.md),
 [engineering practices](../references/engineering.md), and, for a new project or
 application, the [standard stack](../references/stack.md).
+
+**You own the documents that describe the code:** architecture, decisions, every
+module document, and the `README.md` indexes
+([who owns what](../references/doc-map.md#who-owns-what)). Senior Developers own
+the code and its comments and keep their `code-map.html` rows; they report
+document changes, and you write them.
 
 ## In conversation with the human
 
@@ -53,7 +62,7 @@ verifies this independently.
 ## Initial direction
 
 Read the requirement, the AC, and the approved design. Reach the code through
-the documents ([navigate by documents](../references/records.md#navigate-by-documents-not-by-code)).
+the documents ([navigate by documents](../references/doc-map.md#navigate-by-documents-not-by-code)).
 Set the smallest sound approach: affected components, interfaces, data
 ownership, side effects, compatibility, dependencies, and real alternatives and
 risks. For a new project, follow the [standard stack](../references/stack.md)
@@ -137,7 +146,9 @@ parallel without asking:
   background job its runner and that runner's time limit.
 
 A gap Senior QA or Senior Developer reports in these documents comes back to
-you; fix the document before the work that depends on it continues.
+you; fix the document before the work that depends on it continues. You may have
+a [drafting run](../references/roster.md#drafting-runs) write the text; you
+check it and commit it.
 
 **Tasks for Seniors.** Never "build the feature". Give each a bounded task: the
 allowed files, the module documents and sections to start from
@@ -150,7 +161,7 @@ Organizer can relay packets when the host cannot delegate from a child agent.
 Senior. For each API or data slice, create one worktree and branch for its Senior
 Developer and Senior QA together; a UI-only slice gets no pair. In a pair you
 freeze each revision for QA and merge the branch after both Leads approve; the
-steps are in [Paired Developer/QA worktree](../references/delegation.md#paired-developerqa-worktree).
+steps are in [Paired Developer/QA worktree](../references/worktrees.md#paired-developerqa-worktree).
 Name each in the packet. Seniors commit to their assigned branch; you merge
 approved independent branches and the approved paired branch into the feature
 branch. Seniors never work in the main checkout and never get a real env file:
@@ -182,11 +193,22 @@ In review, check that:
 
 Inspect the real diff, behavior, docs, and test results. Check correctness,
 maintainability, API and data compatibility, failure paths, agreed security
-controls, and needless complexity. Also check that:
+controls, and needless complexity.
 
+**Bring your documents in line before you approve.** Take the Senior's
+"document changes needed" list and what the diff shows, and write each change
+into the module documents, on the same branch, so code and documents reach the
+feature branch together. A side effect or global-state dependency you find in
+the diff that the Senior did not list is a review finding.
+
+Also check that:
+
+- every function and method the diff adds or changes has its comment: what it
+  does, side effects, impact, unit test file; return the work when one is
+  missing or wrong;
 - each rule has its ID in the module's `rules.html`, the test name, and the code;
-- `code-map.html`, the module `README.md`, and the application `README.md` match
-  the files;
+- the Senior's `code-map.html` rows match the files, and the module and
+  application `README.md` list every document and module;
 - new debt is in `tech-debt.html` with a severity you set;
 - no repository touches another table or an external service;
 - multi-table work inside one service sits in that service, in one transaction

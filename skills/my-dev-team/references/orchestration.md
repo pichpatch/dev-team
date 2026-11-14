@@ -45,14 +45,15 @@ merges, add the same lines to the main checkout's `.git/info/exclude`.
   [the invocation loop](delegation.md). A running handle is not a result:
   collect the outcome before treating the task as done.
 - Role headings in one answer are never a substitute for delegation.
-- Organizer, PO, Design Lead, and Technical Lead may switch roles in one
-  session to keep context.
-- Delegated QA Lead and Cybersecurity always run as separate sub-agents, on a
-  different provider from the code's author ([delegation](delegation.md)).
+- In conversation with the human, the host plays PO and the four Leads itself
+  ([talking to the Leads](#talking-to-the-leads)).
+- For team work, Design Lead and Technical Lead may stay in Organizer's session
+  to keep context. Delegated QA Lead and Cybersecurity always run as separate
+  sub-agents, on a different provider from the code's author
+  ([delegation](delegation.md)).
 - Any Lead may hand pre-review and paperwork to a
   [drafting run](roster.md#drafting-runs); the Lead checks the result before it
-  is posted or committed. When the human
-  talks to them directly, they stay in the conversation.
+  is posted or committed.
 
 ## Talking to the Leads
 
@@ -93,7 +94,7 @@ Design Lead.
   human before the feature is confirmed.
 
 **The Issue holds everything until implementation starts.** PO creates the
-Issue, labeled `draft`, as soon as the human has described the feature. Each
+Issue, labeled `draft`, as soon as the direction is clear. Each
 role writes what it agrees into its own Issue section as soon as it is agreed.
 Nothing is committed to the default branch: no requirement, decision, design,
 quality, or security document.
@@ -121,16 +122,19 @@ worktree and noted on the Issue (or in the PR when there is no Issue).
 
 After Senior Developer finishes any behavior change:
 
-1. **Technical Lead** reviews the code, every small bug fix included. Rejected
-   work returns to Senior Developer.
-2. **Senior QA** runs acceptance and regression tests on the reviewed revision.
-3. **QA Lead** reviews the evidence and approves or rejects. With an owning
+1. **Technical Lead** reviews the code, every small bug fix included, and
+   brings the module documents in line with it. Rejected work returns to Senior
+   Developer.
+2. **Design Lead** checks the built UI against the approved design, only when
+   the change touches UI.
+3. **Senior QA** runs acceptance and regression tests on the reviewed revision.
+4. **QA Lead** reviews the evidence and approves or rejects. With an owning
    Issue, approval includes
    [syncing the AC and DoD checkboxes](../roles/qa-lead.md#sync-the-issue-checkboxes).
-4. **Cybersecurity** runs its
+5. **Cybersecurity** runs its
    [feature check](../roles/cybersecurity.md#check-a-feature-before-delivery)
-   on the delivered revision, and Design Lead checks UI drift when relevant.
-5. **Organizer** opens the PR. The human approves any merge or deployment.
+   on the delivered revision.
+6. **Organizer** opens the PR. The human approves any merge or deployment.
 
 When QA rejects a fix: Senior Developer corrects it, Technical Lead reviews the
 correction, Senior QA and QA Lead repeat the affected verification. Every review
@@ -154,7 +158,7 @@ Only relevant owners take part. Keep this order:
 2. **Human + the other relevant roles:** Design Lead, Technical Lead, QA Lead,
    and Cybersecurity settle their domains, in the order the human wants.
 3. **Human, then PO:** the human says ready or pause. PO sets
-   `ready to implement` if ready. Steps 4–12 run only from
+   `ready to implement` if ready. Steps 4–11 run only from
    `ready to implement`; each delegated Lead starts from what it agreed.
 4. **Design Lead:** directs and approves design work, with Senior Designers and
    Design Tester as needed.
@@ -170,17 +174,16 @@ Only relevant owners take part. Keep this order:
    for every AC, before implementation. Loops back only for something
    ambiguous, contradictory, missing, or untestable.
 9. **Developer/QA pairs, in parallel:** one pair per API or data slice, each
-   following [Paired Developer/QA worktree](delegation.md#paired-developerqa-worktree).
+   following [Paired Developer/QA worktree](worktrees.md#paired-developerqa-worktree).
    At most two Senior Developers run on Claude at once; a third pair waits or
    starts its Senior Developer on its Go backup ([roster](roster.md#delegated-roles)).
    Technical Lead merges a pair's branch after both Leads approve
    ([test-first](quality.md#test-first-and-who-writes-which-test)).
-10. **Domain reviews:** Design Lead checks the UI against the approved design;
-    drift goes back to Senior Developer through Technical Lead, and a new design
-    decision goes to Design Lead.
-11. **[Shared completion gate](#shared-completion-gate-for-features-small-changes-and-bugs),**
-    including Cybersecurity's feature check. Do not repeat it elsewhere.
-12. **Human:** receives the PR and decides on merge or deployment.
+10. **[Shared completion gate](#shared-completion-gate-for-features-small-changes-and-bugs),**
+    on the integrated feature branch. In its design step, drift goes back to
+    Senior Developer through Technical Lead, and a new design decision goes to
+    Design Lead. Do not repeat the gate elsewhere.
+11. **Human:** receives the PR and decides on merge or deployment.
 
 **Issue status.** Organizer keeps the label current
 ([Issue status](records.md#issue-status)) and changes it *before* the step it
@@ -250,8 +253,8 @@ Before opening the PR, check that:
   covers the delivered revision, and its checklist is in the PR;
 - every security requirement Technical Lead did not follow is listed in the PR,
   with its reason and the remaining risk;
-- relevant docs match the code and are reachable from the
-  [`README.md` indexes](records.md);
+- relevant docs match the code, each has an owner, and each is reachable from
+  the [`README.md` indexes](records.md);
 - the regression document and the user manual are each either updated in the
   PR's diff, or covered by a `No new regression test` or `No manual update`
   line in the description. A PR with neither for one of them is not opened

@@ -106,9 +106,9 @@ Record the choice and any agreed exception to the AI crawler default.
 You agree the requirement live, and the Issue holds it until implementation
 starts. You commit nothing. In order:
 
-1. **Create the Issue first,** labeled `draft`, as soon as the human has
-   described the feature: a short purpose, the requirement, and the AC
-   checklist. Update it as the discussion changes them. Other roles write their
+1. **Create the Issue first,** labeled `draft`, as soon as the direction is
+   clear ([above](#challenge-the-direction-then-agree)): a short purpose, the
+   requirement, and the AC checklist. Update it as the discussion changes them. Other roles write their
    own sections; you add no task checklists.
 2. **Suggest the next role:** which of Design Lead, Technical Lead, QA Lead, and
    Cybersecurity this feature needs, and why; offer to switch. The human may ask

@@ -3,7 +3,7 @@
 You write the integration tests, keep the seed data current, and run the
 end-to-end checks, defect investigation, and verification QA Lead assigns. Read the
 [shared contract](../references/contract.md),
-[delegation](../references/delegation.md), and
+[worktrees](../references/worktrees.md), and
 [quality practices](../references/quality.md).
 
 ## Your boundaries
@@ -16,7 +16,7 @@ end-to-end checks, defect investigation, and verification QA Lead assigns. Read 
 - Commit your test code to the paired branch in small commits that name the
   Issue. Take the pair lock before each commit, and stage your files by path,
   never `git add -A`, `git add .`, or `git commit -a`
-  ([paired worktree](../references/delegation.md#paired-developerqa-worktree)).
+  ([paired worktree](../references/worktrees.md#paired-developerqa-worktree)).
 - Never merge, push, or touch another branch.
 - Report missing enablers. Never fetch production secrets or trigger real
   external side effects to get unblocked.
@@ -45,7 +45,7 @@ adds or edits a migration, check the seed and update it before the next run. A
 failure caused by a stale seed is yours to fix, not a product defect.
 
 **Work at the same time as Senior Developer.** You share one worktree. Follow
-[Paired Developer/QA worktree](../references/delegation.md#paired-developerqa-worktree):
+[Paired Developer/QA worktree](../references/worktrees.md#paired-developerqa-worktree):
 
 - edit only your own files: integration tests and seed data;
 - take the pair lock for shared files, installs, `git add`, and `git commit`;
@@ -127,6 +127,14 @@ After a fix: reproduce the original failure, verify the fix, test the
 surrounding flow and affected shared consumers, and run targeted regression;
 widen only when risk justifies it. Passing the original reproduction alone does
 not verify a fix.
+
+## Return to QA Lead
+
+Return: the revision tested, the test files you added or changed, exact results
+with passed, failed, blocked, unrun, and not-applicable kept apart, evidence
+paths, defects with their impact maps, the cases to record in `docs/qa/` (QA
+Lead owns those documents and writes them), and gaps found in any document as
+`file#section: what is missing`.
 
 Report unresolved failures and risks; never decide a failure is acceptable. QA
 Lead owns the quality status, and the human owns risk acceptance at release.

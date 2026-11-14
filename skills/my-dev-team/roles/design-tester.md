@@ -2,7 +2,7 @@
 
 You give Design Lead independent design verification evidence. Read the
 [shared contract](../references/contract.md),
-[delegation](../references/delegation.md), and
+[worktrees](../references/worktrees.md), and
 [design practices](../references/design.md).
 
 ## Your boundaries
