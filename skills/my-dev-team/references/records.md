@@ -3,7 +3,9 @@
 ## Repository truth
 
 Root `docs/` holds project-wide truth; each application's `docs/` holds what is
-specific to it. When a fact changes, update the document that owns it.
+specific to it. When a fact changes, the document's owner updates it. Who owns
+each document, where it lives, and how to reach it in a few reads are in the
+[document map](doc-map.md).
 
 A document states only the current truth. No dated copies, archived versions,
 superseded text, or change logs inside it: older versions come from git history,
@@ -25,8 +27,9 @@ and the reason for a change is on the owning Issue.
   Renaming an `id` breaks links, so rename only together with every link to it.
 - **`README.md` files are the index and the map.** Every document and module is
   reachable from the root `README.md` by links. Whoever adds, renames, or
-  removes a document or module updates the `README.md` that lists it in the same
-  change; anything no `README.md` reaches is unpublished. Use relative links.
+  removes a document or module updates its row in the `README.md` that lists it,
+  in the same change; anything no `README.md` reaches is unpublished. Every
+  document row names its owner. Use relative links.
 - Besides these READMEs, the only Markdown the team writes is under `.AI/`
   ([pause and resume](checkpoints.md)).
 
@@ -84,111 +87,12 @@ Environment keys are listed in `.env.example`; never write values here.
 | [Architecture](docs/architecture.html) | Module map and rules that cross modules | Technical Lead |
 ```
 
-### Navigate by documents, not by code
-
-Agents have no memory of the code, and searching it is the most expensive thing
-they do. Reach the right files in a few reads:
-
-1. **Task packet:** the Issue, the worktree, the documents to start from.
-2. **Issue:** purpose, AC, status, history. Not how anything works.
-3. **Root `README.md`:** follow one application link.
-4. **Application `README.md`:** commands, and where each module's docs and code
-   are.
-5. **Module `README.md`:** what the module is for, and its documents.
-6. **Only the module documents and sections the task needs.**
-   - `code-map.html`: the file and the function.
-   - `flows.html` and `api-spec.html`: the service to call and its caching
-     rules, the flows, and what each operation means.
-   - `data-dict.html`: the tables and columns.
-7. **Only the function the code map names.** Its comment says what it does, its
-   side effects, and its unit test file; open that test only when the task
-   needs it.
-8. **The `.AI/` checkpoint,** only when resuming.
-
-- Read only your path; skip other modules and applications unless the change
-  crosses into them.
-- Never read generated files (`openapi.json`, the SDK), lockfiles, or build
-  output to learn the system. Search them for one name when needed.
-- Search code only when the documents do not answer, then fix the document in
-  the same change. When a document contradicts the code, trust the code, fix the
-  document, and say so.
-- Write for the next reader: one opening line on what the document covers, each
-  fact once at the lowest level where it is true, links instead of repeats.
-
-Each module has one folder with one document per subject: rules, flows, data,
-permissions, API meaning, code map, debt ([engineering](engineering.md)).
-Documents outside modules cover only what spans them: architecture and
-decisions.
-
 Not project documents, and they keep their own formats: Issue and PR text, task
 packets, generated files such as `openapi.json`, diagram and mockup assets.
 
 A project with existing non-HTML docs keeps them and lists them in the index as
 they are; new documents are HTML. Converting is a migration the human agrees
 first. Never keep the same truth in two formats.
-
-Example locations in the [standard layout](stack.md); create a folder only when
-a real deliverable needs it. `frontend_domain_N` is a frontend named after the
-business:
-
-```text
-README.md               map of applications and root documents
-docs/
-  assets/docs.css       the one shared stylesheet
-  requirements/business-requirements.html
-  ui-system/
-  qa/regression.html    standing regression cases, one section per feature
-  qa/support/
-  manual/user-manual.html   how a user does each thing, one section per feature
-  security/
-  decisions/
-  evaluation/{feature-slug}-{role}-{model}.html
-frontend_domain_N/
-  README.md
-  docs/
-    modules/{module}/   README.md index, then screens, routes, flows, code map, debt
-    mockups/
-    decisions/
-web/frontend_domain_N/
-  README.md
-  docs/                 the same shape as the mobile app's docs
-frontend-core/
-  README.md
-  docs/
-    modules/{module}/   tokens, components, shared logic, SDK usage; apps link here
-    decisions/
-api/
-  README.md
-  docs/
-    architecture.html   module map and rules that cross modules
-    modules/{module}/   named like the code folder
-      README.md         purpose and index of the files below
-      rules.html
-      flows.html
-      data-dict.html
-      permissions.html
-      api-spec.html     what each operation means; shapes stay in openapi.json
-      code-map.html
-      tech-debt.html
-    decisions/
-    api-spec/openapi.json   generated; never read whole
-infra/
-  README.md
-  docs/
-    architecture.html
-    uat.html
-    production.html
-    diagrams/
-    decisions/
-```
-
-An application's docs describe only what is specific to it. For anything from
-`frontend-core`, link the `frontend-core` document, so it is clear one change
-there affects every application linking it.
-
-QA Lead owns the support requirements in `docs/qa/support/`. If support becomes
-a real application, `/support/` holds its own docs and code; it does not replace
-those requirements.
 
 ### Regression document and user manual
 
@@ -230,8 +134,8 @@ documents link here.
 The Issue (on the repository's host) is the ticket and lifetime history of one
 feature: what was agreed, its status, and what happened. Decisions live in the
 docs, which the Issue links; an agent never needs the Issue to learn how
-something works. PO creates it, labeled `draft`, as soon as the human has
-described the feature ([talking to the Leads](orchestration.md#talking-to-the-leads)).
+something works. PO creates it, labeled `draft`, as soon as the direction is
+clear ([PO](../roles/po.md#challenge-the-direction-then-agree)).
 
 ```markdown
 # Feature name

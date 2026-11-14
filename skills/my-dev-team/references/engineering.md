@@ -1,16 +1,17 @@
 # Engineering practices
 
-Technical Lead owns technical decisions and review; Senior Developer owns
-assigned implementation. These practices add to the [contract](contract.md). For
+Technical Lead owns technical decisions, the module documents
+([what each holds](module-docs.md)), and review; Senior Developer owns assigned
+implementation and the comment on every function. These practices add to the [contract](contract.md). For
 a new project, the [standard stack](stack.md) fixes the applications, layout,
 typed API contract, identifiers, and frontend and backend conventions.
 
 ## Technical package and impact
 
 Find your way through documents, not code
-([navigate by documents](records.md#navigate-by-documents-not-by-code)).
+([navigate by documents](doc-map.md#navigate-by-documents-not-by-code)).
 
-- **Write every confirmed decision into the affected domain docs:** the approach
+- **Technical Lead writes every confirmed decision into the affected domain docs:** the approach
   and why, changed interfaces, state and data, side effects and invariants,
   rules with IDs, compatibility and migration, test enablers, deployment
   effects, and risks. An agent must be able to design, build, and review from
@@ -24,103 +25,6 @@ Find your way through documents, not code
   test. If reproduction is impractical, state why and give the strongest
   evidence; a hypothesis is never "confirmed". Diagnostic work can be delegated
   without new roles or Issues.
-
-## Module documents and rule identifiers
-
-Each module has a docs folder named like its code folder, for example
-`api/docs/modules/orders/` for `api/app/modules/orders/`, so each is found from
-the other. It holds a `README.md` index and one document per subject:
-
-```text
-api/docs/modules/orders/
-  README.md           purpose and index
-  rules.html
-  flows.html
-  data-dict.html
-  permissions.html
-  api-spec.html
-  code-map.html
-  tech-debt.html
-```
-
-| File | Holds | Section ids |
-| --- | --- | --- |
-| `README.md` | One line on the module's purpose, then a table linking each file with what it answers | |
-| `rules.html` | Each rule and invariant with its ID (`R1`, `R2`, ...) and source AC, grouped by who it applies to | one per group (`#admin`, `#user`) and per rule (`#r3`) |
-| `flows.html` | Allowed state transitions; every side effect; the services: which entry point to call for what, what it handles for the caller (session checks, caching with its key, lifetime, and invalidation); on the frontend, the global state the module uses | one per flow (`#refund`), plus `#services`, `#side-effects`, and `#global-state` |
-| `data-dict.html` | Tables and fields: meaning, constraints, sensitivity | one per table (`#order-items`) |
-| `permissions.html` | Who may do what, and ownership conditions | one per role (`#admin`) |
-| `api-spec.html` | What each operation means beyond the generated spec: purpose, rules, permissions, side effects, errors | one per operation, its `operationId` in kebab-case (`#refund-order`) |
-| `code-map.html` | Each file with its main functions, one line each, and the unit and integration test files | `#files`, `#tests` |
-| `tech-debt.html` | Known debt: what, the risk, the fix, its Issue | one per severity (`#critical`, `#high`, `#medium`, `#low`) |
-
-- `README.md`, `rules.html`, and `code-map.html` exist for every module. Create
-  the others only when they have content, and index only files that exist.
-- A frontend module uses the files it needs, for example `screens.html` and
-  `routes.html` instead of `data-dict.html` and `api-spec.html`.
-- Why the module is built this way goes in the application's `docs/decisions/`,
-  linked from the module `README.md`.
-
-The module `README.md` is the one file an agent always reads; from it the agent
-opens the one or two documents its task needs:
-
-```markdown
-# Orders
-
-Takes a customer's order from cart to delivered or refunded.
-
-| Document | Answers |
-| --- | --- |
-| [Rules](rules.html) | What must always be true, per actor |
-| [Flows](flows.html) | Order states and what each transition changes |
-| [Data](data-dict.html) | Tables and fields |
-| [Permissions](permissions.html) | Who may do what |
-| [API](api-spec.html) | What each operation means |
-| [Code map](code-map.html) | Which files and tests implement it |
-| [Tech debt](tech-debt.html) | Known shortcuts and their risk |
-```
-
-**`api-spec.html`** never repeats request or response shapes; those are
-generated into `openapi.json`, and a copy would drift. It says why the operation
-exists and which rules it applies. Each heading shows the exact `operationId`,
-method, and path, for example
-`<h2 id="refund-order">refundOrder: POST /orders/{id}/refund</h2>`, so one search
-finds it in the document, the spec, and the SDK.
-
-**`flows.html`** records every side effect and every use of global state,
-because neither is visible from the code that triggers it:
-
-- **`#side-effects`:** one row per effect: trigger, what else changes, where it
-  runs (repository, service, workflow, action hook, or `subscribe`), and the
-  rule. Example: "Unbind Google → `google_refresh_token` cleared
-  (userRepository); Google Drive permission removed (AccountService)".
-- **`#global-state`** (frontend): one row per global store or Context the module
-  reads or writes: what it holds, who changes it, what updates automatically.
-  Example: "Wallet store: balance. Changed by top-up and checkout. Every price on
-  the cart and checkout screens recalculates." List each `subscribe` here.
-
-Change the row in the same change as the code. A side effect or global-state
-dependency missing from the document is a review finding.
-
-**`code-map.html`** changes in the same change as any file added, moved, or
-removed. It lets the next agent open three files instead of searching thirty.
-
-**`tech-debt.html`** records any shortcut you leave and any debt you find.
-Technical Lead sets severity: `critical` can cause wrong results, data loss, or
-security exposure; `high` makes the next changes unsafe or slow; `medium` and
-`low` are the rest. Remove an entry in the change that fixes it.
-
-**Every rule's ID appears in three places:**
-
-- the module's `rules.html`: `R3: cancelling an order clears refund_deadline`;
-- the test that proves it: `R3: cancelling clears refund_deadline`;
-- the code, as a one-line comment where it is not obvious:
-  `// R3: see api/docs/modules/orders/rules.html#r3`.
-
-A failing test then names the broken rule, the document explains it, and the
-comment shows where it lives. Number rules per module; never renumber or reuse.
-Outside the module, cite `orders#R3`. A change is not done until rule, test, and
-document change together.
 
 ## Implementation and data
 
@@ -361,14 +265,14 @@ went fine. Reading them wastes tokens and hides the line that matters.
   `eslint --quiet`, `npm ci --loglevel=error --no-audit --no-fund`,
   `poetry install -q`, `dotnet build -v q`.
 - **Sort every failure after your change:** a bug you caused (fix the code), or
-  an intended change (update the test and the rule document together, and tell
-  QA). Never edit a test only to make it pass.
+  an intended change (update the test, report the rule document change to
+  Technical Lead, and tell QA). Never edit a test only to make it pass.
 - Put the summary and failures in your return or the PR, never a full log.
 
 **Return package:** revision, affected artifacts, behavior change, tests and
-results, doc updates, compatibility and recovery effects, limits, and review
-questions. Say what the tests prove and why the change solves the task, and list
-the documents updated. Label a change with refactoring `refactor` and ask QA
+results, `code-map.html` rows updated, document changes needed as
+`file#section: what`, compatibility and recovery effects, limits, and review
+questions. Say what the tests prove and why the change solves the task. Label a change with refactoring `refactor` and ask QA
 Lead to regression-test the affected parts.
 
 Technical Lead inspects the diff and integrated behavior. After a correction,

@@ -131,6 +131,9 @@ and reports.
 
 ### Who records what
 
+- Every document and file has one owner; only the owner edits it
+  ([who owns what](doc-map.md#who-owns-what)). Leads own the documents that
+  describe a module; a Senior owns its code and the comment on each function.
 - Seniors deliver work to their Lead. They never edit the Issue.
 - Leads keep their own Issue sections, checklists, and comments.
 - PO owns the AC. QA Lead ticks an AC only with verification evidence.
@@ -143,7 +146,7 @@ and reports.
 
 Issue → root `README.md` → application `README.md` → module `README.md` and the
 documents it lists → only the files the code map names
-([navigate by documents](records.md)). Never read a whole repository.
+([navigate by documents](doc-map.md#navigate-by-documents-not-by-code)). Never read a whole repository.
 Reviewers may inspect any evidence they need, not only the author's summary.
 
 ### Read little, write short
@@ -192,7 +195,7 @@ Cybersecurity included. No question is needed for:
 
 - `.env.example` (fake values);
 - an env file a Lead placed in your worktree, such as `.env.test` with
-  test-only credentials ([delegation](delegation.md));
+  test-only credentials ([worktrees](worktrees.md));
 - the human's local development database connection, once the human has
   allowed it for the project; the answer is recorded in the service's
   `README.md` ([stack](stack.md)).

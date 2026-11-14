@@ -62,7 +62,7 @@ and the paperwork; Codex carries the independent approvals.
 
 Organizer starts delegated work as separate CLI runs. A Senior Developer and
 Senior QA paired on a slice are the exception: they use the same worktree and
-write concurrently to separately owned files ([worktrees](delegation.md#worktrees-keep-secrets-out-of-delegated-work)).
+write concurrently to separately owned files ([worktrees](worktrees.md#worktrees-keep-secrets-out-of-delegated-work)).
 
 When a role's model is limited ([checking for limits](#checking-for-limits)),
 it moves along its row, skipping any limited model and any model the row's
@@ -193,7 +193,7 @@ allowances), so check the model.
 
 Run each worker from the worktree its packet names, so it uses its own files and
 its [own database](stack.md). No CLI runs in an OS sandbox
-([delegation](delegation.md)).
+([worktrees](worktrees.md)).
 
 Start every worker in the background, writing JSON events to its log file, and
 record two things in its card: the process ID and the session ID.

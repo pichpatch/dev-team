@@ -152,7 +152,7 @@ pay-as-you-go API key.
    prompt, variations, final size, format, background, the exact save path, and
    `Status: pending`.
 2. **Run Codex on the brief** from the worktree the assets belong to, with no OS
-   sandbox like every CLI in the team ([delegation](delegation.md)):
+   sandbox like every CLI in the team ([worktrees](worktrees.md)):
 
    ```bash
    codex exec --sandbox danger-full-access \

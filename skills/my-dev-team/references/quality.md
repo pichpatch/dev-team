@@ -43,7 +43,7 @@ agents against one mutable database.
 
 Senior Developer and Senior QA work at the same time in one worktree. The steps,
 file ownership, and lock are in
-[Paired Developer/QA worktree](delegation.md#paired-developerqa-worktree).
+[Paired Developer/QA worktree](worktrees.md#paired-developerqa-worktree).
 
 **A new table or column.** Senior QA writes the integration tests from
 `data-dict.html` before the migration exists. They may fail to compile until
@@ -55,7 +55,7 @@ never guesses a schema.
 **Seed data stays current.** Senior QA owns the seed data the tests use: small,
 deterministic, synthetic, with the role accounts the cases need. Before each
 test run, Senior QA checks for migration changes and updates the seed first
-([order of work](delegation.md#paired-developerqa-worktree)). A test that fails because the seed is stale is a seed
+([order of work](worktrees.md#paired-developerqa-worktree)). A test that fails because the seed is stale is a seed
 defect, not a product defect.
 
 **When a test and the code disagree,** neither Senior changes the other's work.

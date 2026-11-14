@@ -1,6 +1,7 @@
 # Local .AI task delegation, progress, and handover
 
-This extends [delegation](delegation.md) and [checkpoints](checkpoints.md). The
+This extends [delegation](delegation.md), [worktrees](worktrees.md), and
+[checkpoints](checkpoints.md). The
 Issue and the repository docs stay the authority for requirements, scope, AC,
 and decisions. The ignored `.AI/` folder is a **temporary local work board**:
 assignments, plans, progress, evidence pointers, and handovers. It is never a
@@ -131,7 +132,7 @@ Developer or Senior QA that shares a paired worktree, check for the lock:
 `ls -d "$(git -C <worktree> rev-parse --git-dir)/pair.lock"`. If it exists, tell
 Technical Lead, who removes it (`rmdir` on the same path) now that the holder's
 process is confirmed stopped, before either worker continues
-([pair lock](delegation.md#paired-developerqa-worktree)).
+([pair lock](worktrees.md#paired-developerqa-worktree)).
 
 **Slow is not silent.** A slow model still writes log events. Peak hours, a busy
 provider, or a long answer never explain 10 minutes with no log event, no file
