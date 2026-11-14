@@ -73,6 +73,11 @@ For each dispatch:
    approval. Record errors, timeouts, and missing output as incomplete.
 5. On rejection, return specific corrections to the same Senior (or a named
    replacement), within [the review loop limits](contract.md#every-review-loop-is-bounded).
+   Resume the Senior's session on the same model
+   ([resuming a session](roster.md#starting-a-run)) and send only the findings:
+   it keeps what it already read, which a new run would pay to read again.
+   Start a new session only when the model changes or the session is gone,
+   and then send the full packet.
    On approval, the owner records completion and evidence on the Issue, or in
    the PR when there is none, and the next stage may start.
 
@@ -111,6 +116,13 @@ Use [the handoff template](../assets/handoff.md). Each packet gives:
 - the receiving Lead, reporting and escalation routes, and approvals that apply;
 - the absolute path of its `.AI` record, and the record to resume from if any
   ([local task delegation](ai-task-delegation.md)).
+
+**Same shape every time.** Keep the template's fields in the template's order
+in every packet: the parts that stay the same first (role, skill paths, Issue,
+documents), the parts that change last (task, findings, corrections). Put no
+date, time, or run number above them. Text that is identical from the first
+character is what a provider can reuse from its cache; one changed character
+near the top makes it read everything after it at full price.
 
 Save the assignment and decisions on the Issue or in repository records before
 handing off; a packet is never the only copy. Keep the worker's `.AI` record

@@ -49,6 +49,7 @@ Read only what the task needs:
 | [Release lifecycle](references/release-lifecycle.md) | Who owns what, before and after implementation |
 | [Pause and resume](references/checkpoints.md) | Checkpoints in `.AI` |
 | [Engineering](references/engineering.md) | Any engineering task |
+| [Performance](references/performance.md) | Bulk writes, an index, a slow endpoint, or a background job |
 | [Standard stack](references/stack.md) | A new project or application, and any implementation |
 | [Project defaults](references/project-defaults.md) | A new project: the human's standard choices |
 | [Design](references/design.md) | Design tasks and UI implementation |

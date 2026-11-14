@@ -29,6 +29,9 @@ and authority boundaries.
 - [Engineering](skills/my-dev-team/references/engineering.md),
   [design](skills/my-dev-team/references/design.md), and
   [quality](skills/my-dev-team/references/quality.md): detailed practices loaded as needed.
+- [Performance](skills/my-dev-team/references/performance.md): hard rules for bulk
+  writes (batches of 500), indexes (proof of concept, then the human decides),
+  endpoints split by speed, and jobs that hand off before the runner's time limit.
 
 One installable `my-dev-team` skill contains ten role guides: PO, Technical Lead,
 Senior Developer, Design Lead, Senior Designer, Design Tester, QA Lead, Senior QA,
@@ -99,11 +102,15 @@ review occurred.
 
 The intended flow is: you agree the feature with PO and whichever of Design
 Lead, Technical Lead, QA Lead, and Cybersecurity it needs, in one conversation →
-each role pushes its agreed documents and PO creates the feature Issue, `draft`,
-then `ready to implement` once you confirm → relevant Design, Technical, QA, and
+PO creates the feature Issue, `draft`, and each role writes what it agreed into
+its own Issue section, then `ready to implement` once you confirm → relevant Design, Technical, QA, and
 Cybersecurity preparation → final technical package → Senior implementation →
 Lead approval → QA execution and final AC verification → Cybersecurity feature
-check (only what the diff touches) → finished PR for you. Trivial corrections are made by Organizer directly, and
+check (only what the diff touches) → finished PR for you. From `ready to
+implement` the team runs to the PR without asking you to confirm steps: it
+records what it assumed, and the PR is its one report, with the commands to test
+it and a numbered list of anything left for you to decide. Answer with a
+numbered list of fixes and it runs them in one pass. Trivial corrections are made by Organizer directly, and
 small changes take a shorter owner route. Lead approval completes its scope;
 downstream QA remains.
 

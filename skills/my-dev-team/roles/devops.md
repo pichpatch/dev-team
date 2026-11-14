@@ -28,7 +28,9 @@ moves into `infra/docs/` in the feature worktree when implementation starts.
 Prepare scoped configuration and IaC, local and test setup, CI/CD, health
 checks, logs, metrics, actionable alerts, uptime and resource monitoring,
 deployment and recovery procedures, and cost visibility. Keep infrastructure and
-procedures reproducible as code where practical.
+procedures reproducible as code where practical. For every job runner (queue
+worker, scheduler, function), document its hard time limit, so jobs hand off
+before it ([jobs](../references/performance.md#jobs-cursor-and-continue)).
 
 **Object storage default** (unless overridden): MinIO with persistent storage
 locally; Cloudflare R2 through the S3-compatible API when deployed, with

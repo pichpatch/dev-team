@@ -193,8 +193,8 @@ those requirements.
 The Issue (on the repository's host) is the ticket and lifetime history of one
 feature: what was agreed, its status, and what happened. Decisions live in the
 docs, which the Issue links; an agent never needs the Issue to learn how
-something works. PO creates it when the human says the feature is ready or asks
-to pause.
+something works. PO creates it, labeled `draft`, as soon as the human has
+described the feature ([talking to the Leads](orchestration.md#talking-to-the-leads)).
 
 ```markdown
 # Feature name
@@ -262,7 +262,7 @@ status label; create the label in the repository if it is missing.
 
 | Label | Means | Set by |
 | --- | --- | --- |
-| `draft` | Just created, or paused before the human confirmed. What is agreed so far is recorded and pushed. Every Issue starts here. | PO |
+| `draft` | Just created, or paused before the human confirmed. What is agreed so far is recorded on the Issue; nothing is committed. Every Issue starts here. | PO |
 | `ready to implement` | The human confirmed; work has not started. | PO |
 | `in progress` | Set just before the first task is dispatched. | Organizer |
 | `in review` | Implementation and reviews are done; set just before the PR opens. | Organizer |

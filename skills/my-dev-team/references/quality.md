@@ -82,6 +82,10 @@ Probe the failure surfaces that apply; do not run every item blindly:
 - **Operations:** external integrations, dependency outages, observability,
   recovery, performance against agreed targets. Agree security cases with
   Cybersecurity.
+- **Bulk data and jobs** ([performance](performance.md)): more rows than one
+  batch of 500; a job stopped mid-run continues from its cursor with no row
+  processed twice or skipped; a job that passes half its runner's limit hands
+  off to a child job; two scheduled runs do not overlap.
 
 Use seeded synthetic data and mock or sandbox integrations. Never send real
 email, SMS, payments, or production changes as a side effect of testing. If real
