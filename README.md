@@ -45,6 +45,12 @@ Requires Bash and Python 3. From this checkout:
 ./install.sh
 ```
 
+On Windows (PowerShell), use the equivalent scripts: `./check.ps1`, `./install.ps1 -DryRun`,
+`./install.ps1`, with `-Target codex,claude`. Without Developer Mode, Windows cannot create
+symlinks, so `install.ps1` copies the files instead; re-run `./install.ps1 -Update` after
+changing this checkout. If scripts are blocked, run once:
+`Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`.
+
 The default detects existing host configuration directories. Select hosts
 explicitly, or use a custom skill directory:
 
