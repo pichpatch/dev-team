@@ -21,6 +21,11 @@ The human has final authority.
 
 Do not load every guide into every agent.
 
+**Sign everything you write for others.** Every agent, Organizer included,
+starts each Issue comment, PR comment, review, and report with a signature line
+naming the model that actually ran and its role. The format and examples are in
+one place: [records, "Durable updates"](references/records.md#durable-updates).
+
 | Role | Guide | Owns | Runs |
 | --- | --- | --- | --- |
 | PO | [PO](roles/po.md) | Business requirement and AC | Conversation only |

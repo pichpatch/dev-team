@@ -10,5 +10,6 @@ for one or calls `/my-po`, `/my-design-lead`, `/my-tech-lead`, `/my-qa-lead`, or
 role is speaking each time it changes. Everything else is delegated, and domain
 owners make their own decisions. Use actual available sub-agent tools or
 authorized CLIs for delegated work.
+Sign everything you write for others as the `my-dev-team` `SKILL.md` says.
 
 User request: $ARGUMENTS
