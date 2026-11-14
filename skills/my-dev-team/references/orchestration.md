@@ -107,6 +107,8 @@ worktree, and each owner moves what it agreed on the Issue into the repository
 documents there: Organizer, as PO, the business requirements; each Lead and
 Cybersecurity their own documents; Technical Lead the module documents the
 Seniors and Senior QA will work from ([implementation documents](../roles/technical-lead.md#implementation-documents)).
+At the same point, PO and QA Lead update the regression document and PO the
+user manual ([both documents](records.md#regression-document-and-user-manual)).
 These documents reach the default branch only through the PR the human merges.
 
 **When a delegated Lead is blocked on the human,** it keeps doing what it can
@@ -223,7 +225,9 @@ Scale the route to the change.
 - **Trivial:** a typo, comment, wording, or format fix that changes no
   behavior, requirement, design, contract, configuration, or ignore rule.
   Organizer edits it in a worktree, runs the existing checks, confirms no env or
-  credential file is in the diff, and opens the PR. No role, no Issue; link the
+  credential file is in the diff, and opens the PR, stating
+  `No new regression test` and `No manual update` with the reason
+  ([both documents](records.md#regression-document-and-user-manual)). No role, no Issue; link the
   owning Issue if there is one. The human's PR review is the review.
 - **Small:** behavior changes, but AC, approved design, API/data contracts,
   security boundaries, and infrastructure do not. Organizer proposes the route;
@@ -248,18 +252,53 @@ Before opening the PR, check that:
   with its reason and the remaining risk;
 - relevant docs match the code and are reachable from the
   [`README.md` indexes](records.md);
+- the regression document and the user manual are each either updated in the
+  PR's diff, or covered by a `No new regression test` or `No manual update`
+  line in the description. A PR with neither for one of them is not opened
+  ([both documents](records.md#regression-document-and-user-manual));
 - the PR links the owning Issue when there is one.
 
-The PR describes the resulting behavior, what the tests prove, why the change
-solves the problem, the documents updated, and limits, with links. Label it
-`refactor` when it includes refactoring. Push only the feature branch, never the
-default branch. Follow the repository's branch and PR conventions. Trigger no
-production operation and expose no secret.
+The PR is the team's one report to the human. Keep it short, with links. It
+gives:
+
+- the resulting behavior, and why the change solves the problem;
+- what the tests prove, and the exact commands for the human to test it;
+- the regression document and the user manual: a link to each updated section,
+  or the `No new regression test` or `No manual update` line with its reason;
+- every assumption the team made instead of asking, each with its owner;
+- anything left for the human to decide, as a numbered list, including each
+  proposed index with its measurements
+  ([indexes](performance.md#indexes-prove-propose-then-add));
+- the documents updated, and limits.
+
+Label it `refactor` when it includes refactoring. Push only the feature branch,
+never the default branch. Follow the repository's branch and PR conventions.
+Trigger no production operation and expose no secret. Remove finished agents'
+checkpoints ([pause and resume](checkpoints.md)).
+
+### Run to the PR without stopping
 
 The human's experience should be: agree with PO, the team works on its own, a
-finished PR arrives. Ask the human only for a real decision, missing
-authorization, or a blocker the team cannot clear. Remove finished agents'
-checkpoints ([pause and resume](checkpoints.md)).
+finished PR arrives. From `ready to implement` (or from the request, for a
+small change or a bug) until the PR:
+
+- **Proceeding is the default.** Never ask "shall I proceed?", "is this OK?",
+  or for confirmation of a step the route already defines.
+- **An owner's question goes to that owner,** never to the human.
+- **A gap the records do not answer, that is not the human's decision:** the
+  owner takes the most reasonable reading, records it as an assumption on the
+  Issue (or in the PR), and continues.
+- **Stop for the human only for:** a decision that is theirs
+  ([authority](contract.md#authority)), a credential or a Tier 3 command
+  ([command policy](../roles/cybersecurity.md#command-policy)), a finding at
+  [round 4](contract.md#every-review-loop-is-bounded), or every model at its
+  limit.
+- **When you must stop,** keep all other work going, then ask everything in one
+  message, each question with options and a recommendation.
+
+**After the PR,** the human may answer with a numbered list of fixes. Classify
+each item ([pick the route](#establish-the-work)), run them all in one pass on
+the same branch, and report once, answering each number.
 
 ## Draft release
 

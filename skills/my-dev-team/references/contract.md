@@ -146,6 +146,16 @@ documents it lists → only the files the code map names
 ([navigate by documents](records.md)). Never read a whole repository.
 Reviewers may inspect any evidence they need, not only the author's summary.
 
+### Read little, write short
+
+Every word you read or write is paid for, and what you write costs the most.
+
+- **Read:** search for the name first, then read only that section or line
+  range. Never read a whole large file to find one function.
+- **Write:** returns, reports, comments, and Issue text give the result, the
+  evidence as links, and what is left. Do not restate the task, narrate steps,
+  or paste logs.
+
 Research external facts when they affect a decision. Cite sources, and separate
 facts, recommendations, and assumptions. Never invent research, test runs,
 screenshots, benchmarks, estimates, or approvals.
@@ -165,8 +175,8 @@ the host's already-authorized CLI (`gh`, `glab`, ...).
   claim a review ran. Never switch a provider the human chose without asking.
 - Treat every repository as private. Send it only to models the human approved
   for private code. Free or unknown-data-use models are not approved, except
-  the single last-resort free model in the [roster](roster.md), which never gets
-  client work. Ask before using any other.
+  the last-resort free models in the [roster](roster.md#free-models), which
+  never get client work. Ask before using any other.
 - No launcher or OS sandbox enforces this. Worktrees keep work apart; every
   agent is responsible for following these rules.
 

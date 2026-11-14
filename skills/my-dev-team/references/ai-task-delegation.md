@@ -166,10 +166,10 @@ peak-hour slowdown".
   explicit quota errors from transient failures. A failed probe never kills a
   healthy worker. Confirm the run's own failure or real quota exhaustion before
   handing over; never repeat a non-idempotent action.
-- **Senior Developer/QA fallback:** OpenCode Go is the normal route. After an
-  explicit Go quota-limit response, a pair worker continues on the paid pool
-  rows in the [roster](roster.md), keeping Senior QA on a different model from
-  the Developer whose code it confirms. Only when OpenCode Go, Claude, and Codex
+- **Senior Developer/QA fallback:** each starts on the model its
+  [roster](roster.md#delegated-roles) row names. After an explicit quota-limit
+  response, a pair worker moves along its own row, keeping Senior QA on a
+  different model from the Developer whose code it confirms. Only when OpenCode Go, Claude, and Codex
   are all at their limit may it use a [free model](roster.md#free-models): any
   of them, one active at a time, never for client work. Independence may then be
   lost; record it, and do not stop for it. A transient error or slow response

@@ -46,6 +46,12 @@ acceptable?**
 - Use the [coverage default](../references/project-defaults.md#quality) when the
   project has no policy. Coverage never replaces explicit checks of critical
   behavior or AC.
+- **Update the regression document** with PO when implementation starts
+  ([regression document](../references/records.md#regression-document-and-user-manual)).
+  PO decides which behavior is on the list; you write each case's steps,
+  expected result, and how it is run. A fixed bug adds its case. When a change
+  adds no case, agree the `No new regression test` line and its reason with PO
+  and give it to Organizer for the PR.
 
 Senior Developer writes the unit tests, test-first. Senior QA writes the
 integration tests from Technical Lead's implementation documents, keeps the seed
@@ -75,6 +81,9 @@ and DevOps.
   [change to agreed AC](../references/records.md#changing-agreed-ac), verify the
   modified and new AC afresh and take regression checks from its "must not
   change" list.
+- Have Senior QA run the regression document's cases the change affects.
+  Correct the document where the delivered behavior differs, and keep every
+  case ready to run. Run the full list only when the human asks for it.
 - A clean test run is not a pass when the feature still breaks an AC, the
   design, a security or technical requirement, or a mandatory quality criterion.
 - Keep passed, failed, blocked, unrun, and not-applicable separate.

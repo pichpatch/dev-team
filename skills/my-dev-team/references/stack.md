@@ -292,9 +292,11 @@ Record the same-record rule in `data-dict.html` and every side effect in
 - **ORM:** TypeORM with NestJS, behind the repositories; Prisma in a standalone
   Next.js app.
 - **Runs in 2 GB of memory.** Paginate or stream instead of loading whole tables
-  or files; bound every queue, batch, and concurrent job; keep long work in the
-  worker; set the heap limit below the instance size. A design needing more goes
-  to the human with its cost.
+  or files; bound every queue, batch, and concurrent job (bulk writes in
+  batches of 500, jobs that hand off before the runner's time limit:
+  [performance](performance.md)); keep long work in the worker; set the heap
+  limit below the instance size. A design needing more goes to the human with
+  its cost.
 - **Time is UTC, always.** Store `timestamptz`, compute in UTC with dayjs and its
   UTC plugin, return ISO 8601 with `Z`. Never save or return local time. A time
   zone the business needs (a shop's opening hours) is its own named field beside

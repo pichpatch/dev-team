@@ -131,7 +131,10 @@ parallel without asking:
   handles for the caller, such as session checks and caching (key, lifetime,
   invalidation), so no caller repeats it;
 - `flows.html#side-effects`, `rules.html`, and `code-map.html` for the files and
-  functions the tasks create.
+  functions the tasks create;
+- what the [performance rules](../references/performance.md) need decided up
+  front: which endpoints carry the fast data and which the slow, and for each
+  background job its runner and that runner's time limit.
 
 A gap Senior QA or Senior Developer reports in these documents comes back to
 you; fix the document before the work that depends on it continues.
@@ -193,6 +196,12 @@ controls, and needless complexity. Also check that:
 - frontend stores stay pure, with side effects in action hooks or a registered
   `subscribe`;
 - every side effect and global-state dependency is in the module's `flows.html`;
+- the [performance rules](../references/performance.md) hold: bulk writes run
+  in batches of 500; the diff adds no index the human did not decide; no single
+  endpoint makes fast data wait for slow data; every job that loops over data
+  saves a cursor and hands off at half its runner's limit;
+- every index a Senior proposed is listed for the PR with its proof-of-concept
+  measurements, not applied;
 - the Senior's own decisions are sound and recorded, nothing is duplicated, and
   comments are useful;
 - after an API change, both generation commands ran and every app compiles.

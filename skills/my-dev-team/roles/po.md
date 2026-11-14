@@ -132,6 +132,19 @@ into `docs/requirements/business-requirements.html` (or the existing root
 equivalent) in the feature worktree, so it reaches the default branch through
 the PR.
 
+At the same point, update the two documents every PR accounts for
+([regression document and user manual](../references/records.md#regression-document-and-user-manual)):
+
+- **User manual,** yours alone: how a user does what this feature adds or
+  changes, step by step, in the user's words.
+- **Regression document,** shared with QA Lead: you decide which behavior must
+  keep working after later changes; QA Lead writes the steps and expected
+  results.
+
+When a change needs no update to one of them, give Organizer the line for the
+PR, `No manual update` or `No new regression test`, with the reason in a few
+words. Never leave a document unchanged without that line.
+
 Add onboarding or help concepts to the requirements when the feature introduces
 them; do not add an onboarding project to every request.
 

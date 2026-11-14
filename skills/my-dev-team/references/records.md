@@ -137,7 +137,9 @@ docs/
   assets/docs.css       the one shared stylesheet
   requirements/business-requirements.html
   ui-system/
+  qa/regression.html    standing regression cases, one section per feature
   qa/support/
+  manual/user-manual.html   how a user does each thing, one section per feature
   security/
   decisions/
   evaluation/{feature-slug}-{role}-{model}.html
@@ -188,13 +190,48 @@ QA Lead owns the support requirements in `docs/qa/support/`. If support becomes
 a real application, `/support/` holds its own docs and code; it does not replace
 those requirements.
 
+### Regression document and user manual
+
+Two root documents are updated by every change that alters behavior, so the
+human sees them in the PR. This is the one full statement of this rule; other
+documents link here.
+
+| Document | Holds | Owner |
+| --- | --- | --- |
+| `docs/qa/regression.html` | The standing cases that must keep passing after every later change. One section per feature. Each case has a stable ID (`REG-1`), the AC it protects, the steps, the expected result, and how it is run: the automated test file, or by hand. | PO and QA Lead |
+| `docs/manual/user-manual.html` | How a user does each thing the product offers, step by step, in the user's words. One section per feature. | PO |
+
+- **Regression ownership is split.** PO decides which behavior is on the list.
+  QA Lead writes the steps, the expected result, and how each case is run.
+- **When implementation starts,** the owners write both updates in the feature
+  worktree, from the agreed AC and design, together with the other documents
+  ([talking to the Leads](orchestration.md#talking-to-the-leads)). Before the
+  PR, they correct them where the delivered behavior differs.
+- **A fixed bug adds its case** to the regression document.
+- **Keep the regression document ready to run in full at any time:** every
+  case complete and current. The team runs only the cases a change affects. A
+  full run happens only when the human asks for one; that decision is the
+  human's.
+- **Every PR accounts for both documents,** whatever its route. Either the PR
+  contains the update, or its description says so on its own line, with the
+  reason in a few words:
+
+  ```text
+  No new regression test: {reason}
+  No manual update: {reason}
+  ```
+
+  PO and QA Lead decide the first line; PO decides the second. A trivial
+  correction changes no behavior, so its PR states both lines.
+- A project that already has these documents keeps them at their own paths.
+
 ## One feature, one Issue
 
 The Issue (on the repository's host) is the ticket and lifetime history of one
 feature: what was agreed, its status, and what happened. Decisions live in the
 docs, which the Issue links; an agent never needs the Issue to learn how
-something works. PO creates it when the human says the feature is ready or asks
-to pause.
+something works. PO creates it, labeled `draft`, as soon as the human has
+described the feature ([talking to the Leads](orchestration.md#talking-to-the-leads)).
 
 ```markdown
 # Feature name
@@ -262,7 +299,7 @@ status label; create the label in the repository if it is missing.
 
 | Label | Means | Set by |
 | --- | --- | --- |
-| `draft` | Just created, or paused before the human confirmed. What is agreed so far is recorded and pushed. Every Issue starts here. | PO |
+| `draft` | Just created, or paused before the human confirmed. What is agreed so far is recorded on the Issue; nothing is committed. Every Issue starts here. | PO |
 | `ready to implement` | The human confirmed; work has not started. | PO |
 | `in progress` | Set just before the first task is dispatched. | Organizer |
 | `in review` | Implementation and reviews are done; set just before the PR opens. | Organizer |

@@ -58,11 +58,19 @@ documents do not cover it and the change would:
 - Build the smallest complete slice that meets the documented decisions and fits
   the repository's patterns. Look for an existing component or module before
   writing one.
-- Give every exported function, class, and component a short purpose comment,
-  and explain the why where code is not obvious
-  ([engineering](../references/engineering.md#implementation-and-data)).
+- **Comment every function and method** with what it does, its side effects,
+  its unit test file, and its impact, and explain the why where code is not
+  obvious ([commenting](../references/engineering.md#implementation-and-data)).
 - Make side effects, transactions, validation, failure handling, permissions,
   and external integrations explicit.
+- **Follow the [performance rules](../references/performance.md);** open the
+  section before you start:
+  - a write that can touch more than 500 rows runs in batches of 500;
+  - never add an index yourself: run the proof of concept and propose it in
+    your return;
+  - never put fast and slow data behind one endpoint;
+  - a job that loops over data saves a cursor after each batch and hands off
+    to a child job at half the runner's time limit.
 - Use the approved UI components. When the design leaves a UI decision open,
   send it to Design Lead through Technical Lead; never guess. If an equivalent
   component exists, say so instead of building a duplicate.
@@ -81,8 +89,6 @@ documents do not cover it and the change would:
 - **You finish when your unit tests and QA Lead's approved integration tests
   pass.** Never edit an approved integration test. When one looks wrong, or the
   documents leave a question open, go to Technical Lead.
-- **Comment every function and method** with what it does, its side effects, and
-  its unit test file ([commenting](../references/engineering.md#implementation-and-data)).
 - **Say when you add or edit a migration,** in your result, so Senior QA updates
   the seed data.
 - For bugs, reproduce the failure and add a regression test before fixing when
@@ -120,7 +126,8 @@ business-doc changes to PO through Technical Lead; never write them yourself.
 
 Return: artifact paths and revision, a short summary of changes, exact test
 results, the decisions you made, the documents you updated as `file#section`,
-remaining risks, and any evidence-backed challenge. Separate a suspected root
+each index you propose with its measurements, remaining risks, and any
+evidence-backed challenge. Separate a suspected root
 cause from a reproduced one. Continue with corrections on rejection. Save a
 [checkpoint](../references/checkpoints.md) only when paused, blocked, or handing
 off unfinished work, and remove it when you finish.

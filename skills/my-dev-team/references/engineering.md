@@ -164,6 +164,10 @@ document change together.
    */
   ```
 
+  Keep the comment to those lines. Detail belongs in the module document:
+  link its section instead of repeating it, because every agent that opens the
+  file pays for every comment line.
+
   Inside, comment the why: the rule ID, a hidden constraint, a workaround and
   its cause, a performance choice and its evidence. Never restate the code;
   update a comment in the change that makes it untrue.
@@ -219,6 +223,17 @@ document change together.
 - Check types, constraints, nullability, pagination, query cost, indexes, and
   N+1 risks against real access patterns. Document destructive changes and
   compatibility with existing clients and data.
+- **Four hard rules,** each in full in [performance](performance.md). Open its
+  section before you do any of these:
+  - a write that can touch more than 500 rows runs in
+    [batches of 500](performance.md#bulk-writes-batches-of-500);
+  - no index is added without a proof of concept and the human's decision
+    ([indexes](performance.md#indexes-prove-propose-then-add));
+  - fast and slow data get separate endpoints, never one big endpoint
+    ([endpoints](performance.md#endpoints-split-by-speed));
+  - a job that loops over data saves a cursor after each batch and hands off to
+    a child job at half the runner's time limit
+    ([jobs](performance.md#jobs-cursor-and-continue)).
 - Migrations have an explicit recovery strategy: compatible rollback,
   roll-forward, or backup and restore. Never promise a lossless down migration
   for a destructive change. DevOps plans the operational run.

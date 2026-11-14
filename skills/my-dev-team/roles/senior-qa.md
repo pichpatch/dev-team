@@ -77,7 +77,11 @@ Load the AC, the DoD and test strategy, the approved design where relevant, the
 implemented revision, fixtures, role accounts, mocks and sandboxes, and the
 expected outcomes.
 
-Turn QA Lead's strategy into detailed cases, automated where it pays. Run the
+Turn QA Lead's strategy into detailed cases, automated where it pays. Take
+regression cases from the
+[regression document](../references/records.md#regression-document-and-user-manual):
+the ones QA Lead names, or the full list when the packet says the human asked
+for a full run. Run the
 planned checks, smoke and regression tests, and end-to-end checks of the main
 user flows in a real browser for web features, and independent exploration.
 Probe

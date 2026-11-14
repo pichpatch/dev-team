@@ -18,6 +18,12 @@ Keep strategy and cases in the existing QA docs. For a new location,
 application-specific details may live with that application. Link them from the
 Issue; never start a second task tracker.
 
+The cases that must keep passing after later changes also go into the standing
+[regression document](records.md#regression-document-and-user-manual), which PO
+and QA Lead update when implementation starts. It stays ready to run in full;
+the team runs the cases a change affects, and the full list only when the human
+asks.
+
 Use the [coverage default](project-defaults.md#quality) only when the project
 has no policy. State the command, metric, scope, baseline, and exclusions.
 Report planned and actually executed coverage separately. Every relevant AC
@@ -82,6 +88,10 @@ Probe the failure surfaces that apply; do not run every item blindly:
 - **Operations:** external integrations, dependency outages, observability,
   recovery, performance against agreed targets. Agree security cases with
   Cybersecurity.
+- **Bulk data and jobs** ([performance](performance.md)): more rows than one
+  batch of 500; a job stopped mid-run continues from its cursor with no row
+  processed twice or skipped; a job that passes half its runner's limit hands
+  off to a child job; two scheduled runs do not overlap.
 
 Use seeded synthetic data and mock or sandbox integrations. Never send real
 email, SMS, payments, or production changes as a side effect of testing. If real
