@@ -107,6 +107,8 @@ worktree, and each owner moves what it agreed on the Issue into the repository
 documents there: Organizer, as PO, the business requirements; each Lead and
 Cybersecurity their own documents; Technical Lead the module documents the
 Seniors and Senior QA will work from ([implementation documents](../roles/technical-lead.md#implementation-documents)).
+At the same point, PO and QA Lead update the regression document and PO the
+user manual ([both documents](records.md#regression-document-and-user-manual)).
 These documents reach the default branch only through the PR the human merges.
 
 **When a delegated Lead is blocked on the human,** it keeps doing what it can
@@ -223,7 +225,9 @@ Scale the route to the change.
 - **Trivial:** a typo, comment, wording, or format fix that changes no
   behavior, requirement, design, contract, configuration, or ignore rule.
   Organizer edits it in a worktree, runs the existing checks, confirms no env or
-  credential file is in the diff, and opens the PR. No role, no Issue; link the
+  credential file is in the diff, and opens the PR, stating
+  `No new regression test` and `No manual update` with the reason
+  ([both documents](records.md#regression-document-and-user-manual)). No role, no Issue; link the
   owning Issue if there is one. The human's PR review is the review.
 - **Small:** behavior changes, but AC, approved design, API/data contracts,
   security boundaries, and infrastructure do not. Organizer proposes the route;
@@ -248,6 +252,10 @@ Before opening the PR, check that:
   with its reason and the remaining risk;
 - relevant docs match the code and are reachable from the
   [`README.md` indexes](records.md);
+- the regression document and the user manual are each either updated in the
+  PR's diff, or covered by a `No new regression test` or `No manual update`
+  line in the description. A PR with neither for one of them is not opened
+  ([both documents](records.md#regression-document-and-user-manual));
 - the PR links the owning Issue when there is one.
 
 The PR is the team's one report to the human. Keep it short, with links. It
@@ -255,6 +263,8 @@ gives:
 
 - the resulting behavior, and why the change solves the problem;
 - what the tests prove, and the exact commands for the human to test it;
+- the regression document and the user manual: a link to each updated section,
+  or the `No new regression test` or `No manual update` line with its reason;
 - every assumption the team made instead of asking, each with its owner;
 - anything left for the human to decide, as a numbered list, including each
   proposed index with its measurements

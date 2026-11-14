@@ -109,7 +109,10 @@ Lead approval → QA execution and final AC verification → Cybersecurity featu
 check (only what the diff touches) → finished PR for you. From `ready to
 implement` the team runs to the PR without asking you to confirm steps: it
 records what it assumed, and the PR is its one report, with the commands to test
-it and a numbered list of anything left for you to decide. Answer with a
+it and a numbered list of anything left for you to decide. Every PR also shows
+the updated regression document and user manual, or says `No new regression
+test` or `No manual update` with the reason; the regression document stays ready
+to run in full, and a full run happens only when you ask. Answer with a
 numbered list of fixes and it runs them in one pass. Trivial corrections are made by Organizer directly, and
 small changes take a shorter owner route. Lead approval completes its scope;
 downstream QA remains.

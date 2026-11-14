@@ -18,6 +18,12 @@ Keep strategy and cases in the existing QA docs. For a new location,
 application-specific details may live with that application. Link them from the
 Issue; never start a second task tracker.
 
+The cases that must keep passing after later changes also go into the standing
+[regression document](records.md#regression-document-and-user-manual), which PO
+and QA Lead update when implementation starts. It stays ready to run in full;
+the team runs the cases a change affects, and the full list only when the human
+asks.
+
 Use the [coverage default](project-defaults.md#quality) only when the project
 has no policy. State the command, metric, scope, baseline, and exclusions.
 Report planned and actually executed coverage separately. Every relevant AC
